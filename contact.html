@@ -247,7 +247,7 @@
       }
 
       try {
-        const res = await fetch("visualvisage-contact-form-server-production.up.railway.app", {
+        const res = await fetch("visualvisage-contact-form-server-production.up.railway.app/send", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ name, email, message }),
