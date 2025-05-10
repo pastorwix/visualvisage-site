@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Posters – Visual Visage</title>
+
+  <!-- Fonts + Styles -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Quicksand:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+
+  <style>
+    body {
+      font-family: 'Quicksand', sans-serif;
+      background-color: #fdf6e3;
+      color: #2d2d2d;
+      margin: 0;
+    }
+
+    .sticky-nav {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background-color: #fff;
+      padding: 1rem 2rem;
+      border-bottom: 1px solid #eee;
+    }
+
+    .sticky-nav nav ul {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .sticky-nav nav a {
+      text-decoration: underline;
+      font-weight: 600;
+      color: #444;
+      transition: color 0.3s ease;
+    }
+
+    .sticky-nav nav a:hover {
+      color: #000;
+    }
+
+    header {
+      background-color: #fff;
+      padding: 2rem 1rem 1rem;
+      border-bottom: none;
+      text-align: center;
+    }
+
+    header h1 {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 2.2rem;
+      letter-spacing: 1px;
+    }
+
+    .intro {
+      text-align: center;
+      padding: 2rem 1rem 0;
+    }
+
+    .intro h2 {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .intro p {
+      font-size: 1rem;
+      color: #666;
+    }
+
+    .masonry-posters {
+      column-count: 3;
+      column-gap: 1rem;
+      padding: 2rem 1rem;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .masonry-posters img {
+      width: 100%;
+      margin-bottom: 1rem;
+      border-radius: 12px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+      break-inside: avoid;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.07);
+    }
+
+    .masonry-posters img:hover {
+      transform: scale(1.03);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+    }
+
+    footer {
+      background-color: #fff;
+      text-align: center;
+      padding: 1.5rem;
+      font-size: 0.9rem;
+      color: #aaa;
+      border-top: 1px solid #eee;
+      margin-top: 3rem;
+    }
+
+    /* Lightbox Styles */
+    .lightbox {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.9);
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      flex-direction: column;
+      touch-action: none;
+    }
+
+    .lightbox img {
+      max-width: 90%;
+      max-height: 80vh;
+      border-radius: 12px;
+    }
+
+    .lightbox-close, .arrow {
+      position: absolute;
+      font-size: 2rem;
+      color: #fff;
+      font-weight: bold;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .lightbox-close {
+      top: 20px;
+      right: 30px;
+    }
+
+    .arrow.left {
+      left: 30px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .arrow.right {
+      right: 30px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    @media (max-width: 768px) {
+      .masonry-posters {
+        column-count: 2;
+      }
+    }
+
+    @media (max-width: 500px) {
+      .masonry-posters {
+        column-count: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="sticky-nav">
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="posters.html">Posters</a></li>
+        <li><a href="designs.html">Designs</a></li>
+        <li><a href="photos.html">Photos</a></li>
+        <li><a href="videos.html">Videos</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <header>
+    <h1>Visual Visage</h1>
+  </header>
+
+  <main>
+    <section class="intro">
+      <h2>Poster Gallery</h2>
+      <p>A collection of poster designs made on procreate. </p>
+    </section>
+
+    <section class="masonry-posters">
+      <img src="assets/poster1.jpg" alt="Poster 1">
+      <img src="assets/poster2.jpg" alt="Poster 2">
+      <img src="assets/poster3.jpg" alt="Poster 3">
+      <img src="assets/poster4.jpg" alt="Poster 4">
+      <img src="assets/poster5.jpg" alt="Poster 5">
+      <img src="assets/poster6.jpg" alt="Poster 6">
+      <img src="assets/poster7.jpg" alt="Poster 7">
+      <img src="assets/poster8.jpg" alt="Poster 8">
+      <img src="assets/poster9.jpg" alt="Poster 9">
+      <img src="assets/poster10.jpg" alt="Poster 10">
+      <img src="assets/poster11.jpg" alt="Poster 11">
+      <img src="assets/poster12.jpg" alt="Poster 12">
+      <img src="assets/poster13.jpg" alt="Poster 13">
+      <img src="assets/poster14.jpg" alt="Poster 14">
+      <img src="assets/poster15.jpg" alt="Poster 15">
+      <img src="assets/poster16.jpg" alt="Poster 16">
+      <img src="assets/poster17.jpg" alt="Poster 17">
+      <img src="assets/poster18.jpg" alt="Poster 18">
+      <img src="assets/poster19.jpg" alt="Poster 19">
+      <img src="assets/poster20.jpg" alt="Poster 20">
+      <img src="assets/poster21.jpg" alt="Poster 21">
+      <img src="assets/poster22.jpg" alt="Poster 22">
+      <img src="assets/poster23.jpg" alt="Poster 23">
+    </section>
+  </main>
+
+  <div class="lightbox" id="lightbox">
+    <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+    <span class="arrow left" onclick="navigate(-1)">&#10094;</span>
+    <img id="lightbox-img" src="" alt="Lightbox Image">
+    <span class="arrow right" onclick="navigate(1)">&#10095;</span>
+  </div>
+
+  <footer>
+    <p>© 2025 Visual Visage</p>
+  </footer>
+
+  <script>
+    const thumbnails = document.querySelectorAll('.masonry-posters img');
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    let currentIndex = 0;
+    const images = Array.from(thumbnails);
+
+    thumbnails.forEach((img, index) => {
+      img.addEventListener('click', () => {
+        currentIndex = index;
+        openLightbox(img.src);
+      });
+    });
+
+    function openLightbox(src) {
+      lightboxImg.src = src;
+      lightbox.style.display = 'flex';
+    }
+
+    function closeLightbox() {
+      lightbox.style.display = 'none';
+    }
+
+    function navigate(direction) {
+      currentIndex += direction;
+      if (currentIndex < 0) currentIndex = images.length - 1;
+      if (currentIndex >= images.length) currentIndex = 0;
+      lightboxImg.src = images[currentIndex].src;
+    }
+
+    window.addEventListener('click', (e) => {
+      if (e.target === lightbox) closeLightbox();
+    });
+
+    window.addEventListener('keydown', (e) => {
+      if (lightbox.style.display === 'flex') {
+        if (e.key === 'ArrowRight') navigate(1);
+        if (e.key === 'ArrowLeft') navigate(-1);
+        if (e.key === 'Escape') closeLightbox();
+      }
+    });
+
+    let startX = 0;
+    let endX = 0;
+
+    lightbox.addEventListener('touchstart', (e) => {
+      startX = e.changedTouches[0].screenX;
+    });
+
+    lightbox.addEventListener('touchend', (e) => {
+      endX = e.changedTouches[0].screenX;
+      handleSwipe();
+    });
+
+    function handleSwipe() {
+      const diffX = startX - endX;
+      if (Math.abs(diffX) > 50) {
+        if (diffX > 0) {
+          navigate(1);
+        } else {
+          navigate(-1);
+        }
+      }
+    }
+  </script>
+
+</body>
+</html>

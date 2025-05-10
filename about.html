@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>About – Visual Visage</title>
+
+  <!-- Fonts + CSS -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Quicksand:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+
+  <style>
+    body {
+      font-family: 'Quicksand', sans-serif;
+      background-color: #fdf6e3;
+      color: #2d2d2d;
+      margin: 0;
+    }
+
+    header {
+      background-color: #fff;
+      padding: 2rem 1rem;
+      border-bottom: 1px solid #eee;
+      text-align: center;
+    }
+
+    header h1 {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 2.2rem;
+      letter-spacing: 1px;
+    }
+
+    nav ul {
+      list-style: none;
+      padding: 0;
+      margin-top: 1rem;
+    }
+
+    nav ul li {
+      display: inline-block;
+      margin: 0 1rem;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #888;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+
+    nav a:hover {
+      color: #2d2d2d;
+    }
+
+    .lava-bg {
+      position: relative;
+      overflow: hidden;
+      min-height: 100vh;
+      padding-bottom: 4rem;
+    }
+
+    .lava-bg::before,
+    .lava-bg::after {
+      content: '';
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle at center, #fbbbad, #fdf6e3);
+      opacity: 0.5;
+      border-radius: 50%;
+      animation: floatBlob 12s ease-in-out infinite alternate;
+      z-index: 0;
+    }
+
+    .lava-bg::after {
+      width: 700px;
+      height: 700px;
+      background: radial-gradient(circle at center, #b4e7d9, #fdf6e3);
+      top: 200px;
+      left: 60%;
+      animation-delay: 4s;
+    }
+
+    @keyframes floatBlob {
+      0% {
+        transform: translate(-100px, -100px) scale(1);
+      }
+      100% {
+        transform: translate(100px, 100px) scale(1.2);
+      }
+    }
+
+    .about-section {
+      position: relative;
+      z-index: 1;
+      background-color: rgba(255, 255, 255, 0.85);
+      border-radius: 20px;
+      padding: 3rem 2rem;
+      margin: 3rem auto;
+      max-width: 800px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+      text-align: center;
+    }
+
+    .about-section h2 {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .about-section p {
+      font-size: 1.1rem;
+      line-height: 1.7;
+      color: #555;
+    }
+
+    footer {
+      background-color: #fff;
+      text-align: center;
+      padding: 1.5rem;
+      font-size: 0.9rem;
+      color: #aaa;
+      border-top: 1px solid #eee;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Visual Visage</h1>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="posters.html">Posters</a></li>
+        <li><a href="designs.html">Designs</a></li>
+        <li><a href="photos.html">Photos</a></li>
+        <li><a href="videos.html">Videos</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <div class="lava-bg">
+    <main>
+      <section class="about-section">
+        <h2>About Izzy & Visual Visage</h2>
+        <p>
+          Visual Visage is a collection of artwork, design, and creative expression — built with the goal of turning everyday ideas into meaningful visuals.
+          <br /><br />
+          From posters to photography, films to print designs, this is the space where passion meets purpose and each piece tells a story.
+          <br /><br />
+          Every project is made with intention and curiousity. Welcome to the portfolio — and thank you for being here!
+          <br /><br />
+          <strong>Izzy</strong> is a creative in the East Coast with the a background in music and arts. He has a passion for storytelling through visuals. When not creating, you can find him exploring nature, skateboarding, or playing music.
+        </p>
+      </section>
+    </main>
+  </div>
+
+  <footer>
+    <p>© 2025 Visual Visage</p>
+  </footer>
+
+</body>
+</html>
