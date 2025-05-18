@@ -1,0 +1,184 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Quicksand:wght@400;600&family=Press+Start+2P&display=swap');
+
+:root {
+  --primary: #2d2d2d;
+  --accent: #f2c94c;
+  --background: #fdf6e3;
+  --white: #ffffff;
+  --gray: #888;
+  --light: #f8f8f8;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Quicksand', sans-serif;
+  background-color: var(--background);
+  color: var(--primary);
+  line-height: 1.6;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.site-header {
+  background-color: var(--white);
+  border-bottom: 1px solid #eee;
+  padding: 2rem 0;
+}
+
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 2rem;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 1.5rem;
+}
+
+.nav-links li a {
+  text-decoration: none;
+  color: var(--gray);
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.nav-links li a:hover {
+  color: var(--primary);
+}
+
+.button {
+  display: inline-block;
+  background: var(--primary);
+  color: var(--white);
+  padding: 0.75rem 1.5rem;
+  border-radius: 5px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.2s ease;
+}
+
+.button:hover {
+  background: #1f1f1f;
+}
+
+.button.small {
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+}
+
+/* === NINTENDO STYLE HOMEPAGE === */
+body.nintendo-mode {
+  background-color: var(--accent);
+  font-family: 'Press Start 2P', cursive;
+  color: #222;
+  text-align: center;
+  padding: 2rem;
+}
+
+.game-logo {
+  font-size: 2rem;
+  letter-spacing: 2px;
+  margin-bottom: 1rem;
+}
+
+.press-start {
+  font-size: 1rem;
+  animation: blink 1s infinite;
+  margin-bottom: 3rem;
+  color: #333;
+}
+
+@keyframes blink {
+  0%, 50%, 100% { opacity: 1; }
+  25%, 75% { opacity: 0; }
+}
+
+.game-menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 2rem;
+  justify-items: center;
+}
+
+.game-tile {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1rem;
+  text-decoration: none;
+  color: #111;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.game-tile img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.game-tile span {
+  font-size: 0.7rem;
+  margin-top: 0.5rem;
+}
+
+.game-tile:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* === ABOUT PREVIEW BELOW MENU === */
+.about-preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 4rem;
+  flex-wrap: wrap;
+}
+
+.about-preview img {
+  max-width: 300px;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.about-preview .about-text {
+  max-width: 500px;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 1rem;
+  line-height: 1.6;
+  text-align: left;
+  color: #222;
+}
+
+.about-preview .about-text p {
+  margin: 0;
+}
+

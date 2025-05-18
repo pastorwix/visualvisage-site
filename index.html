@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Visual Visage</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Press+Start+2P&family=Quicksand:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .about-preview img {
+      border-radius: 50%;
+      width: 200px;
+      height: 200px;
+      object-fit: cover;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .about-preview img:hover {
+      transform: scale(1.08);
+      box-shadow: 0 0 25px 10px rgba(255, 223, 0, 0.6);
+    }
+
+    .top-nav {
+      text-align: left;
+      padding: 1rem 2rem;
+    }
+
+    .top-nav a {
+      text-decoration: underline;
+      margin-right: 1rem;
+      font-weight: 600;
+      color: #444;
+    }
+
+    .top-nav a:hover {
+      color: #000;
+    }
+  </style>
+</head>
+<body class="nintendo-mode">
+
+  <div class="top-nav">
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <a href="https://www.etsy.com/shop/VisualVisage" target="_blank" rel="noopener">Shop</a>
+  </div>
+
+  <main class="start-screen container">
+    <h1 class="game-logo">VISUAL VISAGE</h1>
+    <p class="press-start">IZZY'S PORTFOLIO</p>
+
+    <section class="game-menu-grid">
+      <a href="posters.html" class="game-tile">
+        <img src="assets/posters-preview.jpg" alt="Posters" />
+        <span>Posters</span>
+      </a>
+      <a href="photos.html" class="game-tile">
+        <img src="assets/photo-preview.jpg" alt="Photography" />
+        <span>Photography</span>
+      </a>
+      <a href="designs.html" class="game-tile">
+        <img src="assets/design-preview.jpg" alt="Designs" />
+        <span>Designs</span>
+      </a>
+      <a href="videos.html" class="game-tile">
+        <img src="assets/video-preview.jpg" alt="Video" />
+        <span>Video</span>
+      </a>
+    </section>
+
+    <section class="about-preview">
+      <a href="https://linktr.ee/pasturwix" target="_blank" rel="noopener">
+        <img src="assets/about-photo.jpg" alt="Isaah Wicks" />
+      </a>
+      <div class="about-text">
+        <p>Hey, I’m Izzy Wicks — the creative behind Visual Visage. I bring imagination to life through posters, photos, and experimental design. Click this photo to find me. Click the SHOP button to shop for my printables!!
+
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+</body>
+</html>
+
+
