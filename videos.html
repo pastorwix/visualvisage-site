@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Videos – Visual Visage</title>
+
+  <!-- Fonts + CSS -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Quicksand:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+
+  <style>
+    body {
+      font-family: 'Quicksand', sans-serif;
+      background-color: #fdf6e3;
+      color: #2d2d2d;
+      margin: 0;
+    }
+
+    .sticky-nav {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background-color: #fff;
+      padding: 1rem 2rem;
+      border-bottom: 1px solid #eee;
+    }
+
+    .sticky-nav nav ul {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .sticky-nav nav a {
+      text-decoration: underline;
+      font-weight: 600;
+      color: #444;
+      transition: color 0.3s ease;
+    }
+
+    .sticky-nav nav a:hover {
+      color: #000;
+    }
+
+    header {
+      background-color: #fff;
+      padding: 2rem 1rem 1rem;
+      border-bottom: none;
+      text-align: center;
+    }
+
+    header h1 {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 2.2rem;
+      letter-spacing: 1px;
+    }
+
+    .intro {
+      text-align: center;
+      padding: 2rem 1rem 0;
+    }
+
+    .intro h2 {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .intro p {
+      font-size: 1rem;
+      color: #666;
+    }
+
+    .masonry-videos {
+      column-count: 2;
+      column-gap: 1rem;
+      padding: 2rem 1rem;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .masonry-videos iframe {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      margin-bottom: 1rem;
+      border-radius: 12px;
+      break-inside: avoid;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.07);
+      border: none;
+    }
+
+    footer {
+      background-color: #fff;
+      text-align: center;
+      padding: 1.5rem;
+      font-size: 0.9rem;
+      color: #aaa;
+      border-top: 1px solid #eee;
+      margin-top: 3rem;
+    }
+
+    @media (max-width: 768px) {
+      .masonry-videos {
+        column-count: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="sticky-nav">
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="posters.html">Posters</a></li>
+        <li><a href="designs.html">Designs</a></li>
+        <li><a href="photos.html">Photos</a></li>
+        <li><a href="videos.html">Videos</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <header>
+    <h1>Visual Visage</h1>
+  </header>
+
+  <main>
+    <section class="intro">
+      <h2>Video Gallery</h2>
+      <p>Videos I've helped film/ film + edit.</p>
+    </section>
+
+    <section class="masonry-videos">
+      <iframe src="https://www.youtube.com/embed/i-tZn-2Ym94" title="Paradise" allowfullscreen></iframe>
+      <iframe src="https://www.youtube.com/embed/KyQeDxWpA9I" title="Noah's Dimes Part" allowfullscreen></iframe>
+      <iframe src="https://www.youtube.com/embed/yDp7CY91dMs" title="Liam's Memorial Session" allowfullscreen></iframe>
+
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2025 Visual Visage</p>
+  </footer>
+
+</body>
+</html>
+
+
