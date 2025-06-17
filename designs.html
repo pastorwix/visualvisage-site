@@ -84,19 +84,22 @@
       margin: auto;
     }
 
-    .masonry-posters img {
-      width: 100%;
-      margin-bottom: 1rem;
-      border-radius: 12px;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      cursor: pointer;
+    .design-card {
       break-inside: avoid;
+      background: #fff;
+      border-radius: 12px;
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.07);
+      margin-bottom: 1rem;
+      padding: 1rem;
     }
 
-    .masonry-posters img:hover {
-      transform: scale(1.03);
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+    .design-card img {
+      width: 100%;
+      border-radius: 12px;
+    }
+
+    .design-card h3 {
+      margin: 0.5rem 0;
     }
 
     footer {
@@ -107,54 +110,6 @@
       color: #aaa;
       border-top: 1px solid #eee;
       margin-top: 3rem;
-    }
-
-    .lightbox {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0, 0, 0, 0.9);
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
-      flex-direction: column;
-      touch-action: none;
-    }
-
-    .lightbox img {
-      max-width: 90%;
-      max-height: 80vh;
-      border-radius: 12px;
-    }
-
-    .lightbox-close, .arrow {
-      position: absolute;
-      font-size: 2rem;
-      color: #fff;
-      font-weight: bold;
-      cursor: pointer;
-      -webkit-user-select: none;
-      user-select: none;
-    }
-
-    .lightbox-close {
-      top: 20px;
-      right: 30px;
-    }
-
-    .arrow.left {
-      left: 30px;
-      top: 50%;
-      transform: translateY(-50%);
-    }
-
-    .arrow.right {
-      right: 30px;
-      top: 50%;
-      transform: translateY(-50%);
     }
 
     @media (max-width: 768px) {
@@ -182,6 +137,7 @@
         <li><a href="videos.html">Videos</a></li>
         <li><a href="about.html">About</a></li>
         <li><a href="contact.html">Contact</a></li>
+        <li><a href="shop.html">Shop</a></li>
       </ul>
     </nav>
   </div>
@@ -197,88 +153,43 @@
     </section>
 
     <section class="masonry-posters">
-      <img src="assets/design1.jpg" alt="Design 1">
-      <img src="assets/design2.jpg" alt="Design 2">
-      <img src="assets/design3.jpg" alt="Design 3">
-      <img src="assets/design4.jpg" alt="Design 4">
-      <img src="assets/design5.jpg" alt="Design 5">
-      <img src="assets/design6.jpg" alt="Design 6">
+      <div class="design-card">
+        <img src="assets/design1.jpg" alt="Design 1">
+        <h3>NGB – Infinite Nexus</h3>
+        <p>NachoGummyBears Music</p>
+        
+      
+      </div>
+
+      <div class="design-card">
+        <img src="assets/design2.jpg" alt="Design 2">
+        <h3>Bleux Jeans [Cover]</h3>
+        <p>For NachoGummyBears</p>
+      </div>
+
+      <div class="design-card">
+        <img src="assets/design3.jpg" alt="Design 3">
+        <h3>NGB Design</h3>
+        <p></p>
+      </div>
+
+      <div class="design-card">
+        <img src="assets/design4.jpg" alt="Design 4">
+        <h3>@JayDaJit</h3>
+        <p>Streaming on Twitch &TikTok</p>
+      </div>
+
+      <div class="design-card">
+        <img src="assets/design5.jpg" alt="Design 5">
+        <h3>NGB Logos </h3>
+        <p>Base Color NGB Logos</p>
+      </div>
     </section>
   </main>
-
-  <div class="lightbox" id="lightbox">
-    <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
-    <span class="arrow left" onclick="navigate(-1)">&#10094;</span>
-    <img id="lightbox-img" src="" alt="Lightbox Image">
-    <span class="arrow right" onclick="navigate(1)">&#10095;</span>
-  </div>
 
   <footer>
     <p>© 2025 Visual Visage</p>
   </footer>
 
-  <script>
-    const thumbnails = document.querySelectorAll('.masonry-posters img');
-    const lightbox = document.getElementById('lightbox');
-    const lightboxImg = document.getElementById('lightbox-img');
-    let currentIndex = 0;
-    const images = Array.from(thumbnails);
-
-    thumbnails.forEach((img, index) => {
-      img.addEventListener('click', () => {
-        currentIndex = index;
-        openLightbox(img.src);
-      });
-    });
-
-    function openLightbox(src) {
-      lightboxImg.src = src;
-      lightbox.style.display = 'flex';
-    }
-
-    function closeLightbox() {
-      lightbox.style.display = 'none';
-    }
-
-    function navigate(direction) {
-      currentIndex += direction;
-      if (currentIndex < 0) currentIndex = images.length - 1;
-      if (currentIndex >= images.length) currentIndex = 0;
-      lightboxImg.src = images[currentIndex].src;
-    }
-
-    window.addEventListener('click', (e) => {
-      if (e.target === lightbox) closeLightbox();
-    });
-
-    window.addEventListener('keydown', (e) => {
-      if (lightbox.style.display === 'flex') {
-        if (e.key === 'ArrowRight') navigate(1);
-        if (e.key === 'ArrowLeft') navigate(-1);
-        if (e.key === 'Escape') closeLightbox();
-      }
-    });
-
-    let startX = 0, endX = 0;
-    lightbox.addEventListener('touchstart', (e) => {
-      startX = e.changedTouches[0].screenX;
-    });
-    lightbox.addEventListener('touchend', (e) => {
-      endX = e.changedTouches[0].screenX;
-      handleSwipe();
-    });
-
-    function handleSwipe() {
-      const diffX = startX - endX;
-      if (Math.abs(diffX) > 50) {
-        if (diffX > 0) navigate(1);
-        else navigate(-1);
-      }
-    }
-  </script>
-
 </body>
 </html>
-
-
-

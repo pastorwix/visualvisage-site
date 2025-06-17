@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Shop – Visual Visage</title>
+
+  <!-- Fonts + CSS -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Quicksand:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+
+  <style>
+    body {
+      font-family: 'Quicksand', sans-serif;
+      background-color: #fdf6e3;
+      color: #2d2d2d;
+      margin: 0;
+    }
+
+    header {
+      background-color: #fff;
+      padding: 2rem 1rem;
+      border-bottom: 1px solid #eee;
+      text-align: center;
+    }
+
+    header h1 {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 2.2rem;
+      letter-spacing: 1px;
+    }
+
+    nav ul {
+      list-style: none;
+      padding: 0;
+      margin-top: 1rem;
+    }
+
+    nav ul li {
+      display: inline-block;
+      margin: 0 1rem;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #888;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+
+    nav a:hover {
+      color: #2d2d2d;
+    }
+
+    .shop-container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+
+    .shop-container h2 {
+      font-family: 'Fredoka', sans-serif;
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+    }
+
+    .product-card {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+      overflow: hidden;
+      text-align: center;
+      padding-bottom: 1rem;
+      transition: transform 0.3s ease;
+    }
+
+    .product-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .product-card img {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+    }
+
+    .product-card h3 {
+      font-size: 1.3rem;
+      margin: 1rem 0 0.5rem;
+    }
+
+    .product-card p {
+      color: #666;
+      font-size: 0.95rem;
+      margin: 0 1rem 1rem;
+    }
+
+    .product-card a {
+      background-color: #ffbaba;
+      color: #2d2d2d;
+      text-decoration: none;
+      font-weight: 600;
+      padding: 0.6rem 1.2rem;
+      border-radius: 8px;
+      transition: background-color 0.3s ease;
+    }
+
+    .product-card a:hover {
+      background-color: #f99;
+    }
+
+    footer {
+      background-color: #fff;
+      text-align: center;
+      padding: 1.5rem;
+      font-size: 0.9rem;
+      color: #aaa;
+      border-top: 1px solid #eee;
+      margin-top: 3rem;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Visual Visage</h1>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="posters.html">Posters</a></li>
+        <li><a href="designs.html">Designs</a></li>
+        <li><a href="photos.html">Photos</a></li>
+        <li><a href="videos.html">Videos</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="shop.html">Shop</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="shop-container">
+    <h2>Shop My Prints</h2>
+    <div class="product-grid">
+      <div class="product-card">
+        <img src="assets/poster1.jpg" alt=" Heart Mind Spirit Wall Art" />
+        <h3>Heart Mind Spirit Wall Art</h3>
+        <p>Dreamy layers, perfect for framing or digital backgrounds.</p>
+        <a href="https://www.etsy.com/listing/4295695739" target="_blank" rel="noopener">Buy on Etsy</a>
+      </div>
+
+      <div class="product-card">
+        <img src="assets/poster2.jpg" alt="Risk It All Wall Art" />
+        <h3>Risk It All Wall Art</h3>
+        <p>A bold and nostalgic blend of colors.</p>
+        <a href="https://www.etsy.com/listing/4295708491" target="_blank" rel="noopener">Buy on Etsy</a>
+      </div>
+
+      <div class="product-card">
+        <img src="assets/poster5.jpg" alt="Love Wall Art" />
+        <h3>Love Wall Art</h3>
+        <p>Clean and calming design for any modern space.</p>
+        <a href="https://www.etsy.com/listing/4295701727" target="_blank" rel="noopener">Buy on Etsy</a>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>© 2025 Visual Visage</p>
+  </footer>
+
+</body>
+</html>
