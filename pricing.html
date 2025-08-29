@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pricing & Services - Visual Visage</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Press+Start+2P&family=Quicksand:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://js.stripe.com/v3/"></script>
+  <style>
+    body {
+      font-family: 'Quicksand', sans-serif;
+      background-color: #fdf6e3;
+      color: #2d2d2d;
+      margin: 0;
+    }
+
+    header {
+      background-color: #fff;
+      padding: 2rem 1rem;
+      border-bottom: 1px solid #eee;
+      text-align: center;
+    }
+
+    header h1 {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 2.2rem;
+      letter-spacing: 1px;
+    }
+
+    nav ul {
+      list-style: none;
+      padding: 0;
+      margin-top: 1rem;
+    }
+
+    nav ul li {
+      display: inline-block;
+      margin: 0 1rem;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #888;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+
+    nav a:hover {
+      color: #2d2d2d;
+    }
+
+    .lava-bg {
+      position: relative;
+      overflow: hidden;
+      min-height: 100vh;
+      padding-bottom: 4rem;
+    }
+
+    .lava-bg::before,
+    .lava-bg::after {
+      content: '';
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle at center, #fbbbad, #fdf6e3);
+      opacity: 0.5;
+      border-radius: 50%;
+      animation: floatBlob 12s ease-in-out infinite alternate;
+      z-index: 0;
+    }
+
+    .lava-bg::after {
+      width: 700px;
+      height: 700px;
+      background: radial-gradient(circle at center, #b4e7d9, #fdf6e3);
+      top: 200px;
+      left: 60%;
+      animation-delay: 4s;
+    }
+
+    @keyframes floatBlob {
+      0% {
+        transform: translate(-100px, -100px) scale(1);
+      }
+      100% {
+        transform: translate(100px, 100px) scale(1.2);
+      }
+    }
+
+    .pricing-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .page-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .page-header h1 {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 2rem;
+      color: #333;
+      margin-bottom: 1rem;
+    }
+
+    .page-header p {
+      font-family: 'Quicksand', sans-serif;
+      font-size: 1.2rem;
+      color: #666;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .pricing-note {
+      background: #fff;
+      border: 1px dashed #f2c94c;
+      padding: 1rem 1.25rem;
+      border-radius: 12px;
+      margin: 1.25rem auto 0;
+      max-width: 720px;
+      color: #444;
+      font-size: 0.95rem;
+    }
+
+    .service-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 3rem;
+      flex-wrap: wrap;
+    }
+
+    .service-tab {
+      background: rgba(255, 255, 255, 0.9);
+      border: 2px solid #e9ecef;
+      padding: 1rem 2rem;
+      border-radius: 50px;
+      font-family: 'Quicksand', sans-serif;
+      font-weight: 600;
+      color: #666;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      backdrop-filter: blur(10px);
+    }
+
+    .service-tab.active,
+    .service-tab:hover {
+      background: linear-gradient(135deg, #f2c94c 0%, #f39c12 100%);
+      color: #333;
+      border-color: #f2c94c;
+      transform: translateY(-2px);
+    }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .pricing-card {
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 20px;
+      padding: 2.5rem;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+    }
+
+    .pricing-card:hover {
+      transform: translateY(-10px);
+    }
+
+    .pricing-card.featured {
+      border: 3px solid #f2c94c;
+      transform: scale(1.05);
+    }
+
+    .pricing-card.featured::before {
+      content: "MOST POPULAR";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(135deg, #f2c94c 0%, #f39c12 100%);
+      color: #333;
+      font-family: 'Quicksand', sans-serif;
+      font-weight: 600;
+      font-size: 0.8rem;
+      padding: 0.5rem;
+    }
+
+    .package-name {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 1rem;
+      color: #333;
+      margin-bottom: 1rem;
+    }
+
+    .package-price {
+      font-family: 'Quicksand', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 1rem;
+    }
+
+    .package-price .currency {
+      font-size: 1.5rem;
+      vertical-align: top;
+    }
+
+    .package-features {
+      list-style: none;
+      margin: 2rem 0;
+      text-align: left;
+    }
+
+    .package-features li {
+      font-family: 'Quicksand', sans-serif;
+      color: #666;
+      margin-bottom: 0.8rem;
+      padding-left: 1.5rem;
+      position: relative;
+    }
+
+    .package-features li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: #f2c94c;
+      font-weight: bold;
+    }
+
+    .book-button {
+      background: linear-gradient(135deg, #f2c94c 0%, #f39c12 100%);
+      color: #333;
+      padding: 1rem 2rem;
+      border-radius: 50px;
+      font-family: 'Quicksand', sans-serif;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-block;
+      box-shadow: 0 8px 25px rgba(242, 201, 76, 0.4);
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 1rem;
+    }
+
+    .book-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 35px rgba(242, 201, 76, 0.6);
+      background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+    }
+
+    .rate-control {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      margin: 0.5rem 0 0.75rem;
+      font-family: 'Quicksand', sans-serif;
+    }
+
+    .rate-select {
+      border: 1px solid #e9ecef;
+      border-radius: 999px;
+      padding: 0.35rem 0.75rem;
+      background: #fff;
+      font-weight: 600;
+      color: #444;
+      cursor: pointer;
+    }
+
+    .rate-hint {
+      font-size: 0.85rem;
+      color: #777;
+      margin-top: 0.25rem;
+    }
+
+    .back-link {
+      text-align: center;
+      margin-top: 3rem;
+    }
+
+    .back-link a {
+      font-family: 'Quicksand', sans-serif;
+      color: #666;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .back-link a:hover {
+      color: #333;
+    }
+
+    /* Checkout Modal */
+    .checkout-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .checkout-content {
+      background: white;
+      border-radius: 20px;
+      padding: 2rem;
+      max-width: 500px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    .checkout-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .checkout-header h2 {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 1.2rem;
+      color: #333;
+      margin-bottom: 0.5rem;
+    }
+
+    .close-modal {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #666;
+    }
+
+    .close-modal:hover {
+      color: #333;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-family: 'Quicksand', sans-serif;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 0.5rem;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 0.8rem;
+      border: 2px solid #e9ecef;
+      border-radius: 10px;
+      font-family: 'Quicksand', sans-serif;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: #f2c94c;
+    }
+
+    .form-hint {
+      font-size: 0.9rem;
+      color: #777;
+      margin-top: 0.35rem;
+    }
+
+    .stripe-button {
+      background: #6772e5;
+      color: white;
+      padding: 1rem 2rem;
+      border-radius: 10px;
+      font-family: 'Quicksand', sans-serif;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 1rem;
+      transition: background 0.3s ease;
+    }
+
+    .stripe-button:hover {
+      background: #5469d4;
+    }
+
+    @media (max-width: 768px) {
+      .service-tabs {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .pricing-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .pricing-card.featured {
+        transform: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Visual Visage</h1>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="posters.html">Posters</a></li>
+        <li><a href="designs.html">Designs</a></li>
+        <li><a href="photos.html">Photos</a></li>
+        <li><a href="videos.html">Videos</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="shop.html">Shop</a></li>
+        <li><a href="pricing.html">Pricing</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <div class="lava-bg">
+    <main>
+      <div class="pricing-container">
+        <div class="page-header">
+          <h1>PRICING & SERVICES</h1>
+          <p>Choose the perfect package for your creative project. All packages include consultation, revisions, and high-quality deliverables.</p>
+          <div class="pricing-note">
+            Inclusive pricing: pick the rate that fits your situation. Community Rate offers a discount, Standard is the baseline, and Supporter helps fund community pricing for others.
+          </div>
+        </div>
+
+        <div class="service-tabs">
+          <button class="service-tab active" data-service="posters">Posters</button>
+          <button class="service-tab" data-service="photography">Photography</button>
+          <button class="service-tab" data-service="designs">Designs</button>
+        </div>
+
+        <!-- Posters Pricing -->
+        <div class="pricing-grid" id="posters-pricing">
+          <div class="pricing-card">
+            <h3 class="package-name">BASIC</h3>
+            <div class="package-price">
+              <span class="currency">$</span>75
+            </div>
+            <div class="rate-control">
+              <label for="rate-posters-basic" style="color:#666; font-weight:600;">Rate:</label>
+              <select id="rate-posters-basic" class="rate-select" aria-label="Choose your rate">
+                <option value="community" data-mult="0.7">Community (-30%)</option>
+                <option value="standard" data-mult="1" selected>Standard</option>
+                <option value="supporter" data-mult="1.25">Supporter (+25%)</option>
+              </select>
+            </div>
+            <div class="rate-hint">No proof needed — choose what feels right.</div>
+            <ul class="package-features">
+              <li>1 Custom Poster Design</li>
+              <li>2 Revisions</li>
+              <li>High-resolution files</li>
+              <li>3-5 day turnaround</li>
+              <li>Email support</li>
+            </ul>
+            <button class="book-button" data-package="posters-basic" data-price="75">Book Now</button>
+          </div>
+
+          <div class="pricing-card featured">
+            <h3 class="package-name">STANDARD</h3>
+            <div class="package-price">
+              <span class="currency">$</span>150
+            </div>
+            <div class="rate-control">
+              <label for="rate-posters-standard" style="color:#666; font-weight:600;">Rate:</label>
+              <select id="rate-posters-standard" class="rate-select" aria-label="Choose your rate">
+                <option value="community" data-mult="0.7">Community (-30%)</option>
+                <option value="standard" data-mult="1" selected>Standard</option>
+                <option value="supporter" data-mult="1.25">Supporter (+25%)</option>
+              </select>
+            </div>
+            <div class="rate-hint">Supporter helps fund community discounts.</div>
+            <ul class="package-features">
+              <li>2 Custom Poster Designs</li>
+              <li>Unlimited revisions</li>
+              <li>High-resolution files</li>
+              <li>Print-ready formats</li>
+              <li>2-3 day turnaround</li>
+              <li>Priority support</li>
+            </ul>
+            <button class="book-button" data-package="posters-standard" data-price="150">Book Now</button>
+          </div>
+
+          <div class="pricing-card">
+            <h3 class="package-name">PREMIUM</h3>
+            <div class="package-price">
+              <span class="currency">$</span>250
+            </div>
+            <div class="rate-control">
+              <label for="rate-posters-premium" style="color:#666; font-weight:600;">Rate:</label>
+              <select id="rate-posters-premium" class="rate-select" aria-label="Choose your rate">
+                <option value="community" data-mult="0.7">Community (-30%)</option>
+                <option value="standard" data-mult="1" selected>Standard</option>
+                <option value="supporter" data-mult="1.25">Supporter (+25%)</option>
+              </select>
+            </div>
+            <div class="rate-hint">Choose the rate that fits you.</div>
+            <ul class="package-features">
+              <li>3 Custom Poster Designs</li>
+              <li>Unlimited revisions</li>
+              <li>All file formats</li>
+              <li>Print-ready formats</li>
+              <li>1-2 day turnaround</li>
+              <li>Priority support</li>
+              <li>Source files included</li>
+            </ul>
+            <button class="book-button" data-package="posters-premium" data-price="250">Book Now</button>
+          </div>
+        </div>
+
+        <!-- Photography Pricing -->
+        <div class="pricing-grid" id="photography-pricing" style="display: none;">
+          <div class="pricing-card">
+            <h3 class="package-name">BASIC</h3>
+            <div class="package-price">
+              <span class="currency">$</span>200
+            </div>
+            <div class="rate-control">
+              <label for="rate-photography-basic" style="color:#666; font-weight:600;">Rate:</label>
+              <select id="rate-photography-basic" class="rate-select" aria-label="Choose your rate">
+                <option value="community" data-mult="0.7">Community (-30%)</option>
+                <option value="standard" data-mult="1" selected>Standard</option>
+                <option value="supporter" data-mult="1.25">Supporter (+25%)</option>
+              </select>
+            </div>
+            <ul class="package-features">
+              <li>1 Hour Photo Session</li>
+              <li>20 Edited Photos</li>
+              <li>Online gallery</li>
+              <li>Basic editing</li>
+              <li>1 week delivery</li>
+            </ul>
+            <button class="book-button" data-package="photography-basic" data-price="200">Book Now</button>
+          </div>
+
+          <div class="pricing-card featured">
+            <h3 class="package-name">STANDARD</h3>
+            <div class="package-price">
+              <span class="currency">$</span>350
+            </div>
+            <div class="rate-control">
+              <label for="rate-photography-standard" style="color:#666; font-weight:600;">Rate:</label>
+              <select id="rate-photography-standard" class="rate-select" aria-label="Choose your rate">
+                <option value="community" data-mult="0.7">Community (-30%)</option>
+                <option value="standard" data-mult="1" selected>Standard</option>
+                <option value="supporter" data-mult="1.25">Supporter (+25%)</option>
+              </select>
+            </div>
+            <ul class="package-features">
+              <li>2 Hour Photo Session</li>
+              <li>40 Edited Photos</li>
+              <li>Online gallery</li>
+              <li>Advanced editing</li>
+              <li>Print-ready files</li>
+              <li>5 day delivery</li>
+            </ul>
+            <button class="book-button" data-package="photography-standard" data-price="350">Book Now</button>
+          </div>
+
+          <div class="pricing-card">
+            <h3 class="package-name">PREMIUM</h3>
+            <div class="package-price">
+              <span class="currency">$</span>500
+            </div>
+            <div class="rate-control">
+              <label for="rate-photography-premium" style="color:#666; font-weight:600;">Rate:</label>
+              <select id="rate-photography-premium" class="rate-select" aria-label="Choose your rate">
+                <option value="community" data-mult="0.7">Community (-30%)</option>
+                <option value="standard" data-mult="1" selected>Standard</option>
+                <option value="supporter" data-mult="1.25">Supporter (+25%)</option>
+              </select>
+            </div>
+            <ul class="package-features">
+              <li>3 Hour Photo Session</li>
+              <li>60 Edited Photos</li>
+              <li>Online gallery</li>
+              <li>Premium editing</li>
+              <li>All file formats</li>
+              <li>3 day delivery</li>
+              <li>Video highlights</li>
+            </ul>
+            <button class="book-button" data-package="photography-premium" data-price="500">Book Now</button>
+          </div>
+        </div>
+
+        <!-- Designs Pricing -->
+        <div class="pricing-grid" id="designs-pricing" style="display: none;">
+          <div class="pricing-card">
+            <h3 class="package-name">BASIC</h3>
+            <div class="package-price">
+              <span class="currency">$</span>100
+            </div>
+            <div class="rate-control">
+              <label for="rate-designs-basic" style="color:#666; font-weight:600;">Rate:</label>
+              <select id="rate-designs-basic" class="rate-select" aria-label="Choose your rate">
+                <option value="community" data-mult="0.7">Community (-30%)</option>
+                <option value="standard" data-mult="1" selected>Standard</option>
+                <option value="supporter" data-mult="1.25">Supporter (+25%)</option>
+              </select>
+            </div>
+            <ul class="package-features">
+              <li>1 Design Concept</li>
+              <li>2 Revisions</li>
+              <li>High-resolution files</li>
+              <li>5-7 day turnaround</li>
+              <li>Email support</li>
+            </ul>
+            <button class="book-button" data-package="designs-basic" data-price="100">Book Now</button>
+          </div>
+
+          <div class="pricing-card featured">
+            <h3 class="package-name">STANDARD</h3>
+            <div class="package-price">
+              <span class="currency">$</span>200
+            </div>
+            <div class="rate-control">
+              <label for="rate-designs-standard" style="color:#666; font-weight:600;">Rate:</label>
+              <select id="rate-designs-standard" class="rate-select" aria-label="Choose your rate">
+                <option value="community" data-mult="0.7">Community (-30%)</option>
+                <option value="standard" data-mult="1" selected>Standard</option>
+                <option value="supporter" data-mult="1.25">Supporter (+25%)</option>
+              </select>
+            </div>
+            <ul class="package-features">
+              <li>2 Design Concepts</li>
+              <li>Unlimited revisions</li>
+              <li>All file formats</li>
+              <li>Print-ready files</li>
+              <li>3-5 day turnaround</li>
+              <li>Priority support</li>
+            </ul>
+            <button class="book-button" data-package="designs-standard" data-price="200">Book Now</button>
+          </div>
+
+          <div class="pricing-card">
+            <h3 class="package-name">PREMIUM</h3>
+            <div class="package-price">
+              <span class="currency">$</span>350
+            </div>
+            <div class="rate-control">
+              <label for="rate-designs-premium" style="color:#666; font-weight:600;">Rate:</label>
+              <select id="rate-designs-premium" class="rate-select" aria-label="Choose your rate">
+                <option value="community" data-mult="0.7">Community (-30%)</option>
+                <option value="standard" data-mult="1" selected>Standard</option>
+                <option value="supporter" data-mult="1.25">Supporter (+25%)</option>
+              </select>
+            </div>
+            <ul class="package-features">
+              <li>3 Design Concepts</li>
+              <li>Unlimited revisions</li>
+              <li>All file formats</li>
+              <li>Print-ready files</li>
+              <li>2-3 day turnaround</li>
+              <li>Priority support</li>
+              <li>Source files included</li>
+              <li>Brand guidelines</li>
+            </ul>
+            <button class="book-button" data-package="designs-premium" data-price="350">Book Now</button>
+          </div>
+        </div>
+
+        <section class="community-pricing-info" style="max-width:900px;margin:2rem auto 0;text-align:center;color:#555;">
+          <h3 style="font-family:'Press Start 2P', cursive;font-size:1rem;color:#333;margin-bottom:0.5rem;">How Community Pricing Works</h3>
+          <p style="margin:0 auto 0.5rem;max-width:720px;">The Community rate keeps projects accessible. If you’re able, choose Supporter to help cover these discounts. No applications or proof — just choose the option that matches your circumstances.</p>
+          <p style="margin:0; font-size:0.95rem;">Payment plans are available for all packages. Mention it in your booking request.</p>
+        </section>
+
+        <div class="back-link">
+          <a href="index.html">← Back to Home</a>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Checkout Modal -->
+  <div class="checkout-modal" id="checkoutModal">
+    <div class="checkout-content">
+      <button class="close-modal" onclick="closeModal()">&times;</button>
+      <div class="checkout-header">
+        <h2>BOOK YOUR SERVICE</h2>
+        <p id="selectedPackage">Selected Package: <span id="packageName"></span></p>
+        <p>Price: $<span id="packagePrice"></span></p>
+      </div>
+
+      <form id="checkoutForm">
+        <div class="form-group">
+          <label for="name">Full Name *</label>
+          <input type="text" id="name" name="name" required>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email Address *</label>
+          <input type="email" id="email" name="email" required>
+        </div>
+
+        <div class="form-group">
+          <label for="phone">Phone Number</label>
+          <input type="tel" id="phone" name="phone">
+        </div>
+
+        <div class="form-group">
+          <label for="projectDetails">Project Details *</label>
+          <textarea id="projectDetails" name="projectDetails" rows="4" placeholder="Please describe your project requirements, timeline, and any specific ideas you have..." required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="timeline">Preferred Timeline</label>
+          <select id="timeline" name="timeline">
+            <option value="">Select timeline</option>
+            <option value="asap">As soon as possible</option>
+            <option value="1-2-weeks">1-2 weeks</option>
+            <option value="2-4-weeks">2-4 weeks</option>
+            <option value="flexible">Flexible</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label style="display:flex; align-items:center; gap:0.5rem; cursor:pointer;">
+            <input type="checkbox" id="paymentPlan" name="paymentPlan">
+            I'd like a payment plan
+          </label>
+          <div class="form-hint">Available for any package and rate — no added fees.</div>
+        </div>
+
+        <button type="submit" class="stripe-button">
+          Send Booking Request
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Service tab switching
+    const serviceTabs = document.querySelectorAll('.service-tab');
+    const pricingGrids = document.querySelectorAll('.pricing-grid');
+    const rateSelects = document.querySelectorAll('.rate-select');
+
+    // Initialize base prices and wire up rate selects
+    document.querySelectorAll('.pricing-card').forEach(card => {
+      const priceEl = card.querySelector('.package-price');
+      const bookBtn = card.querySelector('.book-button');
+      if (!priceEl || !bookBtn) return;
+
+      // Read base price from the price element (numbers only)
+      const baseText = priceEl.textContent.replace(/[^0-9.]/g, '');
+      const basePrice = parseFloat(baseText || '0');
+      card.dataset.basePrice = String(basePrice);
+
+      const select = card.querySelector('.rate-select');
+      const updatePrice = () => {
+        const mult = parseFloat(select?.selectedOptions?.[0]?.dataset?.mult || '1');
+        // Round to nearest whole dollar for simplicity
+        const newPrice = Math.round(basePrice * mult);
+        priceEl.innerHTML = `<span class="currency">$</span>${newPrice}`;
+        bookBtn.setAttribute('data-price', String(newPrice));
+        // Store chosen rate on button for modal context
+        bookBtn.setAttribute('data-rate', select?.value || 'standard');
+      };
+      if (select) {
+        select.addEventListener('change', updatePrice);
+        updatePrice();
+      }
+    });
+
+    serviceTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        // Remove active class from all tabs
+        serviceTabs.forEach(t => t.classList.remove('active'));
+        // Add active class to clicked tab
+        tab.classList.add('active');
+
+        // Hide all pricing grids
+        pricingGrids.forEach(grid => grid.style.display = 'none');
+
+        // Show selected pricing grid
+        const service = tab.getAttribute('data-service');
+        const targetGrid = document.getElementById(`${service}-pricing`);
+        if (targetGrid) {
+          targetGrid.style.display = 'grid';
+        }
+      });
+    });
+
+    // Checkout modal functionality
+    const modal = document.getElementById('checkoutModal');
+    const bookButtons = document.querySelectorAll('.book-button');
+    const packageNameSpan = document.getElementById('packageName');
+    const packagePriceSpan = document.getElementById('packagePrice');
+
+    bookButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const pkg = button.getAttribute('data-package') || '';
+        const price = button.getAttribute('data-price') || '';
+        const rate = button.getAttribute('data-rate') || 'standard';
+
+        const prettyPkg = pkg.replace('-', ' ').toUpperCase();
+        const prettyRate = rate.charAt(0).toUpperCase() + rate.slice(1);
+        packageNameSpan.textContent = `${prettyPkg} (${prettyRate} rate)`;
+        packagePriceSpan.textContent = price;
+
+        modal.style.display = 'flex';
+      });
+    });
+
+    function closeModal() {
+      modal.style.display = 'none';
+      // Reset form
+      document.getElementById('checkoutForm').reset();
+    }
+
+    // Close modal when clicking outside
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        closeModal();
+      }
+    });
+
+    // Form submission - Contact form instead of Stripe
+    document.getElementById('checkoutForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const submitButton = e.target.querySelector('button[type="submit"]');
+      const originalText = submitButton.textContent;
+      submitButton.textContent = 'Sending...';
+      submitButton.disabled = true;
+      
+      try {
+        const formData = new FormData(e.target);
+        const data = {
+          name: formData.get('name'),
+          email: formData.get('email'),
+          phone: formData.get('phone'),
+          projectDetails: formData.get('projectDetails'),
+          timeline: formData.get('timeline'),
+          paymentPlan: !!formData.get('paymentPlan'),
+          package: packageNameSpan.textContent,
+          price: packagePriceSpan.textContent
+        };
+
+        // For now, we'll just show a success message
+        // Later, you can integrate with a form service like Formspree, Netlify Forms, or your own backend
+        console.log('Booking request:', data);
+        
+        // Show success message
+        alert('Thank you for your booking request! I will contact you within 24 hours to discuss your project and arrange payment. Please check your email for confirmation.');
+        closeModal();
+
+      } catch (error) {
+        console.error('Form submission error:', error);
+        alert('There was an error sending your request. Please try again or contact me directly.');
+      } finally {
+        submitButton.textContent = originalText;
+        submitButton.disabled = false;
+      }
+    });
+
+    // Optional: Add email integration later
+    // You can integrate with services like:
+    // - Formspree (free tier available)
+    // - Netlify Forms (if hosting on Netlify)
+    // - EmailJS (for client-side email sending)
+    // - Your own backend server
+  </script>
+</body>
+</html> 

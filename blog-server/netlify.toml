@@ -1,0 +1,20 @@
+[build]
+  command = "npm install"
+  publish = "../"
+  functions = "."
+
+[build.environment]
+  NODE_ENV = "production"
+  ADMIN_PASSWORD = "Idance123$"
+  ADMIN_TOKEN = "pasturwix"
+  SESSION_SECRET = "H7k#mP9$vL2nQ8@jR5tY3!hF1wE7sA4dG6zX9cV2bN5mK8pL1qW6eR3tY9uI4oP7aD0sF3gH6jK9lZ2xV5cB8nM1qW4eR7tY0uI3oP6aD9sF2gH5jK8lZ1xV4cB7nM0qW3eR6tY9uI2oP5aD8sF1gH4jK7lZ0xV3cB6nM9qW2eR5tY8uI1oP4aD7sF0gH3jK6lZ9xV2cB5nM8qW1eR4tY7uI0oP3a"
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/server.js"
+  status = 200
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

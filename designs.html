@@ -96,6 +96,20 @@
     .design-card img {
       width: 100%;
       border-radius: 12px;
+      transition: transform 0.3s ease;
+    }
+
+    .design-card img:hover {
+      transform: scale(1.02);
+    }
+
+    .design-card img[loading="lazy"] {
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .design-card img[loading="lazy"].loaded {
+      opacity: 1;
     }
 
     .design-card h3 {
@@ -118,7 +132,7 @@
       }
     }
 
-    @media (max-width: 500px) {
+    @media (max-width: 480px) {
       .masonry-posters {
         column-count: 1;
       }
@@ -138,6 +152,7 @@
         <li><a href="about.html">About</a></li>
         <li><a href="contact.html">Contact</a></li>
         <li><a href="shop.html">Shop</a></li>
+        <li><a href="pricing.html">Pricing</a></li>
       </ul>
     </nav>
   </div>
@@ -154,7 +169,7 @@
 
     <section class="masonry-posters">
       <div class="design-card">
-        <img src="assets/design1.jpg" alt="Design 1">
+        <img src="assets/design1.jpg" alt="Design 1" loading="lazy">
         <h3>NGB – Infinite Nexus</h3>
         <p>NachoGummyBears Music</p>
         
@@ -162,30 +177,51 @@
       </div>
 
       <div class="design-card">
-        <img src="assets/design2.jpg" alt="Design 2">
+        <img src="assets/design2.jpg" alt="Design 2" loading="lazy">
         <h3>Bleux Jeans [Cover]</h3>
         <p>For NachoGummyBears</p>
       </div>
 
       <div class="design-card">
-        <img src="assets/design3.jpg" alt="Design 3">
+        <img src="assets/design3.jpg" alt="Design 3" loading="lazy">
         <h3>NGB Design</h3>
         <p></p>
       </div>
 
       <div class="design-card">
-        <img src="assets/design4.jpg" alt="Design 4">
+        <img src="assets/design4.jpg" alt="Design 4" loading="lazy">
         <h3>@JayDaJit</h3>
         <p>Streaming on Twitch &TikTok</p>
       </div>
 
       <div class="design-card">
-        <img src="assets/design5.jpg" alt="Design 5">
+        <img src="assets/design5.jpg" alt="Design 5" loading="lazy">
         <h3>NGB Logos </h3>
         <p>Base Color NGB Logos</p>
       </div>
     </section>
   </main>
+
+  <script>
+    // Lazy loading for images
+    document.addEventListener('DOMContentLoaded', function() {
+      const images = document.querySelectorAll('img[loading="lazy"]');
+      
+      const imageObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const img = entry.target;
+            img.classList.add('loaded');
+            observer.unobserve(img);
+          }
+        });
+      });
+
+      images.forEach(img => {
+        imageObserver.observe(img);
+      });
+    });
+  </script>
 
   <footer>
     <p>© 2025 Visual Visage</p>
