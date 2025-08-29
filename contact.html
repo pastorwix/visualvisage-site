@@ -203,7 +203,7 @@
         <li><a href="videos.html">Videos</a></li>
         <li><a href="about.html">About</a></li>
         <li><a href="contact.html">Contact</a></li>
-        <li><a href="shop.html">Shop</a></li>
+        <li><a href="https://www.etsy.com/shop/VisualVisage" target="_blank" rel="noopener">Shop</a></li>
         <li><a href="pricing.html">Pricing</a></li>
       </ul>
     </nav>
@@ -218,6 +218,8 @@
        
 
         <form id="contact-form">
+          <!-- Honeypot field (leave hidden/empty) -->
+          <input type="text" name="website" id="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;opacity:0;height:0;width:0;" aria-hidden="true">
           <input type="text" name="name" placeholder="Your Name" required />
           <input type="email" name="email" placeholder="Your Email" required />
           <textarea name="message" rows="5" placeholder="Your Message" required></textarea>
@@ -240,6 +242,7 @@
       const name = form.name.value.trim();
       const email = form.email.value.trim();
       const message = form.message.value.trim();
+      const website = (form.website?.value || '').trim();
 
       if (!name || !email || !message) {
         alert("Please fill in all fields.");
@@ -252,10 +255,10 @@
       }
 
       try {
-        const res = await fetch("https://visualvisage-contact-form-server-production.up.railway.app/send", {
+        const res = await fetch("https://visualvisage-contact-form-server-production.up.railway.app/contact", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ name, email, message }),
+          body: JSON.stringify({ name, email, message, website }),
         });
 
         const result = await res.json();
@@ -285,5 +288,4 @@
 
 </body>
 </html>
-
 
