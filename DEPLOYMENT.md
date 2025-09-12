@@ -51,18 +51,22 @@ Make sure these files are in your deployment folder:
 3. **Save them** with the correct filenames in the `assets/` folder
 4. **Replace with your actual work** when ready
 
-## 📧 Setting Up Contact Forms (Optional)
+## 📧 Contact/Booking Forms
 
-### Netlify Forms (if using Netlify)
-Add this to your form in pricing.html:
-```html
-<form id="checkoutForm" name="booking" netlify>
-```
+Both `contact.html` and `pricing.html` submit to a single backend endpoint:
 
-### Formspree (Alternative)
-1. **Sign up** at [formspree.io](https://formspree.io)
-2. **Get your form endpoint**
-3. **Update the form action** in pricing.html
+- Base URL: `https://visualvisage-contact-form-server-production.up.railway.app`
+- Endpoint: `POST /contact`
+- JSON body: `{ "name": "...", "email": "...", "message": "..." }`
+
+Server expects Gmail credentials via environment variables:
+
+- `EMAIL_USER`: your Gmail address (e.g., `pastorwix@gmail.com`)
+- `EMAIL_PASS`: Gmail App Password (16 characters)
+
+Notes:
+- The server sends mail with `From = EMAIL_USER` and `Reply-To = visitor email` for reliable delivery.
+- `pricing.html` composes a detailed booking message string and sends it as `message`.
 
 ## 🔧 Next Steps After Deployment
 

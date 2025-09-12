@@ -91,8 +91,7 @@
     </nav>
   </header>
 
-  <div class="lava-bg" aria-hidden="true"></div>
-
+  <div class="lava-bg">
   <main aria-live="polite">
     <div class="pricing-container">
       <div class="page-header">
@@ -331,6 +330,7 @@
       </div>
     </div>
   </main>
+  </div>
 
   <!-- Checkout Modal -->
   <div class="checkout-modal" id="checkoutModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-hidden="true">
@@ -344,7 +344,7 @@
 
       <form id="checkoutForm" novalidate>
         <!-- Honeypot to deter bots: leave this hidden field empty -->
-        <input type="text" name="website" id="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;opacity:0;height:0;width:0;" aria-hidden="true">
+        
         <div class="form-group">
           <label for="name">Full Name *</label>
           <input type="text" id="name" name="name" required>
@@ -398,7 +398,7 @@
     const EMAILJS_SERVICE_ID = "YOUR_SERVICE_ID";           // e.g. service_xxx
     const EMAILJS_TEMPLATE_ID = "YOUR_TEMPLATE_ID";         // e.g. template_xxx
     const OWNER_EMAIL = "pastorwix@gmail.com";               // your email for mailto fallback
-    const RAILWAY_ENDPOINT = "https://visualvisage-contact-form-server-production.up.railway.app/booking";
+    const RAILWAY_ENDPOINT = "https://visualvisage-contact-form-server-production.up.railway.app/contact";
     // ============================
 
     if (EMAILJS_PUBLIC_KEY && !EMAILJS_PUBLIC_KEY.includes("YOUR_PUBLIC_KEY")) {
@@ -487,9 +487,7 @@
       e.preventDefault();
       if (!form.reportValidity()) return;
 
-      // honeypot
-      const hp = form.website?.value?.trim();
-      if (hp) { formNotice.textContent = "Thanks! We'll be in touch."; closeModal(); return; }
+      
 
       submitBtn.disabled = true;
       const originalText = submitBtn.textContent;
@@ -529,7 +527,7 @@ Source: pricing page
 
       let sent = false;
 
-      // 1) Primary: Railway JSON POST (booking endpoint)
+      // 1) Primary: Railway JSON POST (contact endpoint with composed message)
       try {
         const response = await fetch(RAILWAY_ENDPOINT, {
           method: 'POST',
@@ -537,14 +535,7 @@ Source: pricing page
           body: JSON.stringify({
             name: data.name,
             email: data.email,
-            phone: data.phone,
-            projectDetails: data.projectDetails,
-            timeline: data.timeline,
-            paymentPlan: data.paymentPlan,
-            package: data.package,
-            price: data.price,
-            // honeypot must be empty for real users
-            website: ''
+            message: bookingMessage
           })
         });
 

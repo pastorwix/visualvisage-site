@@ -138,12 +138,12 @@
     <a href="about.html">About</a>
     <a href="contact.html">Contact</a>
     <a href="https://www.etsy.com/shop/VisualVisage" target="_blank" rel="noopener">Shop</a>
-    <a href="pricing.html">Pricing</a>
+    <a href="pricing.html">Services</a>
   </div>
 
   <main class="start-screen container">
     <h1 class="game-logo">VISUAL VISAGE</h1>
-    <p class="press-start">CHECK OUT MY WORK </p>
+    <p class="press-start">Offered Services</p>
 
     <section class="game-menu-grid">
       <a href="posters.html" class="game-tile">
@@ -179,7 +179,25 @@
 
   </main>
 
+  <script>
+    // Rotate the blinking tagline each animation cycle
+    (function() {
+      const el = document.querySelector('.press-start');
+      if (!el) return;
+      const phrases = [
+        'Offered Services',
+        "Izzy's work",
+        'CHECK OUT MY WORK'
+      ];
+      let i = 0;
+      // Ensure initial phrase matches index 0
+      el.textContent = phrases[i];
+      el.addEventListener('animationiteration', () => {
+        i = (i + 1) % phrases.length;
+        el.textContent = phrases[i];
+      });
+    })();
+  </script>
+
 </body>
 </html>
-
-
