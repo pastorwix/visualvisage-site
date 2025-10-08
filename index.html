@@ -23,6 +23,48 @@
       box-shadow: 0 0 25px 10px rgba(255, 223, 0, 0.6);
     }
 
+    /* Talk bubble over hero image */
+    .about-preview { position: relative; display: grid; place-items: center; gap: 1rem; }
+    .hero-image-wrap { position: relative; display: inline-block; }
+    .talk-bubble {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: #fff;
+      color: #333;
+      padding: 0.6rem 0.9rem;
+      border-radius: 14px;
+      box-shadow: 0 8px 22px rgba(0,0,0,0.12);
+      border: 1px solid rgba(0,0,0,0.06);
+      font-family: 'Press Start 2P', cursive;
+      font-size: 0.7rem;
+      line-height: 1.2;
+      text-decoration: none;
+      z-index: 2;
+      animation: bubble-bounce 1.6s ease-in-out infinite;
+    }
+    .talk-bubble::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      right: 22px;
+      width: 0; height: 0;
+      border-left: 8px solid transparent;
+      border-right: 8px solid transparent;
+      border-top: 10px solid #fff;
+      filter: drop-shadow(0 2px 2px rgba(0,0,0,0.06));
+    }
+    @keyframes bubble-bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+    @media (max-width: 480px) {
+      .talk-bubble { font-size: 0.95rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .talk-bubble { animation: none; }
+    }
+
     .top-nav {
       text-align: left;
       padding: 1rem 2rem;
@@ -130,6 +172,131 @@
     }
 
 
+    /* 3D Hero Cube */
+    .hero-3d {
+      margin: 2.5rem 0 1rem;
+      display: grid;
+      place-items: center;
+      perspective: 1000px;
+    }
+
+    .cube {
+      --s: min(60vw, 260px);
+      width: var(--s);
+      height: var(--s);
+      position: relative;
+      transform-style: preserve-3d;
+      animation: none;
+      touch-action: none;
+      cursor: default;
+    }
+
+    .cube:hover { /* kept for compatibility; no animation now */ }
+
+    .cube-face {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      border-radius: 18px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+      overflow: hidden;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding: 0.5rem;
+      backface-visibility: hidden;
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+    }
+
+    .cube-face:focus-visible {
+      outline: 3px solid rgba(255, 223, 0, 0.95);
+      outline-offset: -3px;
+    }
+
+    .cube:focus-visible {
+      outline: 3px dashed rgba(0,0,0,0.35);
+      outline-offset: 6px;
+    }
+
+    .cube-front  { transform: translateZ(calc(var(--s) / 2)); }
+    .cube-back   { transform: rotateY(180deg) translateZ(calc(var(--s) / 2)); }
+    .cube-right  { transform: rotateY( 90deg) translateZ(calc(var(--s) / 2)); }
+    .cube-left   { transform: rotateY(-90deg) translateZ(calc(var(--s) / 2)); }
+    .cube-top    { transform: rotateX( 90deg) translateZ(calc(var(--s) / 2)); background: linear-gradient(135deg, #f2c94c, #e67e22); }
+    .cube-bottom { transform: rotateX(-90deg) translateZ(calc(var(--s) / 2)); background: linear-gradient(135deg, #8ec5fc, #e0c3fc); }
+
+    @keyframes cube-rotate {
+      0%   { transform: rotateX(-10deg) rotateY(0deg); }
+      50%  { transform: rotateX( 10deg) rotateY(180deg); }
+      100% { transform: rotateX(-10deg) rotateY(360deg); }
+    }
+
+    .hero-caption {
+      margin-top: 1.5rem;
+      font-family: 'Quicksand', sans-serif;
+      color: #555;
+      font-size: 0.95rem;
+      text-align: center;
+    }
+
+    .hero-controls {
+      margin-top: 0.75rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .reset-btn.button.small {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 0.65rem;
+    }
+
+    /* Arrow buttons for cube control */
+    .arrow-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+      background: #111;
+      color: #fff;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+
+    .arrow-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 22px rgba(0,0,0,0.2); }
+    .arrow-btn:active { transform: translateY(0); }
+    .arrow-btn:focus-visible { outline: 3px solid rgba(255,223,0,0.95); outline-offset: 2px; }
+    .arrow-btn svg { width: 18px; height: 18px; fill: currentColor; }
+
+    .cube-label {
+      background: rgba(255, 255, 255, 0.92);
+      color: #111;
+      font-family: 'Press Start 2P', cursive;
+      font-size: 0.65rem;
+      line-height: 1;
+      padding: 0.4rem 0.6rem;
+      border-radius: 10px;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+      border: 1px solid rgba(0,0,0,0.06);
+    }
+
+    /* Respect reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      .cube { animation: none; }
+    }
+
+    .cube.dragging { cursor: grabbing; }
+    .cube.dragging .cube-face { cursor: grabbing; }
+
+
   </style>
 </head>
 <body class="nintendo-mode">
@@ -138,40 +305,53 @@
     <a href="about.html">About</a>
     <a href="contact.html">Contact</a>
     <a href="https://www.etsy.com/shop/VisualVisage" target="_blank" rel="noopener">Shop</a>
-    <a href="pricing.html">Services</a>
   </div>
 
   <main class="start-screen container">
     <h1 class="game-logo">VISUAL VISAGE</h1>
-    <p class="press-start">Offered Services</p>
+    <p class="press-start">CREATIVE STUDIO</p>
 
-    <section class="game-menu-grid">
-      <a href="posters.html" class="game-tile">
-        <img src="assets/posters-preview.jpg" alt="Posters" />
-        <span>Posters</span>
-      </a>
-      <a href="photos.html" class="game-tile">
-        <img src="assets/photo-preview.jpg" alt="Photography" />
-        <span>Photography</span>
-      </a>
-      <a href="designs.html" class="game-tile">
-        <img src="assets/design-preview.jpg" alt="Designs" />
-        <span>Designs</span>
-      </a>
-      <a href="videos.html" class="game-tile">
-        <img src="assets/video-preview.jpg" alt="Video" />
-        <span>Video</span>
-      </a>
+    <!-- Hero cube -->
+    <section class="hero-3d" aria-label="Work categories">
+      <div class="cube" tabindex="0" aria-label="Interactive 3D menu. Use on-screen arrows or keyboard arrows to rotate. Press Enter to open the front face.">
+        <a class="cube-face cube-front" href="posters.html" aria-label="Posters" style="background-image:url('assets/posters-preview.jpg')">
+          <span class="cube-label">Posters</span>
+        </a>
+        <a class="cube-face cube-back" href="videos.html" aria-label="Video" style="background-image:url('assets/video-preview.jpg')">
+          <span class="cube-label">Video</span>
+        </a>
+        <a class="cube-face cube-right" href="designs.html" aria-label="Designs" style="background-image:url('assets/design-preview.jpg')">
+          <span class="cube-label">Designs</span>
+        </a>
+        <a class="cube-face cube-left" href="photos.html" aria-label="Photography" style="background-image:url('assets/photo-preview.jpg')">
+          <span class="cube-label">Photography</span>
+        </a>
+        <div class="cube-face cube-top" aria-hidden="true"></div>
+        <div class="cube-face cube-bottom" aria-hidden="true"></div>
+      </div>
+      <p class="hero-caption">Use arrows to rotate • Tap/Click a face to open</p>
+      <div class="hero-controls">
+        <button type="button" class="arrow-btn" aria-label="Rotate left" title="Rotate left" data-dir="left">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+        </button>
+        <button type="button" class="reset-btn button small" aria-label="Reset cube view">Reset view</button>
+        <button type="button" class="arrow-btn" aria-label="Rotate right" title="Rotate right" data-dir="right">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.59 16.59 10 18l6-6-6-6-1.41 1.41L13.17 12z"/></svg>
+        </button>
+      </div>
     </section>
 
-
+    
 
     <section class="about-preview">
-      <a href="https://linktr.ee/pasturwix" target="_blank" rel="noopener">
-        <img src="assets/about-photo.jpg" alt="Isaah Wicks" />
-      </a>
+      <div class="hero-image-wrap">
+        <a href="https://linktr.ee/pasturwix" target="_blank" rel="noopener">
+          <img src="assets/about-photo.jpg" alt="Isaah Wicks" />
+        </a>
+        <a class="talk-bubble" href="contact.html" aria-label="Go to contact page">Feel free to contact me</a>
+      </div>
       <div class="about-text">
-        <p>Hey, I'm Izzy Wicks — the creative behind Visual Visage. I bring imagination to life through posters, photos, and experimental design. Click this photo to find me. Click the SHOP button for merch!
+        <p> Hey, I'm Izzy Wicks — the creative behind Visual Visage. I've designed music covers, logos, business cards, and posters. I've recently started to create twitch emojis for twitch streamers.  Click this photo to find the recent me. Click the SHOP button for merch!
 
         </p>
       </div>
@@ -185,9 +365,7 @@
       const el = document.querySelector('.press-start');
       if (!el) return;
       const phrases = [
-        'Offered Services',
-        "Izzy's work",
-        'CHECK OUT MY WORK'
+        'CREATIVE STUDIO'
       ];
       let i = 0;
       // Ensure initial phrase matches index 0
@@ -195,6 +373,103 @@
       el.addEventListener('animationiteration', () => {
         i = (i + 1) % phrases.length;
         el.textContent = phrases[i];
+      });
+    })();
+    // Cube rotates when the cursor passes over it (mouse),
+    // and via swipe on touch; also supports keyboard.
+    (function() {
+      const hero = document.querySelector('.hero-3d');
+      const cube = document.querySelector('.cube');
+      if (!hero || !cube) return;
+
+      // Starting tilt
+      let ax = -10; // rotateX
+      let ay = 0;   // rotateY
+      cube.style.transform = `rotateX(${ax}deg) rotateY(${ay}deg)`;
+
+      const apply = () => {
+        cube.style.transform = `rotateX(${ax}deg) rotateY(${ay}deg)`;
+      };
+
+      // Auto-spin until arrow buttons are clicked (respect reduced motion)
+      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      let autoSpin = !prefersReduced;
+      let lastTs = 0;
+      const spinSpeed = 10; // deg per second
+      function raf(t) {
+        if (autoSpin) {
+          if (!lastTs) lastTs = t;
+          const dt = (t - lastTs) / 1000;
+          lastTs = t;
+          ay += spinSpeed * dt;
+          apply();
+          requestAnimationFrame(raf);
+        }
+      }
+      if (autoSpin) requestAnimationFrame(raf);
+
+      const stopAutoSpin = () => { autoSpin = false; };
+      const startAutoSpin = () => {
+        if (prefersReduced) return; // respect reduced motion
+        if (!autoSpin) {
+          autoSpin = true;
+          lastTs = 0; // reset timestamp to avoid jump
+          requestAnimationFrame(raf);
+        }
+      };
+
+      // Pointer-based rotation disabled (mouse/touch). Use arrows or keyboard instead.
+
+      // Keyboard controls (accessibility)
+      const step = 15; // degrees per key press
+      cube.addEventListener('keydown', (e) => {
+        switch (e.key) {
+          case 'ArrowLeft': ay -= step; e.preventDefault(); break;
+          case 'ArrowRight': ay += step; e.preventDefault(); break;
+          case 'ArrowUp': ax -= step; e.preventDefault(); break;
+          case 'ArrowDown': ax += step; e.preventDefault(); break;
+          case 'Enter':
+          case ' ': {
+            const norm = ((ay % 360) + 360) % 360;
+            let faceClass = 'cube-front';
+            if (norm >= 45 && norm < 135) faceClass = 'cube-right';
+            else if (norm >= 135 && norm < 225) faceClass = 'cube-back';
+            else if (norm >= 225 && norm < 315) faceClass = 'cube-left';
+            const face = cube.querySelector('.' + faceClass);
+            if (face && face.click) face.click();
+            e.preventDefault();
+            break;
+          }
+          default:
+            return;
+        }
+        apply();
+      });
+
+      // Reset view button
+      const resetBtn = document.querySelector('.reset-btn');
+      if (resetBtn) {
+        resetBtn.addEventListener('click', () => {
+          ax = -10; ay = 0;
+          apply();
+          startAutoSpin();
+          cube.focus({ preventScroll: true });
+        });
+      }
+
+      // Arrow buttons
+      document.querySelectorAll('.arrow-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          stopAutoSpin();
+          const dir = btn.getAttribute('data-dir');
+          // Snap to next linked face (front/right/back/left only)
+          const norm = ((ay % 360) + 360) % 360; // 0..359
+          let idx = Math.round(norm / 90) % 4;   // current facing index 0..3
+          idx = (idx + (dir === 'right' ? 1 : -1) + 4) % 4; // move to next/prev
+          ay = idx * 90;
+          apply();
+          cube.focus({ preventScroll: true });
+        });
       });
     })();
   </script>
