@@ -95,6 +95,50 @@
       border: none;
     }
 
+    /* Lite YouTube placeholder */
+    .lite-yt {
+      position: relative;
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      margin-bottom: 1rem;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.07);
+      background-size: cover;
+      background-position: center;
+      cursor: pointer;
+      break-inside: avoid;
+      overflow: hidden;
+      border: none;
+    }
+    .lite-yt:focus-visible {
+      outline: 3px solid rgba(255, 223, 0, 0.95);
+      outline-offset: 2px;
+    }
+    .lite-yt .play-btn {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.6);
+      display: grid;
+      place-items: center;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+    }
+    .lite-yt .play-btn::before {
+      content: '';
+      display: block;
+      width: 0;
+      height: 0;
+      border-left: 18px solid white;
+      border-top: 12px solid transparent;
+      border-bottom: 12px solid transparent;
+      margin-left: 6px;
+    }
+
     footer {
       background-color: #fff;
       text-align: center;
@@ -122,10 +166,10 @@
         <li><a href="designs.html">Designs</a></li>
         <li><a href="photos.html">Photos</a></li>
         <li><a href="videos.html">Videos</a></li>
+        <li><a href="tools.html">Tools</a></li>
         <li><a href="about.html">About</a></li>
         <li><a href="contact.html">Contact</a></li>
         <li><a href="https://www.etsy.com/shop/VisualVisage" target="_blank" rel="noopener">Shop</a></li>
-        
       </ul>
     </nav>
   </div>
@@ -140,17 +184,74 @@
       <p>Videos I've helped film/ film + edit.</p>
     </section>
 
-    <section class="masonry-videos">
-      <iframe src="https://www.youtube.com/embed/i-tZn-2Ym94" title="Paradise" allowfullscreen></iframe>
-      <iframe src="https://www.youtube.com/embed/KyQeDxWpA9I" title="Noah's Dimes Part" allowfullscreen></iframe>
-      <iframe src="https://www.youtube.com/embed/yDp7CY91dMs" title="Liam's Memorial Session" allowfullscreen></iframe>
-
+    <section class="masonry-videos" id="videos-grid">
+      <noscript>
+        <iframe src="https://www.youtube.com/embed/i-tZn-2Ym94" title="Paradise" allowfullscreen></iframe>
+        <iframe src="https://www.youtube.com/embed/KyQeDxWpA9I" title="Noah's Dimes Part" allowfullscreen></iframe>
+        <iframe src="https://www.youtube.com/embed/yDp7CY91dMs" title="Liam's Memorial Session" allowfullscreen></iframe>
+      </noscript>
     </section>
   </main>
 
   <footer>
     <p>© 2025 Visual Visage</p>
   </footer>
+  <script>
+    (function() {
+      const grid = document.getElementById('videos-grid');
+      if (!grid) return;
+
+      const titleMap = {
+        'i-tZn-2Ym94': 'Paradise',
+        'KyQeDxWpA9I': "Noah\'s Dimes Part",
+        'yDp7CY91dMs': "Liam\'s Memorial Session"
+      };
+
+      function makeLite(id, title) {
+        const el = document.createElement('div');
+        el.className = 'lite-yt';
+        el.setAttribute('role', 'button');
+        el.setAttribute('tabindex', '0');
+        el.setAttribute('aria-label', `Play ${title || 'video'}`);
+        el.style.backgroundImage = `url('https://img.youtube.com/vi/${id}/hqdefault.jpg')`;
+        const play = document.createElement('div');
+        play.className = 'play-btn';
+        el.appendChild(play);
+
+        const activate = () => {
+          const iframe = document.createElement('iframe');
+          iframe.src = `https://www.youtube.com/embed/${id}?autoplay=1`;
+          iframe.title = title || 'YouTube Video';
+          iframe.loading = 'lazy';
+          iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+          iframe.allowFullscreen = true;
+          iframe.style.width = '100%';
+          iframe.style.height = '100%';
+          iframe.style.border = '0';
+          iframe.style.borderRadius = '12px';
+          el.replaceWith(iframe);
+        };
+
+        el.addEventListener('click', activate);
+        el.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); activate(); }
+        });
+        return el;
+      }
+
+      function initWith(ids) {
+        ids.forEach((id) => {
+          grid.appendChild(makeLite(id, titleMap[id] || 'Video'));
+        });
+      }
+
+      fetch('assets/gallery-manifest.json')
+        .then(r => r.ok ? r.json() : Promise.reject(new Error('manifest fetch failed')))
+        .then(json => Array.isArray(json.videos) ? json.videos : [])
+        .then(ids => { if (ids.length) initWith(ids); else initWith(['i-tZn-2Ym94','KyQeDxWpA9I','yDp7CY91dMs']); })
+        .catch(() => initWith(['i-tZn-2Ym94','KyQeDxWpA9I','yDp7CY91dMs']));
+    })();
+  </script>
 
 </body>
 </html>

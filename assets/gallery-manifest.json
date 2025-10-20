@@ -1,0 +1,28 @@
+{
+  "posters": [
+    "assets/poster1.jpg", "assets/poster2.jpg", "assets/poster3.jpg", "assets/poster4.jpg",
+    "assets/poster5.jpg", "assets/poster6.jpg", "assets/poster7.jpg", "assets/poster8.jpg",
+    "assets/poster9.jpg", "assets/poster10.jpg", "assets/poster11.jpg", "assets/poster12.jpg",
+    "assets/poster13.jpg", "assets/poster14.jpg", "assets/poster15.jpg", "assets/poster16.jpg",
+    "assets/poster17.jpg", "assets/poster18.jpg", "assets/poster19.jpg", "assets/poster20.jpg",
+    "assets/poster21.jpg", "assets/poster22.jpg", "assets/poster23.jpg", "assets/poster24.jpg"
+  ],
+  "designs": [
+    "assets/design1.jpg", "assets/design2.jpg", "assets/design3.jpg", "assets/design4.jpg",
+    "assets/design5.jpg", "assets/design6.jpg", "assets/design7.jpg", "assets/design8.jpg",
+    "assets/design9.jpg"
+  ],
+  "photos": [
+    "assets/photo1.jpg", "assets/photo2.jpg", "assets/photo3.jpg", "assets/photo4.jpg",
+    "assets/photo5.jpg", "assets/photo6.jpg", "assets/photo7.jpg", "assets/photo8.jpg",
+    "assets/photo9.jpg", "assets/photo10.jpg", "assets/photo11.jpg", "assets/photo12.jpg",
+    "assets/photo13.jpg", "assets/photo14.jpg", "assets/photo15.jpg", "assets/photo16.jpg",
+    "assets/photo17.jpg", "assets/photo18.jpg", "assets/photo19.jpg", "assets/photo20.jpg",
+    "assets/photo21.jpg", "assets/photo22.jpg"
+  ],
+  "videos": [
+    "i-tZn-2Ym94",
+    "KyQeDxWpA9I",
+    "yDp7CY91dMs"
+  ]
+}

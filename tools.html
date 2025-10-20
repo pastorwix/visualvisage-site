@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tools – Visual Visage</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Quicksand:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+
+  <style>
+    body { font-family: 'Quicksand', sans-serif; margin: 0; background: #fffef9; color: #2d2d2d; }
+    .sticky-nav { position: sticky; top: 0; z-index: 1000; background-color: #fff; padding: 1rem 2rem; border-bottom: 1px solid #eee; }
+    .sticky-nav nav ul { display: flex; flex-wrap: wrap; gap: 1rem; list-style: none; margin: 0; padding: 0; }
+    .sticky-nav nav a { text-decoration: underline; font-weight: 600; color: #444; transition: color 0.3s ease; }
+    .sticky-nav nav a:hover { color: #000; }
+
+    header { background: #fff; padding: 2rem 1rem 0.5rem; text-align: center; }
+    header h1 { font-family: 'Fredoka', sans-serif; font-size: 2.1rem; margin: 0; }
+    header p { margin: 0.5rem 0 0; color: #666; }
+
+    .tools { max-width: 1100px; margin: 2rem auto; padding: 1.25rem; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; }
+    .card { background: #fff; border: 1px solid #eee; border-radius: 14px; box-shadow: 0 8px 22px rgba(0,0,0,0.06); padding: 1rem; display: grid; gap: 0.5rem; }
+    .card h3 { margin: 0; font-family: 'Fredoka', sans-serif; }
+    .card p { margin: 0; color: #666; }
+    .button { display: inline-block; background: #111; color: #fff; border: none; padding: 0.6rem 0.9rem; border-radius: 10px; cursor: pointer; font-weight: 600; text-decoration: none; }
+    .button.secondary { background: #ececec; color: #222; }
+  </style>
+</head>
+<body>
+
+  <div class="sticky-nav">
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="posters.html">Posters</a></li>
+        <li><a href="designs.html">Designs</a></li>
+        <li><a href="photos.html">Photos</a></li>
+        <li><a href="videos.html">Videos</a></li>
+        <li><a href="tools.html">Tools</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="https://www.etsy.com/shop/VisualVisage" target="_blank" rel="noopener">Shop</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <header>
+    <h1>Tools</h1>
+    <p>Helpful creative utilities by Visual Visage.</p>
+  </header>
+
+  <main class="tools">
+    <div class="grid">
+      <article class="card">
+        <h3>Vectorizer</h3>
+        <p>Turn images into fast, scalable SVG mosaics.</p>
+        <div>
+          <a class="button" href="vectorizer.html">Open Vectorizer</a>
+        </div>
+      </article>
+      <!-- Future tools can go here as cards -->
+    </div>
+  </main>
+
+  <footer style="background:#fff; text-align:center; padding:1.5rem; color:#aaa; border-top:1px solid #eee;">
+    <p>© 2025 Visual Visage</p>
+  </footer>
+
+</body>
+</html>
+

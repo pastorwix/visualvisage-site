@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Vectorizer – Visual Visage</title>
+
+  <!-- Fonts + CSS -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Quicksand:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+
+  <style>
+    body { font-family: 'Quicksand', sans-serif; margin: 0; background: #fffef9; color: #2d2d2d; }
+
+    .sticky-nav { position: sticky; top: 0; z-index: 1000; background-color: #fff; padding: 1rem 2rem; border-bottom: 1px solid #eee; }
+    .sticky-nav nav ul { display: flex; flex-wrap: wrap; gap: 1rem; list-style: none; margin: 0; padding: 0; }
+    .sticky-nav nav a { text-decoration: underline; font-weight: 600; color: #444; transition: color 0.3s ease; }
+    .sticky-nav nav a:hover { color: #000; }
+
+    header { background: #fff; padding: 2rem 1rem 0.5rem; text-align: center; }
+    header h1 { font-family: 'Fredoka', sans-serif; font-size: 2.1rem; margin: 0; }
+    header p { margin: 0.5rem 0 0; color: #666; }
+
+    .tool { max-width: 1100px; margin: 2rem auto; padding: 1.25rem; }
+    .panel { background: #ffffff; border: 1px solid #eee; border-radius: 14px; box-shadow: 0 8px 22px rgba(0,0,0,0.06); padding: 1.25rem; }
+    .panel + .panel { margin-top: 1rem; }
+
+    .controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; align-items: end; }
+    .control { display: grid; gap: 0.35rem; }
+    .control label { font-weight: 600; color: #333; }
+    .control input[type="range"] { width: 100%; }
+    .row { display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center; }
+    .button { display: inline-block; background: #111; color: #fff; border: none; padding: 0.75rem 1.1rem; border-radius: 10px; cursor: pointer; font-weight: 600; text-decoration: none; }
+    .button.secondary { background: #ececec; color: #222; }
+    .button:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    .preview-wrap { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+    .preview-area { background: #fafafa; border: 1px dashed #ddd; border-radius: 12px; min-height: 260px; display: grid; place-items: center; overflow: auto; }
+    .note { color: #777; font-size: 0.95rem; }
+    .hint { color: #555; font-size: 0.95rem; margin-top: 0.25rem; }
+
+    .svg-holder svg { max-width: 100%; height: auto; display: block; }
+  </style>
+</head>
+<body>
+
+  <div class="sticky-nav">
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="posters.html">Posters</a></li>
+        <li><a href="designs.html">Designs</a></li>
+        <li><a href="photos.html">Photos</a></li>
+        <li><a href="videos.html">Videos</a></li>
+        <li><a href="tools.html">Tools</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="https://www.etsy.com/shop/VisualVisage" target="_blank" rel="noopener">Shop</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <header>
+    <h1>Vectorizer</h1>
+    <p>Custom image trace to SVG with colors, fidelity, and cleanup.</p>
+  </header>
+
+  <main class="tool">
+    <section class="panel">
+      <div class="controls">
+        <div class="control">
+          <label for="fileInput">Image</label>
+          <input id="fileInput" type="file" accept="image/*" />
+        </div>
+        <div class="control">
+          <label for="mode">Mode</label>
+          <select id="mode">
+            <option value="color" selected>Color</option>
+            <option value="gray">Grayscale</option>
+            <option value="bw">Black & White</option>
+          </select>
+        </div>
+        <div class="control">
+          <label for="engine">Engine</label>
+          <select id="engine">
+            <option value="custom" selected>Custom (in‑browser)</option>
+            <option value="imagetracer">ImageTracer.js (fast path)</option>
+          </select>
+          <div class="hint">Uses local vendor file if present; falls back to CDN.</div>
+        </div>
+        <div class="control">
+          <label for="colors">Colors: <span id="colorsVal">8</span></label>
+          <input id="colors" type="range" min="2" max="64" value="8" step="1" />
+        </div>
+        <div class="control">
+          <label for="fidelity">Fidelity: <span id="fidelityVal">5</span></label>
+          <input id="fidelity" type="range" min="0" max="8" value="5" step="1" />
+          <div class="hint">Higher = more detail (less simplification)</div>
+        </div>
+        <div class="control">
+          <label for="minArea">Noise threshold: <span id="minAreaVal">12</span> px²</label>
+          <input id="minArea" type="range" min="0" max="800" value="12" step="4" />
+        </div>
+        <div class="control">
+          <label><input id="curves" type="checkbox" checked /> Curves</label>
+          <div class="hint">Smooth polygons into bezier curves</div>
+        </div>
+        <div class="control">
+          <label for="tension">Curve tension: <span id="tensionVal">0.5</span></label>
+          <input id="tension" type="range" min="0" max="1.5" value="0.5" step="0.1" />
+        </div>
+        <div class="control">
+          <label for="maxDim">Max dimension: <span id="maxDimVal">1024</span> px</label>
+          <input id="maxDim" type="range" min="256" max="6144" value="1024" step="64" />
+          <div class="row">
+            <input id="maxDimInput" type="number" min="256" max="6144" value="1024" step="1" aria-label="Max dimension value" style="width: 120px;" />
+          </div>
+          <div class="hint">Hard pixel limit: 25,000,000 px. Desktop up to ~6000 px is usually fine.</div>
+        </div>
+        <div class="control">
+          <label><input id="noMax" type="checkbox" /> No max (use original size)</label>
+          <div class="hint">Disables downscaling; may be slow on huge images.</div>
+        </div>
+        <div class="control">
+          <label><input id="autoClean" type="checkbox" checked /> Auto clean</label>
+          <div class="hint">Contrast stretch + light median denoise if needed.</div>
+        </div>
+        <div class="control">
+          <label><input id="ignoreWhite" type="checkbox" checked /> Ignore white</label>
+          <div class="hint">Skips near‑white regions in output.</div>
+        </div>
+      </div>
+      <div class="row" style="margin-top: 1rem;">
+        <button id="vectorizeBtn" class="button" disabled>Vectorize</button>
+        <button id="downloadBtn" class="button secondary" disabled>Download SVG</button>
+        <button id="resetBtn" class="button secondary">Reset</button>
+        <div class="note">Tip: Lower fidelity and higher noise = fewer paths.</div>
+      </div>
+    </section>
+
+    <section class="panel preview-wrap">
+      <div class="preview-area svg-holder" id="svgHolder">
+        <div class="note">Upload an image to preview the SVG here</div>
+      </div>
+    </section>
+  </main>
+
+  <canvas id="workCanvas" style="display:none"></canvas>
+
+  <script>
+    (function(){
+      const MAX_PIXELS = 25_000_000; // hard pixel cap to protect the browser
+      const fileInput = document.getElementById('fileInput');
+      const vectorizeBtn = document.getElementById('vectorizeBtn');
+      const downloadBtn = document.getElementById('downloadBtn');
+      const resetBtn = document.getElementById('resetBtn');
+      const modeSelect = document.getElementById('mode');
+      const colors = document.getElementById('colors');
+      const colorsVal = document.getElementById('colorsVal');
+      const fidelity = document.getElementById('fidelity');
+      const fidelityVal = document.getElementById('fidelityVal');
+      const minArea = document.getElementById('minArea');
+      const minAreaVal = document.getElementById('minAreaVal');
+      const ignoreWhite = document.getElementById('ignoreWhite');
+      const curves = document.getElementById('curves');
+      const tension = document.getElementById('tension');
+      const tensionVal = document.getElementById('tensionVal');
+      const engine = document.getElementById('engine');
+      const maxDim = document.getElementById('maxDim');
+      const maxDimInput = document.getElementById('maxDimInput');
+      const maxDimVal = document.getElementById('maxDimVal');
+      const noMax = document.getElementById('noMax');
+      const autoClean = document.getElementById('autoClean');
+      const svgHolder = document.getElementById('svgHolder');
+      const canvas = document.getElementById('workCanvas');
+      const ctx = canvas.getContext('2d');
+
+      let imgBitmap = null; // ImageBitmap to draw from
+      let outSVG = null;    // Last generated SVGElement
+
+      colors.addEventListener('input', () => colorsVal.textContent = colors.value);
+      fidelity.addEventListener('input', () => fidelityVal.textContent = fidelity.value);
+      minArea.addEventListener('input', () => minAreaVal.textContent = minArea.value);
+      tension.addEventListener('input', () => tensionVal.textContent = tension.value);
+      modeSelect.addEventListener('change', () => {
+        const mode = modeSelect.value;
+        colors.disabled = (mode === 'bw');
+      });
+      engine.addEventListener('change', () => {
+        // No-op; library loads lazily on vectorize
+      });
+      function clampNumber(val, min, max){
+        const n = parseInt(val, 10);
+        if (isNaN(n)) return min;
+        return Math.max(min, Math.min(max, n));
+      }
+      function setMaxDim(val){
+        const min = parseInt(maxDim.min, 10);
+        const max = parseInt(maxDim.max, 10);
+        const v = clampNumber(val, min, max);
+        maxDim.value = String(v);
+        maxDimInput.value = String(v);
+        maxDimVal.textContent = String(v);
+      }
+      // Keep slider, number input, and label in sync
+      maxDim.addEventListener('input', () => setMaxDim(maxDim.value));
+      maxDimInput.addEventListener('input', () => setMaxDim(maxDimInput.value));
+      noMax.addEventListener('change', () => {
+        if (noMax.checked) {
+          maxDim.setAttribute('disabled', '');
+          maxDimInput.setAttribute('disabled', '');
+          maxDimVal.textContent = 'original';
+        } else {
+          maxDim.removeAttribute('disabled');
+          maxDimInput.removeAttribute('disabled');
+          maxDimVal.textContent = maxDim.value;
+        }
+      });
+
+      resetBtn.addEventListener('click', () => {
+        imgBitmap = null; outSVG = null;
+        fileInput.value = '';
+        downloadBtn.disabled = true;
+        vectorizeBtn.disabled = true;
+        svgHolder.innerHTML = '<div class="note">Upload an image to preview the SVG here</div>';
+      });
+
+      fileInput.addEventListener('change', async (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (!file) { vectorizeBtn.disabled = true; return; }
+        try {
+          const blobURL = URL.createObjectURL(file);
+          const img = new Image();
+          img.decoding = 'async';
+          img.onload = async () => {
+            try {
+              // Create ImageBitmap for faster canvas draw
+              imgBitmap = await createImageBitmap(img);
+              vectorizeBtn.disabled = false;
+              svgHolder.innerHTML = '<div class="note">Ready — click Vectorize</div>';
+            } catch(err) {
+              console.error(err);
+              svgHolder.innerHTML = '<div class="note">Could not read image.</div>';
+            } finally {
+              URL.revokeObjectURL(blobURL);
+            }
+          };
+          img.onerror = () => {
+            svgHolder.innerHTML = '<div class="note">Could not load image.</div>';
+            URL.revokeObjectURL(blobURL);
+          };
+          img.src = blobURL;
+        } catch (err) {
+          console.error(err);
+          svgHolder.innerHTML = '<div class="note">Could not load image.</div>';
+        }
+      });
+
+      // Drag & drop and paste support
+      ;['dragenter','dragover'].forEach(ev => svgHolder.addEventListener(ev, e => { e.preventDefault(); e.dataTransfer.dropEffect='copy'; }));
+      svgHolder.addEventListener('drop', (e) => {
+        e.preventDefault(); const f = e.dataTransfer.files && e.dataTransfer.files[0]; if (!f) return; fileInput.files = e.dataTransfer.files; fileInput.dispatchEvent(new Event('change'));
+      });
+      window.addEventListener('paste', (e) => {
+        const items = e.clipboardData && e.clipboardData.items; if (!items) return;
+        for (const it of items) { if (it.type && it.type.startsWith('image/')) { const f = it.getAsFile(); const dt = new DataTransfer(); dt.items.add(f); fileInput.files = dt.files; fileInput.dispatchEvent(new Event('change')); break; } }
+      });
+
+      // Worker for tracing
+      let worker = null;
+      function getWorker() { if (!worker) worker = new Worker('vectorizer-worker.js'); return worker; }
+
+      vectorizeBtn.addEventListener('click', async () => {
+        if (!imgBitmap) return;
+        const targetMax = noMax.checked ? Math.max(imgBitmap.width, imgBitmap.height) : (parseInt(maxDim.value, 10) || 1024);
+        // Fit into maxDim while preserving aspect
+        let w = imgBitmap.width;
+        let h = imgBitmap.height;
+        const scale = noMax.checked ? 1 : Math.min(1, targetMax / Math.max(w, h));
+        w = Math.max(1, Math.round(w * scale));
+        h = Math.max(1, Math.round(h * scale));
+        if (w * h > MAX_PIXELS) {
+          svgHolder.innerHTML = `<div class="note">Too large: ${(w*h).toLocaleString()} px exceeds the hard limit of ${MAX_PIXELS.toLocaleString()} px. Lower Max dimension or uncheck "No max".</div>`;
+          downloadBtn.disabled = true;
+          return;
+        }
+
+        canvas.width = w; canvas.height = h;
+        ctx.clearRect(0, 0, w, h);
+        ctx.drawImage(imgBitmap, 0, 0, w, h);
+
+        const imgData = ctx.getImageData(0, 0, w, h);
+        svgHolder.innerHTML = '<div class="note">Tracing…</div>';
+        downloadBtn.disabled = true;
+
+        if (engine.value === 'imagetracer') {
+          try {
+            await ensureImageTracer();
+            const dataURL = canvas.toDataURL('image/png');
+            const options = buildImageTracerOptions();
+            ImageTracer.imageToSVG(
+              dataURL,
+              function(svgstr){
+                svgHolder.innerHTML = svgstr;
+                outSVG = svgHolder.querySelector('svg');
+                downloadBtn.disabled = false;
+              },
+              options
+            );
+          } catch (err) {
+            svgHolder.innerHTML = `<div class="note">ImageTracer error: ${err && err.message ? err.message : err}</div>`;
+          }
+          return;
+        }
+
+        // Custom engine via Worker
+        const mode = modeSelect.value;
+        const k = mode === 'bw' ? 2 : (parseInt(colors.value, 10) || 8);
+        const settings = {
+          mode,
+          k,
+          fidelity: parseInt(fidelity.value,10)||5,
+          minArea: parseInt(minArea.value,10)||0,
+          ignoreWhite: !!ignoreWhite.checked,
+          autoClean: !!autoClean.checked,
+          curves: !!curves.checked,
+          tension: parseFloat(tension.value)||0.5
+        };
+        const wkr = getWorker();
+        wkr.onmessage = (ev) => {
+          if (!ev.data || !ev.data.ok) {
+            svgHolder.innerHTML = `<div class="note">Error: ${ev.data && ev.data.error ? ev.data.error : 'Unknown error'}</div>`;
+            return;
+          }
+          svgHolder.innerHTML = ev.data.svg;
+          outSVG = svgHolder.querySelector('svg');
+          downloadBtn.disabled = false;
+        };
+        wkr.postMessage({ dataBuffer: imgData.data.buffer, w, h, settings }, [imgData.data.buffer]);
+      });
+
+      // Lazy-load ImageTracer from CDN
+      let imagetracerLoading = null;
+      function ensureImageTracer(){
+        if (window.ImageTracer) return Promise.resolve();
+        if (imagetracerLoading) return imagetracerLoading;
+
+        const localUrl = 'assets/vendor/imagetracer_v1.2.6.js';
+        const cdnUrl = 'https://cdn.jsdelivr.net/npm/imagetracerjs@1.2.6/imagetracer_v1.2.6.js';
+
+        const loadScript = (url) => new Promise((resolve, reject) => {
+          const s = document.createElement('script');
+          s.src = url; s.async = true;
+          s.onload = () => resolve();
+          s.onerror = () => reject(new Error('Failed to load '+url));
+          document.head.appendChild(s);
+        });
+
+        imagetracerLoading = loadScript(localUrl).catch(() => loadScript(cdnUrl));
+        return imagetracerLoading;
+      }
+
+      function buildImageTracerOptions(){
+        const mode = modeSelect.value;
+        const numcolors = (mode === 'bw') ? 2 : (parseInt(colors.value,10) || 8);
+        const f = parseInt(fidelity.value,10) || 5; // 0..8
+        // Map fidelity to ImageTracer simplification params (lower = more detail)
+        const qtres = 0.5 + (8 - f) * 0.2; // curve fitting resolution
+        const ltres = 0.5 + (8 - f) * 0.2; // line threshold
+        const pathomit = parseInt(minArea.value,10) || 0; // px² filter
+        const blurradius = autoClean.checked ? 0.5 : 0;
+        const blurdelta = autoClean.checked ? 20 : 0;
+        const options = {
+          numberofcolors: numcolors,
+          pathomit,
+          ltres,
+          qtres,
+          blurradius,
+          blurdelta,
+          scale: 1,
+          roundcoords: 2,
+          linefilter: true,
+          desc: false,
+        };
+        if (mode === 'gray') options.grayscaletracing = 1;
+        if (mode === 'bw') { options.numberofcolors = 2; options.colorsampling = 0; options.pal = [{r:0,g:0,b:0},{r:255,g:255,b:255}]; }
+        if (ignoreWhite.checked) options.ignorewhite = true;
+        return options;
+      }
+
+      downloadBtn.addEventListener('click', () => {
+        if (!outSVG) return;
+        const serializer = new XMLSerializer();
+        let source = serializer.serializeToString(outSVG);
+        // Ensure xmlns on root
+        if (!source.match(/^<svg[^>]+xmlns=/)) {
+          source = source.replace('<svg', '<svg xmlns="http://www.w3.org/2000/svg"');
+        }
+        const blob = new Blob([source], { type: 'image/svg+xml;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'vectorized.svg';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+      });
+
+      // Worker handles tracing; keep only analysis utils if needed in UI
+      function analyzeImage(data, w, h) {
+        // Sample stride to cap work on large images
+        const strideY = Math.max(1, Math.floor(h / 512));
+        const strideX = Math.max(1, Math.floor(w / 512));
+        const total = Math.ceil(h / strideY) * Math.ceil(w / strideX);
+
+        // Histograms per channel
+        const histR = new Uint32Array(256);
+        const histG = new Uint32Array(256);
+        const histB = new Uint32Array(256);
+
+        // Quick salt/pepper heuristic
+        let extremes = 0;
+
+        for (let y = 0; y < h; y += strideY) {
+          let idx = (y * w) * 4;
+          for (let x = 0; x < w; x += strideX) {
+            const r = data[idx];
+            const g = data[idx + 1];
+            const b = data[idx + 2];
+            histR[r]++; histG[g]++; histB[b]++;
+            if (r < 3 || g < 3 || b < 3 || r > 252 || g > 252 || b > 252) extremes++;
+            idx += 4 * strideX;
+          }
+        }
+
+        const p = (hist) => percentileFromHist(hist, total, 0.01, 0.99);
+        const pr = p(histR), pg = p(histG), pb = p(histB);
+
+        const lowContrast = (pr.hi - pr.lo < 80) && (pg.hi - pg.lo < 80) && (pb.hi - pb.lo < 80);
+        const saltPepper = (extremes / total) > 0.02; // >2% of sampled pixels near 0/255
+
+        return { lowContrast, saltPepper, channels: { r: pr, g: pg, b: pb } };
+      }
+
+      function percentileFromHist(hist, total, loP, hiP) {
+        const loTarget = Math.max(0, Math.floor(total * loP));
+        const hiTarget = Math.max(0, Math.floor(total * hiP));
+        let cum = 0; let lo = 0; let hi = 255;
+        for (let i = 0; i < 256; i++) { cum += hist[i]; if (cum >= loTarget) { lo = i; break; } }
+        cum = 0;
+        for (let i = 255; i >= 0; i--) { cum += hist[i]; if (cum >= (total - hiTarget)) { hi = i; break; } }
+        if (hi <= lo) { hi = Math.min(255, lo + 1); }
+        return { lo, hi };
+      }
+
+      function contrastStretch(imgData, channels) {
+        const d = imgData.data;
+        const { r, g, b } = channels;
+        const slr = 255 / (r.hi - r.lo || 1);
+        const slg = 255 / (g.hi - g.lo || 1);
+        const slb = 255 / (b.hi - b.lo || 1);
+        for (let i = 0; i < d.length; i += 4) {
+          d[i]   = clamp8((d[i]   - r.lo) * slr);
+          d[i+1] = clamp8((d[i+1] - g.lo) * slg);
+          d[i+2] = clamp8((d[i+2] - b.lo) * slb);
+        }
+      }
+
+      function median3x3(imgData) {
+        const { width: w, height: h, data: src } = imgData;
+        const dst = new Uint8ClampedArray(src.length);
+        const get = (x, y, c) => src[((y * w + x) * 4) + c];
+        for (let y = 0; y < h; y++) {
+          for (let x = 0; x < w; x++) {
+            for (let c = 0; c < 3; c++) {
+              const vals = [];
+              for (let dy = -1; dy <= 1; dy++) {
+                const yy = clamp(y + dy, 0, h - 1);
+                for (let dx = -1; dx <= 1; dx++) {
+                  const xx = clamp(x + dx, 0, w - 1);
+                  vals.push(get(xx, yy, c));
+                }
+              }
+              vals.sort((a,b) => a - b);
+              dst[((y * w + x) * 4) + c] = vals[4];
+            }
+            dst[((y * w + x) * 4) + 3] = get(x, y, 3); // keep alpha
+          }
+        }
+        // copy back
+        src.set(dst);
+      }
+
+      function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+      function clamp8(v) { return v < 0 ? 0 : v > 255 ? 255 : v | 0; }
+    })();
+  </script>
+
+  <footer style="background:#fff; text-align:center; padding:1.5rem; color:#aaa; border-top:1px solid #eee;">
+    <p>© 2025 Visual Visage</p>
+  </footer>
+
+</body>
+</html>

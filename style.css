@@ -39,7 +39,7 @@ img[loading="lazy"].loaded {
 }
 
 .image-placeholder {
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  background: linear-gradient(135deg, #e1e4e8 0%, #c9d1d9 100%);
   border-radius: 8px;
   display: flex;
   align-items: center;

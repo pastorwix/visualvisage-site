@@ -85,7 +85,7 @@
     .pricing-section {
       margin: 4rem 0;
       padding: 3rem 0;
-      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      background: linear-gradient(135deg, #e1e4e8 0%, #c9d1d9 100%);
       border-radius: 20px;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     }
@@ -117,7 +117,7 @@
 
     .pricing-cta .cta-button {
       display: inline-block;
-      background: linear-gradient(135deg, #f2c94c 0%, #f39c12 100%);
+      background: linear-gradient(135deg, #d4a514 0%, #c77c0a 100%);
       color: #333;
       padding: 1rem 2.5rem;
       border-radius: 50px;
@@ -125,7 +125,7 @@
       font-weight: 600;
       font-size: 1.1rem;
       text-decoration: none;
-      box-shadow: 0 8px 25px rgba(242, 201, 76, 0.4);
+      box-shadow: 0 8px 25px rgba(212, 165, 20, 0.4);
       transition: all 0.3s ease;
       border: none;
       cursor: pointer;
@@ -133,8 +133,8 @@
 
     .pricing-cta .cta-button:hover {
       transform: translateY(-3px);
-      box-shadow: 0 12px 35px rgba(242, 201, 76, 0.6);
-      background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+      box-shadow: 0 12px 35px rgba(212, 165, 20, 0.6);
+      background: linear-gradient(135deg, #c77c0a 0%, #b65e13 100%);
     }
 
     .service-highlights {
@@ -211,6 +211,23 @@
       cursor: pointer;
     }
 
+    /* Crossfade layer for cube face background swaps */
+    .cube-face .face-fader {
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background-size: cover;
+      background-position: center;
+      opacity: 0;
+      transition: opacity 180ms ease;
+      pointer-events: none;
+      z-index: 0;
+      will-change: opacity;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .cube-face .face-fader { transition: none; }
+    }
+
     .cube-face:focus-visible {
       outline: 3px solid rgba(255, 223, 0, 0.95);
       outline-offset: -3px;
@@ -225,8 +242,8 @@
     .cube-back   { transform: rotateY(180deg) translateZ(calc(var(--s) / 2)); }
     .cube-right  { transform: rotateY( 90deg) translateZ(calc(var(--s) / 2)); }
     .cube-left   { transform: rotateY(-90deg) translateZ(calc(var(--s) / 2)); }
-    .cube-top    { transform: rotateX( 90deg) translateZ(calc(var(--s) / 2)); background: linear-gradient(135deg, #f2c94c, #e67e22); }
-    .cube-bottom { transform: rotateX(-90deg) translateZ(calc(var(--s) / 2)); background: linear-gradient(135deg, #8ec5fc, #e0c3fc); }
+    .cube-top    { transform: rotateX( 90deg) translateZ(calc(var(--s) / 2)); background: linear-gradient(135deg, #d4a514, #b65e13); }
+    .cube-bottom { transform: rotateX(-90deg) translateZ(calc(var(--s) / 2)); background: linear-gradient(135deg, #5a9bea, #b998f2); }
 
     @keyframes cube-rotate {
       0%   { transform: rotateX(-10deg) rotateY(0deg); }
@@ -286,6 +303,8 @@
       border-radius: 10px;
       box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
       border: 1px solid rgba(0,0,0,0.06);
+      position: relative;
+      z-index: 1; /* keep label above crossfade layer */
     }
 
     /* Respect reduced motion */
@@ -302,6 +321,7 @@
 <body class="nintendo-mode">
 
   <div class="top-nav">
+    <a href="tools.html">Tools</a>
     <a href="about.html">About</a>
     <a href="contact.html">Contact</a>
     <a href="https://www.etsy.com/shop/VisualVisage" target="_blank" rel="noopener">Shop</a>
@@ -374,6 +394,110 @@
         i = (i + 1) % phrases.length;
         el.textContent = phrases[i];
       });
+    })();
+    // Cube face slideshows: Posters (front), Designs (right), Photos (left)
+    (function() {
+      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      function startFaceSlideshow(selector, images, intervalMs) {
+        const face = document.querySelector(selector);
+        if (!face || !images || images.length === 0) return { stop: () => {} };
+
+        // Preload
+        images.forEach(src => { const img = new Image(); img.src = src; });
+
+        // Insert a crossfade layer behind the label content
+        let fader = face.querySelector('.face-fader');
+        if (!fader) {
+          fader = document.createElement('div');
+          fader.className = 'face-fader';
+          face.insertBefore(fader, face.firstChild);
+        }
+
+        // Track current index and set initial background
+        let idx = 0;
+        face.style.backgroundImage = `url('${images[idx]}')`;
+
+        const crossfadeTo = (nextIdx) => {
+          if (prefersReduced) { // degrade gracefully
+            face.style.backgroundImage = `url('${images[nextIdx]}')`;
+            idx = nextIdx;
+            return;
+          }
+          fader.style.backgroundImage = `url('${images[nextIdx]}')`;
+          // force reflow to ensure transition triggers
+          void fader.offsetWidth;
+          fader.style.opacity = '1';
+          setTimeout(() => {
+            face.style.backgroundImage = `url('${images[nextIdx]}')`;
+            fader.style.opacity = '0';
+            idx = nextIdx;
+          }, 200);
+        };
+
+        const apply = () => {
+          const nextIdx = (idx + 1) % images.length;
+          crossfadeTo(nextIdx);
+        };
+
+        let timer = null;
+        const start = () => {
+          if (prefersReduced || timer) return;
+          timer = setInterval(apply, intervalMs);
+        };
+        const stop = () => { if (timer) { clearInterval(timer); timer = null; } };
+
+        // Visibility handling per face
+        const onVis = () => { if (document.hidden) stop(); else start(); };
+        document.addEventListener('visibilitychange', onVis);
+        start();
+        return { stop };
+      }
+
+      // Fallback lists (kept in sync with pages) used if manifest fetch fails
+      const fallback = {
+        posters: [
+          'assets/poster1.jpg','assets/poster2.jpg','assets/poster3.jpg','assets/poster4.jpg',
+          'assets/poster5.jpg','assets/poster6.jpg','assets/poster7.jpg','assets/poster8.jpg',
+          'assets/poster9.jpg','assets/poster10.jpg','assets/poster11.jpg','assets/poster12.jpg',
+          'assets/poster13.jpg','assets/poster14.jpg','assets/poster15.jpg','assets/poster16.jpg',
+          'assets/poster17.jpg','assets/poster18.jpg','assets/poster19.jpg','assets/poster20.jpg',
+          'assets/poster21.jpg','assets/poster22.jpg','assets/poster23.jpg','assets/poster24.jpg'
+        ],
+        designs: [
+          'assets/design1.jpg','assets/design2.jpg','assets/design3.jpg','assets/design4.jpg',
+          'assets/design5.jpg','assets/design6.jpg','assets/design7.jpg','assets/design8.jpg',
+          'assets/design9.jpg'
+        ],
+        photos: [
+          'assets/photo1.jpg','assets/photo2.jpg','assets/photo3.jpg','assets/photo4.jpg',
+          'assets/photo5.jpg','assets/photo6.jpg','assets/photo7.jpg','assets/photo8.jpg',
+          'assets/photo9.jpg','assets/photo10.jpg','assets/photo11.jpg','assets/photo12.jpg',
+          'assets/photo13.jpg','assets/photo14.jpg','assets/photo15.jpg','assets/photo16.jpg',
+          'assets/photo17.jpg','assets/photo18.jpg','assets/photo19.jpg','assets/photo20.jpg',
+          'assets/photo21.jpg','assets/photo22.jpg'
+        ],
+        // YouTube IDs used to build thumbnail URLs
+        videos: [ 'i-tZn-2Ym94', 'KyQeDxWpA9I', 'yDp7CY91dMs' ]
+      };
+
+      function initWith(data) {
+        // Blink-of-an-eye speed with quick crossfade
+        startFaceSlideshow('.cube .cube-front', data.posters, 400);
+        startFaceSlideshow('.cube .cube-right', data.designs, 400);
+        startFaceSlideshow('.cube .cube-left',  data.photos,  400);
+        // Build video thumbnail URLs (YouTube) if provided
+        const videoThumbs = (data.videos || []).map(id => `https://img.youtube.com/vi/${id}/hqdefault.jpg`);
+        if (videoThumbs.length) {
+          startFaceSlideshow('.cube .cube-back', videoThumbs, 400);
+        }
+      }
+
+      // Try to load manifest for maintainability
+      fetch('assets/gallery-manifest.json')
+        .then(r => r.ok ? r.json() : Promise.reject(new Error('manifest fetch failed')))
+        .then(json => initWith(json))
+        .catch(() => initWith(fallback));
     })();
     // Cube rotates when the cursor passes over it (mouse),
     // and via swipe on touch; also supports keyboard.
