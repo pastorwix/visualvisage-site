@@ -219,7 +219,7 @@
       background-size: cover;
       background-position: center;
       opacity: 0;
-      transition: opacity 180ms ease;
+      transition: opacity 320ms ease-in-out;
       pointer-events: none;
       z-index: 0;
       will-change: opacity;
@@ -432,7 +432,7 @@
             face.style.backgroundImage = `url('${images[nextIdx]}')`;
             fader.style.opacity = '0';
             idx = nextIdx;
-          }, 200);
+          }, 320);
         };
 
         const apply = () => {
@@ -482,14 +482,15 @@
       };
 
       function initWith(data) {
-        // Blink-of-an-eye speed with quick crossfade
-        startFaceSlideshow('.cube .cube-front', data.posters, 400);
-        startFaceSlideshow('.cube .cube-right', data.designs, 400);
-        startFaceSlideshow('.cube .cube-left',  data.photos,  400);
+        // Slow down to match the tagline blink (~2s cycle)
+        const interval = 2000;
+        startFaceSlideshow('.cube .cube-front', data.posters, interval);
+        startFaceSlideshow('.cube .cube-right', data.designs, interval);
+        startFaceSlideshow('.cube .cube-left',  data.photos,  interval);
         // Build video thumbnail URLs (YouTube) if provided
         const videoThumbs = (data.videos || []).map(id => `https://img.youtube.com/vi/${id}/hqdefault.jpg`);
         if (videoThumbs.length) {
-          startFaceSlideshow('.cube .cube-back', videoThumbs, 400);
+          startFaceSlideshow('.cube .cube-back', videoThumbs, interval);
         }
       }
 
