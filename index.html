@@ -219,7 +219,7 @@
       background-size: cover;
       background-position: center;
       opacity: 0;
-      transition: opacity 320ms ease-in-out;
+      transition: opacity 500ms ease-in-out;
       pointer-events: none;
       z-index: 0;
       will-change: opacity;
@@ -432,7 +432,7 @@
             face.style.backgroundImage = `url('${images[nextIdx]}')`;
             fader.style.opacity = '0';
             idx = nextIdx;
-          }, 320);
+          }, 500);
         };
 
         const apply = () => {
@@ -482,8 +482,8 @@
       };
 
       function initWith(data) {
-        // 8s interval to match a slower blink
-        const interval = 8000;
+        // 10s interval to match a slower blink
+        const interval = 10000;
         startFaceSlideshow('.cube .cube-front', data.posters, interval);
         startFaceSlideshow('.cube .cube-right', data.designs, interval);
         startFaceSlideshow('.cube .cube-left',  data.photos,  interval);
