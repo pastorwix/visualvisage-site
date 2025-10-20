@@ -482,8 +482,8 @@
       };
 
       function initWith(data) {
-        // Slightly slower to run smoother across devices (~3s)
-        const interval = 3000;
+        // 8s interval to match a slower blink
+        const interval = 8000;
         startFaceSlideshow('.cube .cube-front', data.posters, interval);
         startFaceSlideshow('.cube .cube-right', data.designs, interval);
         startFaceSlideshow('.cube .cube-left',  data.photos,  interval);
