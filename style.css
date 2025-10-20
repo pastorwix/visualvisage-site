@@ -165,7 +165,7 @@ body.nintendo-mode {
 
 .press-start {
   font-size: 1rem;
-  animation: blink 10s infinite;
+  animation: blink 15s infinite;
   margin-bottom: 3rem;
   color: #333;
 }
