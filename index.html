@@ -397,14 +397,13 @@
     })();
     // Cube face slideshows: Posters (front), Designs (right), Photos (left)
     (function() {
+      const heroSection = document.querySelector('.hero-3d');
+      if (!heroSection) return;
       const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
       function startFaceSlideshow(selector, images, intervalMs) {
         const face = document.querySelector(selector);
         if (!face || !images || images.length === 0) return { stop: () => {} };
-
-        // Preload
-        images.forEach(src => { const img = new Image(); img.src = src; });
 
         // Insert a crossfade layer behind the label content
         let fader = face.querySelector('.face-fader');
@@ -415,28 +414,34 @@
         }
 
         // Track current index and set initial background
-        let idx = 0;
-        face.style.backgroundImage = `url('${images[idx]}')`;
+        const hasInitialBackground = face.style.backgroundImage && face.style.backgroundImage !== 'none';
+        let idx = hasInitialBackground ? -1 : 0;
+        if (!hasInitialBackground) {
+          face.style.backgroundImage = `url('${images[0]}')`;
+        }
+
+        const getNextIdx = () => (idx + 1 + images.length) % images.length;
 
         const crossfadeTo = (nextIdx) => {
+          const nextSrc = images[nextIdx];
           if (prefersReduced) { // degrade gracefully
-            face.style.backgroundImage = `url('${images[nextIdx]}')`;
+            face.style.backgroundImage = `url('${nextSrc}')`;
             idx = nextIdx;
             return;
           }
-          fader.style.backgroundImage = `url('${images[nextIdx]}')`;
+          fader.style.backgroundImage = `url('${nextSrc}')`;
           // force reflow to ensure transition triggers
           void fader.offsetWidth;
           fader.style.opacity = '1';
           setTimeout(() => {
-            face.style.backgroundImage = `url('${images[nextIdx]}')`;
+            face.style.backgroundImage = `url('${nextSrc}')`;
             fader.style.opacity = '0';
             idx = nextIdx;
           }, 500);
         };
 
         const apply = () => {
-          const nextIdx = (idx + 1) % images.length;
+          const nextIdx = getNextIdx();
           crossfadeTo(nextIdx);
         };
 
@@ -494,11 +499,40 @@
         }
       }
 
-      // Try to load manifest for maintainability
-      fetch('assets/gallery-manifest.json')
-        .then(r => r.ok ? r.json() : Promise.reject(new Error('manifest fetch failed')))
-        .then(json => initWith(json))
-        .catch(() => initWith(fallback));
+      let bootStarted = false;
+      const boot = () => {
+        if (bootStarted) return;
+        bootStarted = true;
+        fetch('assets/gallery-manifest.json')
+          .then(r => r.ok ? r.json() : Promise.reject(new Error('manifest fetch failed')))
+          .then(json => initWith(json))
+          .catch(() => initWith(fallback));
+      };
+
+      let bootScheduled = false;
+      const scheduleBoot = () => {
+        if (bootScheduled) return;
+        bootScheduled = true;
+        if ('requestIdleCallback' in window) {
+          requestIdleCallback(() => boot(), { timeout: 1500 });
+        } else {
+          setTimeout(() => boot(), 250);
+        }
+      };
+
+      if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              observer.disconnect();
+              scheduleBoot();
+            }
+          });
+        }, { rootMargin: '200px' });
+        observer.observe(heroSection);
+      } else {
+        window.addEventListener('load', scheduleBoot, { once: true });
+      }
     })();
     // Cube rotates when the cursor passes over it (mouse),
     // and via swipe on touch; also supports keyboard.
