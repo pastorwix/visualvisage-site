@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="style.css" />
 
   <style>
-    body { font-family: 'Quicksand', sans-serif; background:#fdf6e3; color:#2d2d2d; margin:0; }
+    body { font-family: 'Quicksand', sans-serif; background:var(--accent, #f2c94c); color:#2d2d2d; margin:0; }
     header { background:#fff; padding:2rem 1rem; border-bottom:1px solid #eee; text-align:center; }
     header h1 { font-family:'Fredoka', sans-serif; font-size:2.2rem; letter-spacing:1px; margin:0; }
     nav ul { list-style:none; padding:0; margin:1rem 0 0; }
@@ -20,10 +20,7 @@
     nav a { text-decoration: none; color:#888; font-weight:600; transition:color .3s; }
     nav a:hover { color:#2d2d2d; }
 
-    .lava-bg { position:relative; overflow:hidden; min-height:100vh; padding-bottom:4rem; }
-    .lava-bg::before, .lava-bg::after { content:''; position:absolute; width:600px; height:600px; background:radial-gradient(circle at center, #e58f80, #e8dec7); opacity:.5; border-radius:50%; animation:floatBlob 12s ease-in-out infinite alternate; z-index:0; }
-    .lava-bg::after { width:700px; height:700px; background:radial-gradient(circle at center, #7dccbf, #e8dec7); top:200px; left:60%; animation-delay:4s; }
-    @keyframes floatBlob { 0%{ transform: translate(-100px,-100px) scale(1);} 100%{ transform: translate(100px,100px) scale(1.2);} }
+    .lava-bg { position:relative; min-height:100vh; padding-bottom:4rem; }
 
     .contact-card { position:relative; z-index:1; max-width:840px; margin:3rem auto; padding:2.5rem 2rem; background:rgba(255,255,255,0.9); border-radius:20px; box-shadow:0 10px 30px rgba(0,0,0,.06); backdrop-filter: blur(8px); }
     .contact-card h2 { font-family:'Fredoka', sans-serif; font-size:2rem; margin:0 0 .5rem; text-align:center; }

@@ -14,18 +14,46 @@
   <style>
     body {
       font-family: 'Quicksand', sans-serif;
-      background-color: #fdf6e3;
-      color: #2d2d2d;
+      background: radial-gradient(circle at 20% 20%, #12305c 0%, #0b1b36 45%, #050b16 80%);
+      color: #e5ecff;
       margin: 0;
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        repeating-linear-gradient(
+          to right,
+          rgba(120, 200, 255, 0.25) 0,
+          rgba(120, 200, 255, 0.25) 1px,
+          transparent 1px,
+          transparent 48px
+        ),
+        repeating-linear-gradient(
+          to bottom,
+          rgba(120, 200, 255, 0.22) 0,
+          rgba(120, 200, 255, 0.22) 1px,
+          transparent 1px,
+          transparent 38px
+        );
+      opacity: 0.4;
+      pointer-events: none;
+      z-index: 0;
     }
 
     .sticky-nav {
       position: sticky;
       top: 0;
       z-index: 1000;
-      background-color: #fff;
+      background-color: rgba(6, 10, 20, 0.9);
       padding: 1rem 2rem;
-      border-bottom: 1px solid #eee;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(10px);
     }
 
     .sticky-nav nav ul {
@@ -40,40 +68,47 @@
     .sticky-nav nav a {
       text-decoration: underline;
       font-weight: 600;
-      color: #444;
+      color: #cfe6ff;
       transition: color 0.3s ease;
     }
 
     .sticky-nav nav a:hover {
-      color: #000;
+      color: #fff;
     }
 
     header {
-      background-color: #fff;
+      background: transparent;
       padding: 2rem 1rem 1rem;
       text-align: center;
+      position: relative;
+      z-index: 1;
     }
 
     header h1 {
       font-family: 'Fredoka', sans-serif;
       font-size: 2.2rem;
       letter-spacing: 1px;
+      color: #f5f9ff;
+      text-shadow: 0 6px 30px rgba(0, 0, 0, 0.6);
     }
 
     .intro {
       text-align: center;
       padding: 2rem 1rem 0;
+      position: relative;
+      z-index: 1;
     }
 
     .intro h2 {
       font-family: 'Fredoka', sans-serif;
       font-size: 1.8rem;
       margin-bottom: 0.5rem;
+      color: #e8f3ff;
     }
 
     .intro p {
       font-size: 1rem;
-      color: #666;
+      color: #c7dcff;
     }
 
     .masonry-posters {
@@ -82,21 +117,26 @@
       padding: 2rem 1rem;
       max-width: 1200px;
       margin: auto;
+      position: relative;
+      z-index: 1;
     }
 
     .design-card {
       break-inside: avoid;
-      background: #fff;
+      background: linear-gradient(180deg, rgba(15, 27, 51, 0.9), rgba(8, 13, 26, 0.95));
       border-radius: 12px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.07);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(120, 200, 255, 0.2);
       margin-bottom: 1rem;
       padding: 1rem;
+      border: 1px solid rgba(120, 200, 255, 0.18);
     }
 
     .design-card img {
       width: 100%;
       border-radius: 12px;
       transition: transform 0.3s ease;
+      background: rgba(8, 13, 26, 0.9);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
     }
 
     .design-card img:hover {
@@ -114,16 +154,19 @@
 
     .design-card h3 {
       margin: 0.5rem 0;
+      color: #f4f7ff;
     }
 
     footer {
-      background-color: #fff;
+      background: rgba(4, 8, 16, 0.7);
       text-align: center;
       padding: 1.5rem;
       font-size: 0.9rem;
-      color: #aaa;
-      border-top: 1px solid #eee;
+      color: #b8cfff;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
       margin-top: 3rem;
+      position: relative;
+      z-index: 1;
     }
 
     @media (max-width: 768px) {
@@ -164,7 +207,7 @@
   <main>
     <section class="intro">
       <h2>Design Gallery</h2>
-      <p>Artwork I've done for people.</p>
+      <p>Cover art, Logos, Twitch emojis.</p>
     </section>
 
     <section class="masonry-posters">
