@@ -81,6 +81,27 @@
       color: #000;
     }
 
+    .top-nav .youtube-button {
+      display: inline-flex;
+      align-items: center;
+      margin-left: 0.45rem;
+      position: relative;
+      top: 12px;
+    }
+
+    .top-nav .youtube-button img {
+      display: block;
+      height: 72px;
+      width: auto;
+      filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.25));
+      transition: transform 0.2s ease, filter 0.2s ease;
+    }
+
+    .top-nav .youtube-button:hover img {
+      transform: translateY(-1px);
+      filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.35));
+    }
+
     /* Pricing Section Styles */
     .pricing-section {
       margin: 4rem 0;
@@ -175,8 +196,10 @@
     /* 3D Hero Cube */
     .hero-3d {
       margin: 2.5rem 0 1rem;
-      display: grid;
-      place-items: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
       perspective: 1000px;
     }
 
@@ -340,6 +363,9 @@
     <a href="about.html">About</a>
     <a href="contact.html">Contact</a>
     <a href="https://www.etsy.com/shop/VisualVisage" target="_blank" rel="noopener">Shop</a>
+    <a class="youtube-button" href="https://www.youtube.com/@pasturwix" target="_blank" rel="noopener">
+      <img src="assets/youtube%20button.PNG" alt="YouTube channel" />
+    </a>
   </div>
 
   <main class="start-screen container">
@@ -364,7 +390,6 @@
         <div class="cube-face cube-top" aria-hidden="true"></div>
         <div class="cube-face cube-bottom" aria-hidden="true"></div>
       </div>
-      <p class="hero-caption">Use arrows to rotate • Tap/Click a face to open</p>
       <div class="hero-controls">
         <button type="button" class="arrow-btn" aria-label="Rotate left" title="Rotate left" data-dir="left">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
@@ -386,9 +411,7 @@
         <a class="talk-bubble" href="contact.html" aria-label="Go to contact page">Contact me</a>
       </div>
       <div class="about-text">
-        <p> Hey, I'm Izzy Wicks — the creative behind Visual Visage. I've designed music covers, logos, business cards, and posters. I've recently started to create twitch emojis for twitch streamers.  Click this photo to find the recent me. Click the SHOP button for merch!
-
-        </p>
+        <p>Hey, I'm Izzy Wicks — the person behind Visual Visage. I design music covers, logos, business cards, twitch emojis and posters. I currently specialize in graphic design and photography. Click this photo to find the recent me. Hit the Youtube play button to check out my channel.</p>
       </div>
     </section>
 
