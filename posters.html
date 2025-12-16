@@ -216,20 +216,32 @@
 <body>
 
   <div class="sticky-nav">
-    <nav>
-      <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="posters.html">Posters</a></li>
-        <li><a href="designs.html">Designs</a></li>
-        <li><a href="photos.html">Photos</a></li>
-        <li><a href="videos.html">Videos</a></li>
-        <li><a href="tools.html">Tools</a></li>
-        <li><a href="about.html">About</a></li>
-        <li><a href="contact.html">Contact</a></li>
-        <li><a href="https://www.etsy.com/shop/VisualVisage" target="_blank" rel="noopener">Shop</a></li>
-      </ul>
+    <nav class="global-nav">
+      <button class="offcanvas-toggle" type="button" aria-controls="offcanvasNav" aria-expanded="false" aria-label="Open menu">☰ Menu</button>
+      <a class="youtube-button" href="https://www.youtube.com/@pasturwix" target="_blank" rel="noopener">
+        <img src="assets/youtube%20button.PNG" alt="YouTube channel" />
+      </a>
     </nav>
   </div>
+
+  <div class="offcanvas-overlay" id="offcanvasOverlay"></div>
+  <aside class="offcanvas-panel" id="offcanvasNav" aria-hidden="true">
+    <div class="offcanvas-header">
+      <strong>Menu</strong>
+      <button class="offcanvas-close" type="button" aria-label="Close menu">✕</button>
+    </div>
+    <ul class="offcanvas-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="posters.html">Posters</a></li>
+      <li><a href="designs.html">Designs</a></li>
+      <li><a href="photos.html">Photos</a></li>
+      <li><a href="videos.html">Videos</a></li>
+      <li><a href="tools.html">Tools</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="https://www.etsy.com/shop/VisualVisage" target="_blank" rel="noopener">Shop</a></li>
+    </ul>
+  </aside>
 
   <header>
     <h1>Visual Visage</h1>
@@ -280,6 +292,7 @@
     <p>© 2025 Visual Visage</p>
   </footer>
 
+  <script src="nav.js"></script>
   <script>
     const thumbnails = document.querySelectorAll('.masonry-posters img');
     const lightbox = document.getElementById('lightbox');

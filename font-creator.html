@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TypoGraph - Visual Visage</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Quicksand:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+
+  <style>
+    :root {
+      --ink: #111;
+      --paper: #fffef9;
+      --border: #e8e4da;
+      --accent: #d4a514;
+    }
+    body {
+      font-family: 'Quicksand', sans-serif;
+      margin: 0;
+      background-color: #a0b796;
+      color: #111;
+    }
+    .sticky-nav { position: sticky; top: 0; z-index: 1000; background-color: rgba(160, 183, 150, 0.9); padding: 1rem 2rem; border-bottom: 2px solid #000; backdrop-filter: blur(4px); }
+    .sticky-nav nav ul { display: flex; flex-wrap: wrap; gap: 1rem; list-style: none; margin: 0; padding: 0; }
+    .sticky-nav nav a { text-decoration: underline; font-weight: 600; color: #0d1a0f; transition: color 0.3s ease; }
+    .sticky-nav nav a:hover { color: #000; }
+
+    header { background: rgba(160, 183, 150, 0.92); padding: 2rem 1rem 0.5rem; text-align: center; border-bottom: 2px solid #000; }
+    header h1 { font-family: 'Fredoka', sans-serif; font-size: 2.1rem; margin: 0; }
+    header p { margin: 0.5rem 0 0; color: #0d1a0f; }
+
+    main { max-width: 1200px; margin: 2rem auto 3rem; padding: 0 1.25rem 2rem; display: grid; gap: 1rem; }
+    .callout {
+      background: #a7c19d;
+      border: 2px solid #000;
+      border-radius: 16px;
+      padding: 1rem 1.25rem;
+      box-shadow: 6px 6px 0 rgba(0,0,0,0.45);
+    }
+    .callout h2 { margin: 0 0 0.5rem; font-family: 'Fredoka', sans-serif; }
+    .callout ul { margin: 0.25rem 0 0; padding-left: 1.2rem; color: #555; }
+
+    .creator-layout { display: grid; grid-template-columns: minmax(280px, 360px) 1fr; gap: 1.25rem; align-items: start; }
+    .panel {
+      background: #a7c19d;
+      border: 2px solid #000;
+      border-radius: 16px;
+      padding: 1rem;
+      box-shadow: 6px 6px 0 rgba(0,0,0,0.45);
+    }
+    .panel h3 { margin: 0 0 0.35rem; font-family: 'Fredoka', sans-serif; }
+    .panel p { margin: 0 0 0.75rem; color: #555; }
+    .subhead { font-weight: 600; color: #333; margin: 0.5rem 0; }
+
+    .current-char { display: inline-flex; align-items: center; gap: 0.35rem; font-weight: 700; font-size: 1.2rem; color: #111; }
+    .current-char .pill { display: inline-flex; align-items: center; justify-content: center; min-width: 36px; height: 36px; border-radius: 10px; background: #d5e0cf; border: 2px solid #000; font-family: 'Fredoka', sans-serif; }
+
+    .canvas-wrap { background: #d5e0cf; border: 2px dashed #000; border-radius: 14px; padding: 0.5rem; display: grid; place-items: center; }
+    #drawCanvas { width: 100%; height: auto; max-width: 340px; border-radius: 10px; border: 2px solid #000; background: #fff; touch-action: none; }
+
+    .controls { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
+    .controls label { font-weight: 600; color: #0d1a0f; }
+    .controls input[type="range"] { accent-color: var(--accent); }
+    .button { display: inline-flex; align-items: center; justify-content: center; gap: 0.35rem; background: #111; color: #fff; border: 2px solid #000; padding: 0.65rem 0.95rem; border-radius: 10px; cursor: pointer; font-weight: 700; text-decoration: none; transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.2s ease; box-shadow: 4px 4px 0 rgba(0,0,0,0.45); }
+    .button:hover { transform: translateY(-1px); box-shadow: 6px 6px 0 rgba(0,0,0,0.45); }
+    .button.secondary { background: #f1efe8; color: #2b2b2b; border: 2px solid #000; }
+    .button.ghost { background: #fff; color: #333; border: 2px dashed #000; }
+    .button.small { padding: 0.45rem 0.6rem; font-size: 0.9rem; }
+
+    .chart-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem; }
+    .glyph-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 0.5rem; }
+    .glyph-card { border: 2px solid #000; border-radius: 12px; padding: 0.6rem; background: #b5c9ad; display: grid; gap: 0.35rem; box-shadow: 4px 4px 0 rgba(0,0,0,0.35); }
+    .glyph-card strong { font-family: 'Fredoka', sans-serif; }
+    .status { font-size: 0.85rem; color: #0d1a0f; }
+
+    .preview-block { display: grid; gap: 0.5rem; }
+    #previewCanvas { width: 100%; border-radius: 12px; border: 2px solid #000; background: #fff; }
+    .preview-input { width: 100%; padding: 0.65rem 0.85rem; border: 2px solid #000; border-radius: 10px; font-size: 1rem; background: #e3eddc; }
+    .dropzone {
+      border: 2px dashed #000;
+      border-radius: 12px;
+      padding: 0.75rem 1rem;
+      background: #b5c9ad;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+    .dropzone.dragging { background: #c4d3bb; }
+    .dropzone .hint { margin: 0; }
+    .live-preview {
+      display: grid;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+    }
+    #fontLiveArea {
+      width: 100%;
+      min-height: 120px;
+      padding: 0.75rem 0.85rem;
+      border: 2px solid #000;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      background: #fff;
+      resize: vertical;
+    }
+
+    @media (max-width: 960px) {
+      .creator-layout { grid-template-columns: 1fr; }
+      #drawCanvas { max-width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="sticky-nav">
+    <nav class="global-nav">
+      <button class="offcanvas-toggle" type="button" aria-controls="offcanvasNav" aria-expanded="false" aria-label="Open menu">☰ Menu</button>
+      <a class="youtube-button" href="https://www.youtube.com/@pasturwix" target="_blank" rel="noopener">
+        <img src="assets/youtube%20button.PNG" alt="YouTube channel" />
+      </a>
+    </nav>
+  </div>
+
+  <div class="offcanvas-overlay" id="offcanvasOverlay"></div>
+  <aside class="offcanvas-panel" id="offcanvasNav" aria-hidden="true">
+    <div class="offcanvas-header">
+      <strong>Menu</strong>
+      <button class="offcanvas-close" type="button" aria-label="Close menu">✕</button>
+    </div>
+    <ul class="offcanvas-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="posters.html">Posters</a></li>
+      <li><a href="designs.html">Designs</a></li>
+      <li><a href="photos.html">Photos</a></li>
+      <li><a href="videos.html">Videos</a></li>
+      <li><a href="tools.html">Tools</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="https://www.etsy.com/shop/VisualVisage" target="_blank" rel="noopener">Shop</a></li>
+    </ul>
+  </aside>
+
+  <header>
+    <h1>TypoGraph</h1>
+    <p>Map every character to your handwriting with a simple chart. Draw, preview, and export a sheet you can use anywhere.</p>
+  </header>
+
+  <main>
+    <section class="callout">
+      <h2>How it works</h2>
+      <ul>
+        <li>Pick a character, sketch it on the pad, then save it to the chart.</li>
+        <li>Fill out each box to build a full alphabet (upper/lowercase, numbers, punctuation).</li>
+        <li>Download the filled chart to print, share, or trace into a full font editor.</li>
+      </ul>
+    </section>
+
+    <div class="creator-layout">
+      <section class="panel">
+        <h3>Draw a glyph</h3>
+        <p>Select a character from the chart, sketch your version, then save. Brush is pressureless to keep things simple.</p>
+        <div class="current-char">Editing: <span class="pill" id="currentChar">A</span></div>
+        <div class="canvas-wrap">
+          <canvas id="drawCanvas" width="320" height="320" aria-label="Glyph drawing canvas"></canvas>
+        </div>
+        <div class="controls" style="margin:0.65rem 0;">
+          <label for="brush">Brush</label>
+          <input id="brush" type="range" min="2" max="14" value="6" />
+          <button class="button ghost small" type="button" id="clearGlyph">Clear</button>
+          <button class="button small" type="button" id="saveGlyph">Save glyph</button>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="chart-actions">
+          <button class="button secondary small" type="button" id="downloadChart">Download filled chart (PNG)</button>
+          <button class="button ghost small" type="button" id="downloadBlank">Download blank chart</button>
+          <button class="button small" type="button" id="uploadChart">Upload filled chart</button>
+          <button class="button small" type="button" id="downloadFont">Download font (TTF)</button>
+          <button class="button ghost small" type="button" id="resetAll">Reset saved glyphs</button>
+        </div>
+        <input type="file" id="uploadChartInput" accept="image/png,image/jpeg" style="display:none;" />
+        <div class="status" id="importStatus">Upload a completed chart (PNG/JPG) exported from this tool to auto-fill every cell.</div>
+        <div class="subhead">Character chart</div>
+        <div class="glyph-grid" id="glyphGrid" aria-label="Character chart"></div>
+      </section>
+    </div>
+
+    <section class="panel">
+      <h3>Preview your font</h3>
+      <p>Type to see your saved glyphs laid out in a simple sprite preview.</p>
+      <input class="preview-input" id="previewText" type="text" value="Visual Visage - custom font!" aria-label="Preview text" />
+      <div class="preview-block">
+        <canvas id="previewCanvas" width="900" height="180" aria-label="Preview canvas"></canvas>
+        <span class="status" id="previewHint">Draw a few letters to see them here.</span>
+      </div>
+      <div class="dropzone" id="fontDropZone">
+        <span class="hint">Drag & drop a .ttf/.otf/.woff file here to preview it.</span>
+        <div class="chart-actions" style="margin:0;">
+          <button class="button ghost small" type="button" id="fontUploadBtn">Upload font file</button>
+        </div>
+        <input type="file" id="fontUploadInput" accept=".ttf,.otf,.woff,.woff2" style="display:none;" />
+      </div>
+      <div class="live-preview">
+        <label class="subhead" for="fontLiveArea">Try your uploaded font</label>
+        <textarea id="fontLiveArea" aria-label="Type to try your uploaded font">Type here to see your uploaded font in a paragraph layout.</textarea>
+        <span class="status" id="fontLiveStatus">Waiting for an uploaded font.</span>
+      </div>
+    </section>
+  </main>
+
+  <footer style="background:rgba(160, 183, 150, 0.92); text-align:center; padding:1.5rem; color:#0d1a0f; border-top:2px solid #000;">
+    <p>© 2025 Visual Visage</p>
+  </footer>
+
+  <script src="nav.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/opentype.js/1.3.4/opentype.min.js" defer></script>
+  <script>
+    (() => {
+      const characters = Array.from('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,?!&$%-+');
+      const drawCanvas = document.getElementById('drawCanvas');
+      const ctx = drawCanvas.getContext('2d');
+      const glyphGrid = document.getElementById('glyphGrid');
+      const currentCharEl = document.getElementById('currentChar');
+      const brushInput = document.getElementById('brush');
+      const previewCanvas = document.getElementById('previewCanvas');
+      const previewCtx = previewCanvas.getContext('2d');
+      const previewText = document.getElementById('previewText');
+      const previewHint = document.getElementById('previewHint');
+      const uploadChartBtn = document.getElementById('uploadChart');
+      const uploadChartInput = document.getElementById('uploadChartInput');
+      const importStatus = document.getElementById('importStatus');
+      const downloadFontBtn = document.getElementById('downloadFont');
+      const fontUploadBtn = document.getElementById('fontUploadBtn');
+      const fontUploadInput = document.getElementById('fontUploadInput');
+      const fontDropZone = document.getElementById('fontDropZone');
+      const fontLiveArea = document.getElementById('fontLiveArea');
+      const fontLiveStatus = document.getElementById('fontLiveStatus');
+
+      const glyphs = new Map();
+      let currentChar = characters[0];
+      let drawing = false;
+      let brush = Number(brushInput.value);
+      let uploadedFontName = '';
+      let uploadedFontLabel = '';
+
+      const size = drawCanvas.width;
+
+      const clearCanvas = () => {
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(0, 0, size, size);
+        ctx.strokeStyle = '#d5d0c0';
+        ctx.lineWidth = 1;
+        ctx.strokeRect(0.5, 0.5, size - 1, size - 1);
+      };
+
+      clearCanvas();
+
+      const getPos = (evt) => {
+        const rect = drawCanvas.getBoundingClientRect();
+        const clientX = evt.touches ? evt.touches[0].clientX : evt.clientX;
+        const clientY = evt.touches ? evt.touches[0].clientY : evt.clientY;
+        return {
+          x: ((clientX - rect.left) / rect.width) * size,
+          y: ((clientY - rect.top) / rect.height) * size
+        };
+      };
+
+      const startDraw = (evt) => {
+        drawing = true;
+        const { x, y } = getPos(evt);
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        evt.preventDefault();
+      };
+
+      const moveDraw = (evt) => {
+        if (!drawing) return;
+        const { x, y } = getPos(evt);
+        ctx.lineTo(x, y);
+        ctx.strokeStyle = '#111';
+        ctx.lineWidth = brush;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.stroke();
+        evt.preventDefault();
+      };
+
+      const endDraw = () => {
+        drawing = false;
+        ctx.closePath();
+      };
+
+      drawCanvas.addEventListener('mousedown', startDraw);
+      drawCanvas.addEventListener('mousemove', moveDraw);
+      document.addEventListener('mouseup', endDraw);
+      drawCanvas.addEventListener('touchstart', startDraw, { passive: false });
+      drawCanvas.addEventListener('touchmove', moveDraw, { passive: false });
+      drawCanvas.addEventListener('touchend', endDraw);
+      drawCanvas.addEventListener('touchcancel', endDraw);
+
+      brushInput.addEventListener('input', () => {
+        brush = Number(brushInput.value);
+      });
+
+      document.getElementById('clearGlyph').addEventListener('click', () => {
+        clearCanvas();
+      });
+
+      const renderChart = () => {
+        glyphGrid.innerHTML = '';
+        characters.forEach(char => {
+          const card = document.createElement('div');
+          card.className = 'glyph-card';
+
+          const label = document.createElement('strong');
+          label.textContent = char === ' ' ? 'Space' : char;
+          card.appendChild(label);
+
+          const status = document.createElement('div');
+          status.className = 'status';
+          status.textContent = glyphs.has(char) ? 'Saved' : 'Empty';
+          card.appendChild(status);
+
+          const button = document.createElement('button');
+          button.className = 'button small secondary';
+          button.textContent = char === currentChar ? 'Editing…' : 'Edit';
+          button.addEventListener('click', () => selectChar(char));
+          card.appendChild(button);
+
+          glyphGrid.appendChild(card);
+        });
+      };
+
+      const selectChar = (char) => {
+        currentChar = char;
+        currentCharEl.textContent = char;
+        clearCanvas();
+        const saved = glyphs.get(char);
+        if (saved) ctx.drawImage(saved, 0, 0);
+        renderChart();
+      };
+
+      document.getElementById('saveGlyph').addEventListener('click', () => {
+        const savedCanvas = document.createElement('canvas');
+        savedCanvas.width = size;
+        savedCanvas.height = size;
+        const savedCtx = savedCanvas.getContext('2d');
+        savedCtx.drawImage(drawCanvas, 0, 0);
+        glyphs.set(currentChar, savedCanvas);
+        renderChart();
+        renderPreview();
+      });
+
+      const renderPreview = () => {
+        previewCtx.fillStyle = '#fff';
+        previewCtx.fillRect(0, 0, previewCanvas.width, previewCanvas.height);
+
+        const text = previewText.value || '';
+        let x = 16;
+        const baseline = previewCanvas.height / 2 + 24;
+        const targetHeight = 72;
+        const maxWidth = previewCanvas.width - 24;
+
+        for (const char of text) {
+          if (x > maxWidth) break;
+          if (glyphs.has(char)) {
+            const img = glyphs.get(char);
+            const scale = targetHeight / img.height;
+            const w = img.width * scale;
+            previewCtx.drawImage(img, x, baseline - targetHeight, w, targetHeight);
+            x += w + 8;
+          } else {
+            previewCtx.fillStyle = '#999';
+            previewCtx.font = '24px Fredoka, sans-serif';
+            previewCtx.fillText(char, x, baseline - 10);
+            x += 18;
+          }
+        }
+
+        const filled = glyphs.size;
+        previewHint.textContent = filled ? `Previewing with ${filled} saved glyph${filled === 1 ? '' : 's'}.` : 'Draw a few letters to see them here.';
+      };
+
+      previewText.addEventListener('input', renderPreview);
+
+      const chartConfig = { cols: 8, cellSize: 200, padding: 24, labelHeight: 22 };
+      const chartRows = Math.ceil(characters.length / chartConfig.cols);
+      const chartSize = {
+        width: chartConfig.cols * (chartConfig.cellSize + chartConfig.padding) + chartConfig.padding,
+        height: chartRows * (chartConfig.cellSize + chartConfig.padding + chartConfig.labelHeight) + chartConfig.padding
+      };
+
+      const downloadChart = (blankOnly = false) => {
+        const sheet = document.createElement('canvas');
+        sheet.width = chartSize.width;
+        sheet.height = chartSize.height;
+        const sctx = sheet.getContext('2d');
+
+        sctx.fillStyle = '#fff';
+        sctx.fillRect(0, 0, sheet.width, sheet.height);
+        sctx.strokeStyle = '#d9d3c3';
+        sctx.lineWidth = 1;
+        sctx.font = '16px Fredoka, sans-serif';
+        sctx.fillStyle = '#333';
+
+        characters.forEach((char, idx) => {
+          const col = idx % chartConfig.cols;
+          const row = Math.floor(idx / chartConfig.cols);
+          const x = chartConfig.padding + col * (chartConfig.cellSize + chartConfig.padding);
+          const y = chartConfig.padding + row * (chartConfig.cellSize + chartConfig.padding + chartConfig.labelHeight);
+
+          sctx.strokeRect(x + 0.5, y + chartConfig.labelHeight + 0.5, chartConfig.cellSize, chartConfig.cellSize);
+          sctx.fillText(char, x + 6, y + 18);
+
+          if (!blankOnly && glyphs.has(char)) {
+            const img = glyphs.get(char);
+            const scale = chartConfig.cellSize / img.height;
+            const w = img.width * scale;
+            sctx.drawImage(img, x + (chartConfig.cellSize - w) / 2, y + chartConfig.labelHeight);
+          }
+        });
+
+        const link = document.createElement('a');
+        link.download = blankOnly ? 'font-chart-blank.png' : 'font-chart.png';
+        link.href = sheet.toDataURL('image/png');
+        link.click();
+      };
+
+      document.getElementById('downloadChart').addEventListener('click', () => downloadChart(false));
+      document.getElementById('downloadBlank').addEventListener('click', () => downloadChart(true));
+
+      const hasInk = (canvas) => {
+        const data = canvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height).data;
+        let nonWhite = 0;
+        for (let i = 0; i < data.length; i += 4) {
+          if (data[i] < 250 || data[i + 1] < 250 || data[i + 2] < 250) {
+            nonWhite++;
+            if (nonWhite > 120) return true;
+          }
+        }
+        return false;
+      };
+
+      const importChartFromImage = (img) => {
+        const ratioX = img.width / chartSize.width;
+        const ratioY = img.height / chartSize.height;
+        let imported = 0;
+
+        characters.forEach((char, idx) => {
+          const col = idx % chartConfig.cols;
+          const row = Math.floor(idx / chartConfig.cols);
+          const srcX = (chartConfig.padding + col * (chartConfig.cellSize + chartConfig.padding)) * ratioX;
+          const srcY = (chartConfig.padding + row * (chartConfig.cellSize + chartConfig.padding + chartConfig.labelHeight) + chartConfig.labelHeight) * ratioY;
+          const srcW = chartConfig.cellSize * ratioX;
+          const srcH = chartConfig.cellSize * ratioY;
+
+          const cellCanvas = document.createElement('canvas');
+          cellCanvas.width = size;
+          cellCanvas.height = size;
+          const cellCtx = cellCanvas.getContext('2d');
+          cellCtx.fillStyle = '#fff';
+          cellCtx.fillRect(0, 0, size, size);
+          cellCtx.drawImage(img, srcX, srcY, srcW, srcH, 0, 0, size, size);
+
+          if (hasInk(cellCanvas)) {
+            glyphs.set(char, cellCanvas);
+            imported++;
+          }
+        });
+
+        return imported;
+      };
+
+      uploadChartBtn.addEventListener('click', () => uploadChartInput.click());
+
+      uploadChartInput.addEventListener('change', (evt) => {
+        const file = evt.target.files && evt.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const img = new Image();
+          img.onload = () => {
+            const count = importChartFromImage(img);
+            importStatus.textContent = count
+              ? `Imported ${count} glyph${count === 1 ? '' : 's'} from the sheet.`
+              : 'No glyphs detected. Make sure you exported the blank chart from here and that cells contain ink.';
+            renderChart();
+            renderPreview();
+            uploadChartInput.value = '';
+          };
+          img.onerror = () => {
+            importStatus.textContent = 'Could not read that image file.';
+            uploadChartInput.value = '';
+          };
+          img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      });
+
+      const loadFontFile = (file) => {
+        if (!file) return;
+        fontLiveStatus.textContent = `Loading ${file.name}...`;
+        const reader = new FileReader();
+        reader.onload = async (e) => {
+          try {
+            const data = e.target.result;
+            const family = `UploadedFont-${Date.now()}`;
+            const face = new FontFace(family, data);
+            await face.load();
+            document.fonts.add(face);
+            uploadedFontName = family;
+            uploadedFontLabel = file.name;
+            fontLiveStatus.textContent = `Type below to try ${file.name}`;
+            fontLiveArea.style.fontFamily = `"${uploadedFontName}", sans-serif`;
+          } catch (err) {
+            fontLiveStatus.textContent = 'Could not load that font file.';
+          } finally {
+            fontUploadInput.value = '';
+          }
+        };
+        reader.onerror = () => {
+          fontLiveStatus.textContent = 'Could not read that font file.';
+          fontUploadInput.value = '';
+        };
+        reader.readAsArrayBuffer(file);
+      };
+
+      fontUploadBtn.addEventListener('click', () => fontUploadInput.click());
+      fontUploadInput.addEventListener('change', (evt) => {
+        const file = evt.target.files && evt.target.files[0];
+        loadFontFile(file);
+      });
+
+      fontLiveArea.addEventListener('input', () => {
+        // Nothing extra needed; font is applied via style. Keep handler in case of future hooks.
+      });
+
+      const handleDropFile = (evt) => {
+        evt.preventDefault();
+        fontDropZone.classList.remove('dragging');
+        const file = evt.dataTransfer.files && evt.dataTransfer.files[0];
+        loadFontFile(file);
+      };
+
+      fontDropZone.addEventListener('dragover', (evt) => {
+        evt.preventDefault();
+        fontDropZone.classList.add('dragging');
+      });
+      fontDropZone.addEventListener('dragleave', () => fontDropZone.classList.remove('dragging'));
+      fontDropZone.addEventListener('drop', handleDropFile);
+
+      const waitForOpenType = () => new Promise((resolve, reject) => {
+        if (window.opentype) return resolve(window.opentype);
+        const maxWait = 6000;
+        const start = performance.now();
+        const check = () => {
+          if (window.opentype) return resolve(window.opentype);
+          if (performance.now() - start > maxWait) return reject(new Error('Font generator timed out loading opentype.js'));
+          requestAnimationFrame(check);
+        };
+        check();
+      });
+
+      const metrics = { ascender: 820, descender: -220, unitsPerEm: 1000 };
+
+      const rasterToPath = (srcCanvas) => {
+        const target = 64;
+        const temp = document.createElement('canvas');
+        temp.width = target;
+        temp.height = target;
+        const tctx = temp.getContext('2d');
+        tctx.fillStyle = '#fff';
+        tctx.fillRect(0, 0, target, target);
+        tctx.drawImage(srcCanvas, 0, 0, target, target);
+
+        const data = tctx.getImageData(0, 0, target, target).data;
+        const path = new opentype.Path();
+        const scale = (metrics.ascender - metrics.descender) / target;
+        let maxX = 0;
+
+        for (let y = 0; y < target; y++) {
+          for (let x = 0; x < target; x++) {
+            const i = (y * target + x) * 4;
+            const r = data[i];
+            const g = data[i + 1];
+            const b = data[i + 2];
+            const a = data[i + 3];
+            // Treat near-white as empty; anything else is "ink".
+            if (a < 10 || (r > 245 && g > 245 && b > 245)) continue;
+            const px = x * scale;
+            const py = metrics.ascender - y * scale; // flip Y into font space
+            const s = scale;
+            path.moveTo(px, py);
+            path.lineTo(px + s, py);
+            path.lineTo(px + s, py - s);
+            path.lineTo(px, py - s);
+            path.close();
+            if (x > maxX) maxX = x;
+          }
+        }
+
+        const width = Math.max((maxX + 2) * scale + 120, 450);
+        return { path, width };
+      };
+
+      const downloadFont = async () => {
+        try {
+          downloadFontBtn.disabled = true;
+          downloadFontBtn.textContent = 'Generating...';
+          await waitForOpenType();
+          const glyphList = [];
+
+          glyphList.push(new opentype.Glyph({
+            name: '.notdef',
+            unicode: 0,
+            advanceWidth: 600,
+            path: new opentype.Path()
+          }));
+
+          characters.forEach((char) => {
+            if (char === ' ') {
+              glyphList.push(new opentype.Glyph({
+                name: 'space',
+                unicode: 32,
+                advanceWidth: 400,
+                path: new opentype.Path()
+              }));
+              return;
+            }
+
+            if (glyphs.has(char)) {
+              const { path, width } = rasterToPath(glyphs.get(char));
+              glyphList.push(new opentype.Glyph({
+                name: char,
+                unicode: char.charCodeAt(0),
+                advanceWidth: Math.min(Math.max(width, 350), 1200),
+                path
+              }));
+            } else {
+              glyphList.push(new opentype.Glyph({
+                name: char,
+                unicode: char.charCodeAt(0),
+                advanceWidth: 550,
+                path: new opentype.Path()
+              }));
+            }
+          });
+
+          const font = new opentype.Font({
+            familyName: 'VisualVisageHand',
+            styleName: 'Regular',
+            unitsPerEm: metrics.unitsPerEm,
+            ascender: metrics.ascender,
+            descender: metrics.descender,
+            glyphs: glyphList
+          });
+
+          const arrayBuffer = font.toArrayBuffer();
+          const blob = new Blob([arrayBuffer], { type: 'font/ttf' });
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = 'visual-visage-hand.ttf';
+          link.click();
+          URL.revokeObjectURL(url);
+          downloadFontBtn.textContent = 'Download font (TTF)';
+        } catch (err) {
+          alert('Font export failed. Please try again.\n' + err.message);
+          downloadFontBtn.textContent = 'Download font (TTF)';
+        } finally {
+          downloadFontBtn.disabled = false;
+        }
+      };
+
+      downloadFontBtn.addEventListener('click', () => {
+        if (!glyphs.size) {
+          if (!confirm('You have no saved glyphs yet. Export anyway with empty characters?')) return;
+        }
+        downloadFont();
+      });
+
+      document.getElementById('resetAll').addEventListener('click', () => {
+        if (confirm('Clear all saved glyphs?')) {
+          glyphs.clear();
+          clearCanvas();
+          renderChart();
+          renderPreview();
+        }
+      });
+
+      // Initialize
+      renderChart();
+      renderPreview();
+    })();
+  </script>
+</body>
+</html>
