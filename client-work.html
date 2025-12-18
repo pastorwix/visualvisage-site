@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Posters – Visual Visage</title>
+  <title>Client Work – Visual Visage</title>
 
   <!-- Fonts + Styles -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -14,8 +14,8 @@
   <style>
     body {
       font-family: 'Quicksand', sans-serif;
-      background: radial-gradient(circle at 20% 20%, #12305c 0%, #0b1b36 45%, #050b16 80%);
-      color: #e5ecff;
+      background: radial-gradient(circle at 20% 20%, #dff1ff 0%, #c6e4ff 45%, #add9ff 80%);
+      color: #0f273a;
       margin: 0;
       min-height: 100vh;
       position: relative;
@@ -29,19 +29,19 @@
       background:
         repeating-linear-gradient(
           to right,
-          rgba(120, 200, 255, 0.25) 0,
-          rgba(120, 200, 255, 0.25) 1px,
+          rgba(32, 76, 121, 0.12) 0,
+          rgba(32, 76, 121, 0.12) 1px,
           transparent 1px,
           transparent 48px
         ),
         repeating-linear-gradient(
           to bottom,
-          rgba(120, 200, 255, 0.22) 0,
-          rgba(120, 200, 255, 0.22) 1px,
+          rgba(32, 76, 121, 0.1) 0,
+          rgba(32, 76, 121, 0.1) 1px,
           transparent 1px,
           transparent 38px
         );
-      opacity: 0.4;
+      opacity: 0.45;
       pointer-events: none;
       z-index: 0;
     }
@@ -50,9 +50,9 @@
       position: sticky;
       top: 0;
       z-index: 1000;
-      background-color: rgba(6, 10, 20, 0.9);
+      background-color: rgba(236, 246, 255, 0.92);
       padding: 1rem 2rem;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      border-bottom: 1px solid rgba(38, 87, 134, 0.12);
       backdrop-filter: blur(10px);
     }
 
@@ -68,14 +68,32 @@
     .sticky-nav nav a {
       text-decoration: underline;
       font-weight: 600;
-      color: #cfe6ff;
+      color: #1f4264;
       transition: color 0.3s ease;
     }
 
     .sticky-nav nav a:hover {
-      color: #fff;
+      color: #0f2f4e;
     }
 
+    .bookme-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.55rem 0.9rem;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #ffbaba, #ffd7a8);
+      color: #0f2f4e;
+      text-decoration: none;
+      font-weight: 700;
+      box-shadow: 0 8px 18px rgba(255, 186, 186, 0.35);
+      border: 1px solid rgba(15, 47, 78, 0.06);
+    }
+
+    .bookme-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 24px rgba(255, 186, 186, 0.45);
+    }
 
     header {
       background: transparent;
@@ -90,8 +108,8 @@
       font-family: 'Fredoka', sans-serif;
       font-size: 2.2rem;
       letter-spacing: 1px;
-      color: #f5f9ff;
-      text-shadow: 0 6px 30px rgba(0, 0, 0, 0.6);
+      color: #0f2f4e;
+      text-shadow: 0 6px 30px rgba(15, 47, 78, 0.18);
     }
 
     .intro {
@@ -105,12 +123,12 @@
       font-family: 'Fredoka', sans-serif;
       font-size: 1.8rem;
       margin-bottom: 0.5rem;
-      color: #e8f3ff;
+      color: #123a5c;
     }
 
     .intro p {
       font-size: 1rem;
-      color: #c7dcff;
+      color: #3d5a75;
     }
 
     .masonry-posters {
@@ -130,23 +148,23 @@
       transition: transform 0.3s ease, box-shadow 0.3s ease;
       cursor: pointer;
       break-inside: avoid;
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(120, 200, 255, 0.18);
-      border: 1px solid rgba(120, 200, 255, 0.16);
-      background: rgba(8, 13, 26, 0.9);
+      box-shadow: 0 10px 26px rgba(25, 72, 116, 0.2), 0 0 0 1px rgba(25, 72, 116, 0.18);
+      border: 1px solid rgba(25, 72, 116, 0.2);
+      background: rgba(237, 246, 255, 0.9);
     }
 
     .masonry-posters img:hover {
       transform: scale(1.03);
-      box-shadow: 0 16px 32px rgba(0, 0, 0, 0.35), 0 0 0 2px rgba(120, 200, 255, 0.4);
+      box-shadow: 0 14px 30px rgba(25, 72, 116, 0.26), 0 0 0 2px rgba(25, 72, 116, 0.3);
     }
 
     footer {
-      background: rgba(4, 8, 16, 0.7);
+      background: rgba(236, 246, 255, 0.9);
       text-align: center;
       padding: 1.5rem;
       font-size: 0.9rem;
-      color: #b8cfff;
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      color: #2a4b69;
+      border-top: 1px solid rgba(38, 87, 134, 0.12);
       margin-top: 3rem;
       position: relative;
       z-index: 1;
@@ -220,6 +238,7 @@
       <a class="youtube-button" href="https://www.youtube.com/@pasturwix" target="_blank" rel="noopener">
         <img src="assets/youtube%20button.PNG" alt="YouTube channel" />
       </a>
+      <a class="bookme-btn" href="contact.html?reason=booking">Book me</a>
       <button class="offcanvas-toggle" type="button" aria-controls="offcanvasNav" aria-expanded="false" aria-label="Open menu">☰ Menu</button>
     </nav>
   </div>
@@ -249,35 +268,28 @@
 
   <main>
     <section class="intro">
-      <h2>Poster Gallery</h2>
-      <p>A collection of poster  made on Procreate.</p>
+      <h2>Client Gallery</h2>
+      <p>Album art, Twitch emojis, Business cards, Logos, Poster work.</p>
     </section>
 
     <section class="masonry-posters">
-      <img src="assets/poster1.jpg" alt="Poster 1">
-      <img src="assets/poster2.jpg" alt="Poster 2">
-      <img src="assets/poster3.jpg" alt="Poster 3">
-      <img src="assets/poster4.jpg" alt="Poster 4">
-      <img src="assets/poster5.jpg" alt="Poster 5">
-      <img src="assets/poster6.jpg" alt="Poster 6">
-      <img src="assets/poster7.jpg" alt="Poster 7">
-      <img src="assets/poster8.jpg" alt="Poster 8">
-      <img src="assets/poster9.jpg" alt="Poster 9">
-      <img src="assets/poster10.jpg" alt="Poster 10">
-      <img src="assets/poster11.jpg" alt="Poster 11">
-      <img src="assets/poster12.jpg" alt="Poster 12">
-      <img src="assets/poster13.jpg" alt="Poster 13">
-      <img src="assets/poster14.jpg" alt="Poster 14">
-      <img src="assets/poster15.jpg" alt="Poster 15">
-      <img src="assets/poster16.jpg" alt="Poster 16">
-      <img src="assets/poster17.jpg" alt="Poster 17">
-      <img src="assets/poster18.jpg" alt="Poster 18">
-      <img src="assets/poster19.jpg" alt="Poster 19">
-      <img src="assets/poster20.jpg" alt="Poster 20">
-      <img src="assets/poster21.jpg" alt="Poster 21">
-      <img src="assets/poster22.jpg" alt="Poster 22">
-      <img src="assets/poster23.jpg" alt="Poster 23">
-      <img src="assets/poster24.jpg" alt="Poster 24">
+      <a href="https://music.apple.com/us/album/infinite-nexus-ep/1735139694" target="_blank" rel="noopener">
+        <img src="assets/work1.jpg" alt="Client work 1" data-lightbox="false">
+      </a>
+      <a href="https://music.apple.com/us/album/bleux-jeans-single/1733815307" target="_blank" rel="noopener">
+        <img src="assets/work2.jpg" alt="Client work 2" data-lightbox="false">
+      </a>
+      <a href="https://www.instagram.com/fearlesswaffle_/?igsh=MWVzeDU5Y3hnY2UxZA%3D%3D#" target="_blank" rel="noopener">
+        <img src="assets/work3.jpg" alt="Client work 3" data-lightbox="false">
+      </a>
+      <a href="https://m.twitch.tv/jaydajit/home" target="_blank" rel="noopener">
+        <img src="assets/work4.jpg" alt="Client work 4" data-lightbox="false">
+      </a>
+      <img src="assets/work5.jpg" alt="Client work 5">
+      <a href="https://www.instagram.com/biplioteca/?igsh=bjc0enJxemRhdnJq#" target="_blank" rel="noopener">
+        <img src="assets/work6.jpg" alt="Client work 6" data-lightbox="false">
+      </a>
+      <img src="assets/work7.jpg" alt="Client work 7">
     </section>
   </main>
 
@@ -294,7 +306,7 @@
 
   <script src="nav.js"></script>
   <script>
-    const thumbnails = document.querySelectorAll('.masonry-posters img');
+    const thumbnails = document.querySelectorAll('.masonry-posters img:not([data-lightbox="false"])');
     const lightbox = document.getElementById('lightbox');
     const lightboxImg = document.getElementById('lightbox-img');
     let currentIndex = 0;

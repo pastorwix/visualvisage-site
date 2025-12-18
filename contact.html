@@ -31,6 +31,10 @@
     .label { font-weight:600; color:#555; }
     input[type="text"], input[type="email"], textarea { padding:1rem; border:1px solid #e6e6e6; border-radius:12px; font:inherit; background:#fff; color:#333; }
     textarea { resize:vertical; min-height:140px; }
+    .pill-toggle { display:flex; gap:.6rem; flex-wrap:wrap; }
+    .pill-toggle button { padding:.65rem 1rem; border-radius:999px; border:1px solid #e6e6e6; background:#fff; font-weight:700; cursor:pointer; transition: all .15s ease; color:#444; }
+    .pill-toggle button.active { background:#ffbaba; border-color:#ff9e9e; color:#2d2d2d; box-shadow:0 6px 18px rgba(255,186,186,.4); }
+    .pill-toggle button:focus-visible { outline:2px solid #ff9e9e; outline-offset:2px; }
     .actions { display:flex; gap:.75rem; align-items:center; }
     .btn { padding:0.9rem 1.25rem; border:none; border-radius:12px; font-weight:700; cursor:pointer; transition:transform .1s ease, box-shadow .2s ease, background-color .2s ease; }
     .btn-primary { background:#ffbaba; color:#333; box-shadow:0 6px 20px rgba(255,186,186,.4); }
@@ -50,10 +54,10 @@
   <header>
     <h1>Visual Visage</h1>
     <nav class="global-nav">
-      <button class="offcanvas-toggle" type="button" aria-controls="offcanvasNav" aria-expanded="false" aria-label="Open menu">☰ Menu</button>
       <a class="youtube-button" href="https://www.youtube.com/@pasturwix" target="_blank" rel="noopener">
         <img src="assets/youtube%20button.PNG" alt="YouTube channel" />
       </a>
+      <button class="offcanvas-toggle" type="button" aria-controls="offcanvasNav" aria-expanded="false" aria-label="Open menu">☰ Menu</button>
     </nav>
   </header>
 
@@ -94,6 +98,14 @@
           </div>
 
           <div class="field">
+            <span class="label">Reason</span>
+            <div class="pill-toggle" role="radiogroup" aria-label="Reason">
+              <button type="button" class="pill active" data-reason="question" aria-pressed="true">Question</button>
+              <button type="button" class="pill" data-reason="booking" aria-pressed="false">Book me</button>
+            </div>
+          </div>
+
+          <div class="field">
             <label for="message" class="label">Your Message</label>
             <textarea id="message" name="message" placeholder="Write your message..." required></textarea>
           </div>
@@ -120,6 +132,11 @@
     const form = document.getElementById('contact-form');
     const statusEl = document.getElementById('formStatus');
     const submitBtn = document.getElementById('submitBtn');
+    const reasonButtons = document.querySelectorAll('.pill-toggle button');
+    const messageEl = document.getElementById('message');
+    const basePlaceholder = 'Write your message...';
+    const bookingPrompt = 'How can I help?';
+    let selectedReason = 'question';
 
     function setStatus(text) {
       statusEl.textContent = text || '';
@@ -136,9 +153,9 @@
       `;
     }
 
-    function composeMailto(name, email, message) {
-      const subject = encodeURIComponent('Contact — Visual Visage');
-      const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\n${message}`);
+    function composeMailto(name, email, message, reason) {
+      const subject = encodeURIComponent(`Contact — ${reason === 'booking' ? 'Booking' : 'Question'} — Visual Visage`);
+      const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\nReason: ${reason}\n\n${message}`);
       return `mailto:${OWNER_EMAIL}?subject=${subject}&body=${body}`;
     }
 
@@ -161,6 +178,46 @@
       }
     }
 
+    function applyMessagePrompt(reason) {
+      if (reason === 'booking') {
+        if (!messageEl.value || messageEl.dataset.auto === 'true') {
+          messageEl.value = bookingPrompt;
+          messageEl.dataset.auto = 'true';
+        }
+        messageEl.placeholder = bookingPrompt;
+      } else {
+        if (messageEl.dataset.auto === 'true') {
+          messageEl.value = '';
+          delete messageEl.dataset.auto;
+        }
+        messageEl.placeholder = basePlaceholder;
+      }
+    }
+
+    function setReason(reason) {
+      selectedReason = reason;
+      reasonButtons.forEach(btn => {
+        const active = btn.dataset.reason === reason;
+        btn.classList.toggle('active', active);
+        btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+      });
+      applyMessagePrompt(reason);
+    }
+
+    reasonButtons.forEach(btn => {
+      btn.addEventListener('click', () => setReason(btn.dataset.reason));
+    });
+
+    messageEl.addEventListener('input', () => {
+      if (messageEl.dataset.auto === 'true' && messageEl.value !== bookingPrompt) {
+        delete messageEl.dataset.auto;
+      }
+    });
+
+    const params = new URLSearchParams(window.location.search);
+    const initialReason = params.get('reason') === 'booking' ? 'booking' : 'question';
+    setReason(initialReason);
+
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
@@ -168,6 +225,7 @@
       const name = (document.getElementById('name').value || '').trim();
       const email = (document.getElementById('email').value || '').trim();
       const message = (document.getElementById('message').value || '').trim();
+      const reason = selectedReason;
 
       if (!name || !email || !message) {
         setStatus('Please fill in all fields.');
@@ -185,13 +243,13 @@
       setStatus('');
 
       try {
-        const result = await postJSON(RAILWAY_ENDPOINT, { name, email, message });
+        const result = await postJSON(RAILWAY_ENDPOINT, { name, email, message, reason });
 
         if (!result.ok || !(result.json && result.json.success)) {
           const detail = (result.json && result.json.message) || result.text || `HTTP ${result.status}`;
           console.error('Contact submit failed:', detail);
           const useMail = confirm('There was an issue sending via the server. Send with your email app instead?');
-          if (useMail) window.location.href = composeMailto(name, email, message);
+          if (useMail) window.location.href = composeMailto(name, email, message, reason);
           else setStatus('Please try again later.');
           return;
         }
@@ -202,7 +260,7 @@
       } catch (err) {
         console.error('Network error submitting contact form:', err);
         const useMail = confirm('Network error. Send with your email app instead?');
-        if (useMail) window.location.href = composeMailto(name, email, message);
+        if (useMail) window.location.href = composeMailto(name, email, message, reason);
         else setStatus('Please try again later.');
       } finally {
         submitBtn.textContent = original;

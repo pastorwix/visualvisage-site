@@ -102,6 +102,31 @@
       filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.35));
     }
 
+    .top-nav .client-work-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.55rem 0.9rem;
+      margin-left: 0.75rem;
+      position: relative;
+      top: 12px;
+      border: 2px solid #000;
+      background: #f5faff;
+      color: #111;
+      font-family: 'Press Start 2P', cursive;
+      font-size: 0.65rem;
+      letter-spacing: 0.02em;
+      text-decoration: none;
+      box-shadow: 5px 5px 0 #000;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.2s ease;
+    }
+
+    .top-nav .client-work-link:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 7px 7px 0 #000;
+      background: #e6f2ff;
+    }
+
     /* Pricing Section Styles */
     .pricing-section {
       margin: 4rem 0;
@@ -365,6 +390,7 @@
     <a class="youtube-button" href="https://www.youtube.com/@pasturwix" target="_blank" rel="noopener">
       <img src="assets/youtube%20button.PNG" alt="YouTube channel" />
     </a>
+    <a class="client-work-link" href="client-work.html">Client Work</a>
   </div>
 
   <main class="start-screen container">
