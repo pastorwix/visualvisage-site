@@ -369,7 +369,7 @@
       <button class="button success" type="button" id="saveSessionBtn">⬇ Save session (.json)</button>
       <button class="button ghost"   type="button" id="loadSessionBtn">⬆ Load session</button>
       <input type="file" id="loadSessionInput" accept=".json" style="display:none;" />
-      <button class="button ghost"   type="button" id="resetAll">✕ Reset all</button>
+      <button class="button"         type="button" id="resetAll" style="background:#b94040; border-color:#b94040;" title="Clear all glyphs and start a new font">✕ New font</button>
       <span id="sessionStatus">Auto-saves to browser storage.</span>
     </div>
 
@@ -1291,7 +1291,7 @@
        RESET
     ═══════════════════════════════════════════ */
     document.getElementById('resetAll').addEventListener('click', () => {
-      if (!confirm('Clear all saved glyphs and reset the session?')) return;
+      if (!confirm('Start a new font? This will clear all saved glyphs.\n\nMake sure you\'ve saved your session first if you want to keep this one.')) return;
       glyphs.clear();
       undoStack.length = 0;
       clearCanvas();
