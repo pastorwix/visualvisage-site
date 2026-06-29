@@ -404,7 +404,7 @@
       box-shadow: 0 6px 16px rgba(18, 28, 38, 0.15);
       border: 1px solid rgba(0,0,0,0.06);
       position: relative;
-      z-index: 1; /* keep label above crossfade layer */
+      z-index: 1;
     }
 
     /* Respect reduced motion */
@@ -432,13 +432,6 @@
       color: var(--ink);
     }
 
-    .studio-hero p {
-      max-width: 680px;
-      margin: 0 auto;
-      color: var(--ink-soft);
-      font-size: 1.05rem;
-    }
-
     .studio-actions {
       display: flex;
       flex-wrap: wrap;
@@ -457,36 +450,6 @@
       text-decoration: none;
       font-weight: 600;
       box-shadow: 0 10px 24px rgba(255, 122, 80, 0.35);
-    }
-
-    .studio-secondary {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      padding: 0.7rem 1.4rem;
-      border-radius: 999px;
-      border: 1px solid rgba(18, 28, 38, 0.2);
-      text-decoration: none;
-      color: var(--ink);
-      background: rgba(255, 255, 255, 0.7);
-      font-weight: 600;
-    }
-
-    .studio-badges {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 0.75rem;
-    }
-
-    .studio-badge {
-      padding: 0.4rem 0.75rem;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.75);
-      border: 1px solid rgba(18, 28, 38, 0.12);
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: var(--ink-soft);
     }
 
     .blog-section {
@@ -585,16 +548,8 @@
   <main class="start-screen container">
     <section class="studio-hero">
       <h1>Visual Visage Studio</h1>
-      <p>Smooth, vibrant, and built for culture. We design identity systems, album launches, and digital campaigns that feel cinematic and alive.</p>
       <div class="studio-actions">
         <a class="studio-primary" href="contact.html?reason=booking">Start a studio sprint</a>
-        <a class="studio-secondary" href="#blog">Read the studio journal</a>
-      </div>
-      <div class="studio-badges">
-        <span class="studio-badge">Brand Systems</span>
-        <span class="studio-badge">Motion + Video</span>
-        <span class="studio-badge">Campaign Art</span>
-        <span class="studio-badge">Photography</span>
       </div>
     </section>
 
@@ -666,7 +621,7 @@
             <span>Culture</span>
             <span>Mar 12</span>
           </div>
-          <h3>Why vibrant doesn’t mean loud</h3>
+          <h3>Why vibrant doesn't mean loud</h3>
           <p>We break down how to balance glow, texture, and legibility without losing soul.</p>
           <a href="#blog">Read more</a>
         </article>
@@ -676,34 +631,29 @@
   </main>
 
   <script>
-    // Keep for legacy; no rotating tagline on the updated hero.
-    // Cube faces remain static previews (no automated image swapping)
     (function() {
       const cube = document.querySelector('.cube');
       if (!cube) return;
       cube.querySelectorAll('.face-fader').forEach(node => node.remove());
     })();
-    // Cube rotates when the cursor passes over it (mouse),
-    // and via swipe on touch; also supports keyboard.
+
     (function() {
       const hero = document.querySelector('.hero-3d');
       const cube = document.querySelector('.cube');
       if (!hero || !cube) return;
 
-      // Starting tilt
-      let ax = -10; // rotateX
-      let ay = 0;   // rotateY
+      let ax = -10;
+      let ay = 0;
       cube.style.transform = `rotateX(${ax}deg) rotateY(${ay}deg)`;
 
       const apply = () => {
         cube.style.transform = `rotateX(${ax}deg) rotateY(${ay}deg)`;
       };
 
-      // Auto-spin until arrow buttons are clicked (respect reduced motion)
       const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       let autoSpin = !prefersReduced;
       let lastTs = 0;
-      const spinSpeed = 10; // deg per second
+      const spinSpeed = 10;
       function raf(t) {
         if (autoSpin) {
           if (!lastTs) lastTs = t;
@@ -718,18 +668,15 @@
 
       const stopAutoSpin = () => { autoSpin = false; };
       const startAutoSpin = () => {
-        if (prefersReduced) return; // respect reduced motion
+        if (prefersReduced) return;
         if (!autoSpin) {
           autoSpin = true;
-          lastTs = 0; // reset timestamp to avoid jump
+          lastTs = 0;
           requestAnimationFrame(raf);
         }
       };
 
-      // Pointer-based rotation disabled (mouse/touch). Use arrows or keyboard instead.
-
-      // Keyboard controls (accessibility)
-      const step = 15; // degrees per key press
+      const step = 15;
       cube.addEventListener('keydown', (e) => {
         switch (e.key) {
           case 'ArrowLeft': ay -= step; e.preventDefault(); break;
@@ -754,7 +701,6 @@
         apply();
       });
 
-      // Reset view button
       const resetBtn = document.querySelector('.reset-btn');
       if (resetBtn) {
         resetBtn.addEventListener('click', () => {
@@ -765,15 +711,13 @@
         });
       }
 
-      // Arrow buttons
       document.querySelectorAll('.arrow-btn').forEach(btn => {
         btn.addEventListener('click', () => {
           stopAutoSpin();
           const dir = btn.getAttribute('data-dir');
-          // Snap to next linked face (front/right/back/left only)
-          const norm = ((ay % 360) + 360) % 360; // 0..359
-          let idx = Math.round(norm / 90) % 4;   // current facing index 0..3
-          idx = (idx + (dir === 'right' ? 1 : -1) + 4) % 4; // move to next/prev
+          const norm = ((ay % 360) + 360) % 360;
+          let idx = Math.round(norm / 90) % 4;
+          idx = (idx + (dir === 'right' ? 1 : -1) + 4) % 4;
           ay = idx * 90;
           apply();
           cube.focus({ preventScroll: true });
