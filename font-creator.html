@@ -357,7 +357,7 @@
     <section class="callout">
       <h2>Two ways to work</h2>
       <ul>
-        <li><strong>Draw digitally:</strong> Click a character in the chart → sketch on the canvas → Save glyph. Your session auto-saves in the browser.</li>
+        <li><strong>Draw digitally:</strong> Click a character in the chart (or use ← → to step through), sketch on the canvas, then move to the next glyph — it saves automatically.</li>
         <li><strong>Procreate / paper workflow:</strong> Download the blank chart → fill it out in Procreate (or on paper, then scan) → upload the filled PNG here. Registration marks in the corners let the tool auto-align the import precisely.</li>
         <li>Both paths feed into the same font — mix and match freely. Hit <strong>Download font (TTF)</strong> when ready.</li>
       </ul>
@@ -402,7 +402,6 @@
         <div class="controls">
           <button class="button ghost" type="button" id="undoBtn" title="Undo (Ctrl+Z)">↩ Undo</button>
           <button class="button ghost" type="button" id="clearGlyph">Clear</button>
-          <button class="button"       type="button" id="saveGlyph">Save glyph ✓</button>
         </div>
       </section>
 
@@ -739,9 +738,43 @@
     document.getElementById('clearGlyph').addEventListener('click', () => clearCanvas(true));
 
     /* ═══════════════════════════════════════════
+       SAVE CURRENT GLYPH
+       Called automatically whenever the user
+       navigates away — no button needed.
+       Only saves if the canvas has actual ink
+       so blank canvases don't overwrite real work.
+    ═══════════════════════════════════════════ */
+    const saveCurrentGlyph = () => {
+      if (!hasInkOnCanvas()) return;
+      const saved  = document.createElement('canvas');
+      saved.width  = CANVAS_RES;
+      saved.height = CANVAS_RES;
+      saved.getContext('2d').drawImage(drawCanvas, 0, 0);
+      glyphs.set(currentChar, saved);
+      undoStack.length = 0;
+      autoSave();
+      renderChart();
+      renderPreview();
+    };
+
+    // Quick ink check on the live draw canvas
+    const hasInkOnCanvas = () => {
+      const d = ctx.getImageData(0, 0, CANVAS_RES, CANVAS_RES).data;
+      let count = 0;
+      for (let i = 0; i < d.length; i += 4) {
+        if (d[i] < 200 && d[i+1] < 200 && d[i+2] < 200 && d[i+3] > 30) {
+          if (++count > 80) return true;
+        }
+      }
+      return false;
+    };
+
+    /* ═══════════════════════════════════════════
        SELECT CHARACTER
+       Auto-saves the current glyph before switching.
     ═══════════════════════════════════════════ */
     const selectChar = char => {
+      saveCurrentGlyph();               // auto-save before leaving
       currentChar = char;
       currentCharEl.textContent = char === ' ' ? '(sp)' : char;
       undoStack.length = 0;
@@ -760,26 +793,11 @@
       selectChar(CHARACTERS[(idx + 1) % TOTAL]);
     });
 
-    // Arrow key shortcuts when canvas is not focused on an input
+    // Arrow key shortcuts when not typing in an input
     document.addEventListener('keydown', e => {
       if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
       if (e.key === 'ArrowRight') { e.preventDefault(); document.getElementById('nextGlyph').click(); }
       if (e.key === 'ArrowLeft')  { e.preventDefault(); document.getElementById('prevGlyph').click(); }
-    });
-
-    /* ═══════════════════════════════════════════
-       SAVE GLYPH
-    ═══════════════════════════════════════════ */
-    document.getElementById('saveGlyph').addEventListener('click', () => {
-      const saved  = document.createElement('canvas');
-      saved.width  = CANVAS_RES;
-      saved.height = CANVAS_RES;
-      saved.getContext('2d').drawImage(drawCanvas, 0, 0);
-      glyphs.set(currentChar, saved);
-      undoStack.length = 0;
-      autoSave();
-      renderChart();
-      renderPreview();
     });
 
     /* ═══════════════════════════════════════════
