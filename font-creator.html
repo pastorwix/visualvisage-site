@@ -618,14 +618,46 @@
     };
 
     /* ═══════════════════════════════════════════
-       DRAWING — quadratic midpoint smoothing
+       DRAWING — interpolated solid stroke engine
+
+       Root cause of dotted lines:
+         mousemove fires at ~60Hz but fast hand movement
+         can jump many pixels between events, leaving gaps
+         larger than the brush diameter.
+
+       Fix: when the distance between lastX/Y and the new
+       point exceeds half the brush radius, we stamp filled
+       circles at evenly-spaced intervals along the segment
+       (linear interpolation) before drawing the connecting
+       stroke. This guarantees full coverage at any speed.
+
+       The quadraticCurveTo control point is also corrected —
+       the previous version used (lastX, lastY) as the control
+       which is identical to the start point and produces no
+       smoothing. The correct control is the previous midpoint.
     ═══════════════════════════════════════════ */
-    const applyStrokeStyle = () => {
-      ctx.strokeStyle = '#111';
-      ctx.fillStyle   = '#111';
-      ctx.lineWidth   = brush;
-      ctx.lineCap     = 'round';
-      ctx.lineJoin    = 'round';
+
+    // Stores the midpoint of the previous segment for smooth Catmull-Rom-style curves
+    let prevMidX = 0, prevMidY = 0;
+
+    const stampDot = (x, y) => {
+      ctx.beginPath();
+      ctx.arc(x, y, brush / 2, 0, Math.PI * 2);
+      ctx.fillStyle = '#111';
+      ctx.fill();
+    };
+
+    // Interpolate dots along a segment to fill gaps at high velocity
+    const interpolateStroke = (x0, y0, x1, y1) => {
+      const dx   = x1 - x0;
+      const dy   = y1 - y0;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      const step = Math.max(brush * 0.4, 1); // stamp every 40% of brush size
+      const steps = Math.ceil(dist / step);
+      for (let i = 1; i <= steps; i++) {
+        const t = i / steps;
+        stampDot(x0 + dx * t, y0 + dy * t);
+      }
     };
 
     const startDraw = evt => {
@@ -634,23 +666,38 @@
       drawing = true;
       const { x, y } = getPos(evt);
       lastX = x; lastY = y;
-      applyStrokeStyle();
-      ctx.beginPath();
-      ctx.arc(x, y, brush / 2, 0, Math.PI * 2);
-      ctx.fill();
+      prevMidX = x; prevMidY = y;
+
+      ctx.lineWidth = brush;
+      ctx.lineCap   = 'round';
+      ctx.lineJoin  = 'round';
+      stampDot(x, y);
     };
 
     const moveDraw = evt => {
       if (!drawing) return;
       evt.preventDefault();
       const { x, y } = getPos(evt);
+
+      // Midpoint between last and current — used as quadratic control anchor
       const midX = (lastX + x) / 2;
       const midY = (lastY + y) / 2;
-      applyStrokeStyle();
+
+      // 1. Interpolate filled dots to cover any gap from fast movement
+      interpolateStroke(lastX, lastY, x, y);
+
+      // 2. Draw a smooth stroke over the top using correct quadratic curve:
+      //    move to previous midpoint, curve through lastX/Y to current midpoint
       ctx.beginPath();
-      ctx.moveTo(lastX, lastY);
+      ctx.moveTo(prevMidX, prevMidY);
       ctx.quadraticCurveTo(lastX, lastY, midX, midY);
+      ctx.strokeStyle = '#111';
+      ctx.lineWidth   = brush;
+      ctx.lineCap     = 'round';
+      ctx.lineJoin    = 'round';
       ctx.stroke();
+
+      prevMidX = midX; prevMidY = midY;
       lastX = x; lastY = y;
     };
 
