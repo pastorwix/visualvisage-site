@@ -17,6 +17,7 @@
       --border: #e8e4da;
       --accent: #d4a514;
       --green: #3a7d44;
+      --blue: #2457a4;
     }
 
     *, *::before, *::after { box-sizing: border-box; }
@@ -67,7 +68,7 @@
       .creator-layout { grid-template-columns: 1fr; }
     }
 
-    /* ── PANELS / CARDS ── */
+    /* ── PANELS ── */
     .callout, .panel {
       background: #a7c19d;
       border: 2px solid #000;
@@ -77,10 +78,57 @@
     }
     .callout h2 { margin: 0 0 0.5rem; font-family: 'Fredoka', sans-serif; }
     .callout ul { margin: 0.25rem 0 0; padding-left: 1.2rem; color: #444; }
+    .callout li { margin-bottom: 0.35rem; }
     .panel h3   { margin: 0 0 0.35rem; font-family: 'Fredoka', sans-serif; }
-    .panel p    { margin: 0 0 0.75rem; color: #555; font-size: 0.95rem; }
+    .panel > p  { margin: 0 0 0.75rem; color: #555; font-size: 0.95rem; }
 
-    .subhead { font-weight: 600; color: #333; margin: 0.6rem 0 0.3rem; display: block; }
+    .subhead { font-weight: 700; color: #1a1a1a; margin: 0.7rem 0 0.3rem; display: block; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.04em; }
+
+    /* ── WORKFLOW TABS ── */
+    .workflow-tabs {
+      display: flex; gap: 0; margin-bottom: 0;
+      border-bottom: 2px solid #000;
+    }
+    .tab-btn {
+      flex: 1; padding: 0.6rem 0.5rem;
+      background: #93ae8a; border: 2px solid #000;
+      border-bottom: none; border-radius: 10px 10px 0 0;
+      cursor: pointer; font-family: inherit; font-weight: 700;
+      font-size: 0.85rem; color: #2b4a2e;
+      transition: background 0.15s;
+      margin-right: -2px;
+    }
+    .tab-btn:last-child { margin-right: 0; }
+    .tab-btn.active { background: #a7c19d; color: #111; z-index: 1; }
+    .tab-btn:hover:not(.active) { background: #9fbf96; }
+
+    .tab-panel { display: none; padding-top: 0.75rem; }
+    .tab-panel.active { display: block; }
+
+    /* ── WORKFLOW PANEL STYLES ── */
+    .workflow-panel {
+      background: #9bbf92;
+      border: 2px solid #000;
+      border-radius: 0 0 12px 12px;
+      padding: 0.85rem 1rem;
+    }
+
+    /* ── PROCREATE CALLOUT ── */
+    .procreate-steps {
+      background: #b8ccb3;
+      border: 2px solid #000;
+      border-radius: 12px;
+      padding: 0.75rem 1rem;
+      margin-bottom: 0.75rem;
+    }
+    .procreate-steps ol {
+      margin: 0.25rem 0 0;
+      padding-left: 1.3rem;
+      color: #333;
+      font-size: 0.9rem;
+    }
+    .procreate-steps li { margin-bottom: 0.3rem; }
+    .procreate-steps strong { color: #111; }
 
     /* ── CURRENT CHAR PILL ── */
     .current-char {
@@ -148,33 +196,41 @@
     .button:hover   { transform: translateY(-1px); box-shadow: 6px 6px 0 rgba(0,0,0,0.4); }
     .button.secondary { background: #f1efe8; color: #2b2b2b; }
     .button.ghost   { background: #fff; color: #333; border-style: dashed; }
-    .button.success { background: var(--green); color: #fff; border-color: var(--green); }
+    .button.success { background: var(--green); color: #fff; border-color: var(--green); border-style: solid; }
+    .button.blue    { background: var(--blue); color: #fff; border-color: var(--blue); border-style: solid; }
     .button:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; box-shadow: none !important; }
 
-    /* ── SESSION ACTIONS BAR ── */
+    /* ── SESSION BAR ── */
     .session-bar {
-      display: flex; flex-wrap: wrap; gap: 0.5rem;
+      display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center;
       background: #93ae8a;
       border: 2px solid #000;
       border-radius: 12px;
       padding: 0.65rem 0.85rem;
     }
-    .session-bar .label {
+    .session-bar .bar-label {
       font-weight: 700; font-size: 0.85rem; color: #0d1a0f;
-      align-self: center; margin-right: 0.25rem;
     }
     #sessionStatus {
       font-size: 0.82rem; color: #2b4a2e;
-      align-self: center; margin-left: auto;
+      margin-left: auto;
+    }
+
+    /* ── IMPORT STATUS ── */
+    #importStatus {
+      font-size: 0.85rem; color: #2b4a2e;
+      background: #b8ccb3; border: 2px solid #000;
+      border-radius: 8px; padding: 0.4rem 0.65rem;
+      margin-top: 0.5rem; display: block;
     }
 
     /* ── CHART ACTIONS ── */
-    .chart-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem; }
+    .action-row { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem; }
 
     /* ── GLYPH GRID ── */
     .glyph-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(98px, 1fr));
       gap: 0.45rem;
     }
     .glyph-card {
@@ -207,7 +263,7 @@
     .progress-wrap {
       background: #c4d3bb; border: 2px solid #000;
       border-radius: 10px; overflow: hidden; height: 14px;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.4rem;
     }
     #progressBar {
       height: 100%; background: var(--green);
@@ -253,7 +309,6 @@
 </head>
 <body>
 
-  <!-- NAV (unchanged — hooks into your nav.js / style.css) -->
   <div class="sticky-nav">
     <nav class="global-nav">
       <a class="youtube-button" href="https://www.youtube.com/@pasturwix" target="_blank" rel="noopener">
@@ -283,26 +338,24 @@
 
   <header>
     <h1>TypoGraph</h1>
-    <p>Draw every character in your handwriting, then export a real TTF font — no quality loss, no round-trip image guesswork.</p>
+    <p>Draw every character in your handwriting — digitally or on paper — then export a real TTF font.</p>
   </header>
 
   <main>
 
     <!-- HOW IT WORKS -->
     <section class="callout">
-      <h2>How it works</h2>
+      <h2>Two ways to work</h2>
       <ul>
-        <li>Click any character in the chart on the right, then draw it on the pad and hit <strong>Save glyph</strong>.</li>
-        <li>Your session saves automatically in your browser — come back any time and your glyphs are still here.</li>
-        <li><strong>Save session</strong> exports a lossless <code>.json</code> backup. <strong>Load session</strong> restores it instantly at full quality.</li>
-        <li>When you're ready, hit <strong>Download font (TTF)</strong> to get a real font file you can install and use anywhere.</li>
-        <li>The <strong>chart PNG</strong> is a print template only — draw on paper, then scan and redraw digitally here.</li>
+        <li><strong>Draw digitally:</strong> Click a character in the chart → sketch on the canvas → Save glyph. Your session auto-saves in the browser.</li>
+        <li><strong>Procreate / paper workflow:</strong> Download the blank chart → fill it out in Procreate (or on paper, then scan) → upload the filled PNG here. Registration marks in the corners let the tool auto-align the import precisely.</li>
+        <li>Both paths feed into the same font — mix and match freely. Hit <strong>Download font (TTF)</strong> when ready.</li>
       </ul>
     </section>
 
     <!-- SESSION BAR -->
     <div class="session-bar" role="toolbar" aria-label="Session controls">
-      <span class="label">Session</span>
+      <span class="bar-label">Session</span>
       <button class="button success" type="button" id="saveSessionBtn">⬇ Save session (.json)</button>
       <button class="button ghost"   type="button" id="loadSessionBtn">⬆ Load session</button>
       <input type="file" id="loadSessionInput" accept=".json" style="display:none;" />
@@ -313,10 +366,10 @@
     <!-- MAIN CREATOR -->
     <div class="creator-layout">
 
-      <!-- DRAW PANEL -->
+      <!-- LEFT: DRAW PANEL -->
       <section class="panel" aria-label="Glyph drawing panel">
         <h3>Draw a glyph</h3>
-        <p>Select any character from the chart, sketch it here, then save.</p>
+        <p>Click any character in the chart, sketch it here, then save.</p>
 
         <div class="current-char">
           Editing: <span class="pill" id="currentChar">A</span>
@@ -339,24 +392,58 @@
         </div>
       </section>
 
-      <!-- CHART PANEL -->
+      <!-- RIGHT: CHART PANEL -->
       <section class="panel" aria-label="Character chart">
 
-        <!-- Chart export (print-only now) -->
-        <div class="chart-actions">
-          <button class="button secondary" type="button" id="downloadChart">Print chart (PNG)</button>
-          <button class="button ghost"     type="button" id="downloadBlank">Blank chart (PNG)</button>
-          <button class="button"           type="button" id="downloadFont">Download font (TTF)</button>
+        <!-- TOP ACTIONS -->
+        <div class="action-row">
+          <button class="button" type="button" id="downloadFont">Download font (TTF)</button>
         </div>
 
+        <!-- WORKFLOW TABS -->
+        <div class="workflow-tabs" role="tablist">
+          <button class="tab-btn active" role="tab" aria-selected="true"  id="tab-digital"    aria-controls="panel-digital">💻 Digital workflow</button>
+          <button class="tab-btn"        role="tab" aria-selected="false" id="tab-procreate"  aria-controls="panel-procreate">✏️ Procreate / paper</button>
+        </div>
+
+        <!-- TAB: DIGITAL -->
+        <div class="tab-panel active workflow-panel" id="panel-digital" role="tabpanel" aria-labelledby="tab-digital">
+          <p style="color:#333;font-size:0.88rem;margin:0 0 0.5rem;">
+            Draw on the canvas, save each glyph, and come back anytime — your progress auto-saves in this browser.
+            Use <strong>Save session</strong> in the bar above to export a backup file.
+          </p>
+        </div>
+
+        <!-- TAB: PROCREATE -->
+        <div class="tab-panel workflow-panel" id="panel-procreate" role="tabpanel" aria-labelledby="tab-procreate">
+          <div class="procreate-steps">
+            <strong style="font-size:0.88rem;">How to use the Procreate workflow:</strong>
+            <ol>
+              <li><strong>Download the blank chart</strong> below — it includes corner registration marks.</li>
+              <li>Open it in <strong>Procreate</strong> (or print & scan). Draw each character inside its cell using black ink on white. <em>Don't draw over the corner marks.</em></li>
+              <li>Export as <strong>PNG</strong> at any resolution — keep the full canvas, don't crop.</li>
+              <li><strong>Upload filled chart</strong> below. The tool reads the registration marks to auto-align, then extracts every cell at full quality.</li>
+            </ol>
+          </div>
+          <div class="action-row">
+            <button class="button blue"  type="button" id="downloadBlank">⬇ Blank chart (PNG)</button>
+            <button class="button ghost" type="button" id="uploadChartBtn">⬆ Upload filled chart</button>
+            <input type="file" id="uploadChartInput" accept="image/png,image/jpeg" style="display:none;" />
+          </div>
+          <span id="importStatus">Upload your filled chart to auto-import all glyphs.</span>
+        </div>
+
+        <!-- PROGRESS -->
         <span class="subhead">Progress</span>
         <span id="progressLabel">0 / 69 glyphs saved</span>
         <div class="progress-wrap" role="progressbar" aria-valuemin="0" aria-valuemax="69" aria-valuenow="0" id="progressBarWrap">
           <div id="progressBar" style="width:0%"></div>
         </div>
 
+        <!-- GLYPH GRID -->
         <span class="subhead">Character chart — click to edit</span>
         <div class="glyph-grid" id="glyphGrid" aria-label="Character chart"></div>
+
       </section>
     </div>
 
@@ -371,7 +458,7 @@
       </div>
     </section>
 
-    <!-- FONT FILE UPLOAD / LIVE TEST -->
+    <!-- FONT UPLOAD / LIVE TEST -->
     <section class="panel" aria-label="Upload and test a font">
       <h3>Test an existing font</h3>
       <p>Upload any .ttf / .otf / .woff file and type below to try it — useful for checking your exported font before installing.</p>
@@ -394,77 +481,98 @@
   </footer>
 
   <script src="nav.js"></script>
-  <!-- opentype loaded synchronously — no defer, no race condition -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/opentype.js/1.3.4/opentype.min.js"></script>
 
   <script>
   (() => {
     'use strict';
 
-    /* ═══════════════════════════════════════════════════
+    /* ═══════════════════════════════════════════
        CONSTANTS
-    ═══════════════════════════════════════════════════ */
+    ═══════════════════════════════════════════ */
     const CHARACTERS = Array.from('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,?!&$%-+');
     const TOTAL      = CHARACTERS.length; // 69
+    const CANVAS_RES = 480;               // native drawing canvas resolution
+    const LS_KEY     = 'typograph_session_v2';
 
-    // Native canvas resolution — high res for quality TTF rasterisation
-    const CANVAS_RES = 480;
-
-    // Chart export layout (print template only — no longer used for re-import)
-    const CHART = { cols: 8, cellSize: 200, pad: 24, labelH: 22 };
+    // Chart export layout — shared by both export and Procreate import
+    // REG_MARK_SIZE: the L-shaped corner target size in pixels on the exported PNG
+    const CHART = {
+      cols:         8,
+      cellSize:     200,
+      pad:          40,   // increased padding to give reg marks breathing room
+      labelH:       24,
+      regSize:      24,   // registration mark arm length
+      regThick:     4,    // registration mark line thickness
+      regMargin:    8,    // gap between canvas edge and reg mark
+    };
 
     // Font metrics
     const FONT = { ascender: 800, descender: -200, unitsPerEm: 1000 };
 
-    // localStorage key
-    const LS_KEY = 'typograph_session_v2';
-
-    /* ═══════════════════════════════════════════════════
+    /* ═══════════════════════════════════════════
        DOM REFS
-    ═══════════════════════════════════════════════════ */
-    const drawCanvas      = document.getElementById('drawCanvas');
-    const ctx             = drawCanvas.getContext('2d');
-    const glyphGrid       = document.getElementById('glyphGrid');
-    const currentCharEl   = document.getElementById('currentChar');
-    const brushInput      = document.getElementById('brush');
-    const brushPreview    = document.getElementById('brushPreview');
-    const previewCanvas   = document.getElementById('previewCanvas');
-    const previewCtx      = previewCanvas.getContext('2d');
-    const previewText     = document.getElementById('previewText');
-    const previewHint     = document.getElementById('previewHint');
-    const progressBar     = document.getElementById('progressBar');
-    const progressBarWrap = document.getElementById('progressBarWrap');
-    const progressLabel   = document.getElementById('progressLabel');
-    const sessionStatus   = document.getElementById('sessionStatus');
-    const downloadFontBtn = document.getElementById('downloadFont');
-    const fontUploadBtn   = document.getElementById('fontUploadBtn');
-    const fontUploadInput = document.getElementById('fontUploadInput');
-    const fontDropZone    = document.getElementById('fontDropZone');
-    const fontLiveArea    = document.getElementById('fontLiveArea');
-    const fontLiveStatus  = document.getElementById('fontLiveStatus');
-    const saveSessionBtn  = document.getElementById('saveSessionBtn');
-    const loadSessionBtn  = document.getElementById('loadSessionBtn');
-    const loadSessionInput= document.getElementById('loadSessionInput');
-    const undoBtn         = document.getElementById('undoBtn');
+    ═══════════════════════════════════════════ */
+    const drawCanvas       = document.getElementById('drawCanvas');
+    const ctx              = drawCanvas.getContext('2d');
+    const glyphGrid        = document.getElementById('glyphGrid');
+    const currentCharEl    = document.getElementById('currentChar');
+    const brushInput       = document.getElementById('brush');
+    const brushPreview     = document.getElementById('brushPreview');
+    const previewCanvas    = document.getElementById('previewCanvas');
+    const previewCtx       = previewCanvas.getContext('2d');
+    const previewText      = document.getElementById('previewText');
+    const previewHint      = document.getElementById('previewHint');
+    const progressBar      = document.getElementById('progressBar');
+    const progressBarWrap  = document.getElementById('progressBarWrap');
+    const progressLabel    = document.getElementById('progressLabel');
+    const sessionStatus    = document.getElementById('sessionStatus');
+    const importStatus     = document.getElementById('importStatus');
+    const downloadFontBtn  = document.getElementById('downloadFont');
+    const fontUploadBtn    = document.getElementById('fontUploadBtn');
+    const fontUploadInput  = document.getElementById('fontUploadInput');
+    const fontDropZone     = document.getElementById('fontDropZone');
+    const fontLiveArea     = document.getElementById('fontLiveArea');
+    const fontLiveStatus   = document.getElementById('fontLiveStatus');
+    const saveSessionBtn   = document.getElementById('saveSessionBtn');
+    const loadSessionBtn   = document.getElementById('loadSessionBtn');
+    const loadSessionInput = document.getElementById('loadSessionInput');
+    const uploadChartBtn   = document.getElementById('uploadChartBtn');
+    const uploadChartInput = document.getElementById('uploadChartInput');
+    const undoBtn          = document.getElementById('undoBtn');
 
-    /* ═══════════════════════════════════════════════════
+    /* ═══════════════════════════════════════════
        STATE
-    ═══════════════════════════════════════════════════ */
-    const glyphs    = new Map();   // char → offscreen HTMLCanvasElement (full CANVAS_RES)
+    ═══════════════════════════════════════════ */
+    const glyphs    = new Map();
     let currentChar = CHARACTERS[0];
     let drawing     = false;
     let brush       = Number(brushInput.value);
     let lastX = 0, lastY = 0;
-
-    // Undo stack — array of ImageData for the current editing session
     const undoStack = [];
     const MAX_UNDO  = 40;
 
-    /* ═══════════════════════════════════════════════════
-       CANVAS INIT
-       Native res set via JS; CSS controls display size only.
-       This is what fixes coordinate misalignment on any screen.
-    ═══════════════════════════════════════════════════ */
+    /* ═══════════════════════════════════════════
+       TABS
+    ═══════════════════════════════════════════ */
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => {
+          b.classList.remove('active');
+          b.setAttribute('aria-selected', 'false');
+        });
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        btn.setAttribute('aria-selected', 'true');
+        document.getElementById(btn.getAttribute('aria-controls')).classList.add('active');
+      });
+    });
+
+    /* ═══════════════════════════════════════════
+       CANVAS SETUP
+       Native res set via JS — CSS controls display size only.
+       This is the fix for coordinate misalignment.
+    ═══════════════════════════════════════════ */
     drawCanvas.width  = CANVAS_RES;
     drawCanvas.height = CANVAS_RES;
 
@@ -479,41 +587,39 @@
       fillWhite();
     };
 
-    /* ═══════════════════════════════════════════════════
+    /* ═══════════════════════════════════════════
        UNDO
-    ═══════════════════════════════════════════════════ */
+    ═══════════════════════════════════════════ */
     const pushUndo = () => {
       undoStack.push(ctx.getImageData(0, 0, CANVAS_RES, CANVAS_RES));
       if (undoStack.length > MAX_UNDO) undoStack.shift();
     };
-
     const undo = () => {
       if (!undoStack.length) return;
       ctx.putImageData(undoStack.pop(), 0, 0);
     };
-
     undoBtn.addEventListener('click', undo);
     document.addEventListener('keydown', e => {
       if ((e.ctrlKey || e.metaKey) && e.key === 'z') { e.preventDefault(); undo(); }
     });
 
-    /* ═══════════════════════════════════════════════════
+    /* ═══════════════════════════════════════════
        COORDINATE MAPPING
-       Translates CSS-space pointer coords → canvas native pixels.
-       Fixes stroke misalignment when CSS size ≠ native resolution.
-    ═══════════════════════════════════════════════════ */
+       CSS px → canvas native px. Fixes stroke misalignment
+       when CSS display size ≠ CANVAS_RES.
+    ═══════════════════════════════════════════ */
     const getPos = evt => {
-      const rect   = drawCanvas.getBoundingClientRect();
-      const src    = evt.touches ? evt.touches[0] : evt;
+      const rect = drawCanvas.getBoundingClientRect();
+      const src  = evt.touches ? evt.touches[0] : evt;
       return {
         x: (src.clientX - rect.left) * (CANVAS_RES / rect.width),
         y: (src.clientY - rect.top)  * (CANVAS_RES / rect.height)
       };
     };
 
-    /* ═══════════════════════════════════════════════════
+    /* ═══════════════════════════════════════════
        DRAWING — quadratic midpoint smoothing
-    ═══════════════════════════════════════════════════ */
+    ═══════════════════════════════════════════ */
     const applyStrokeStyle = () => {
       ctx.strokeStyle = '#111';
       ctx.fillStyle   = '#111';
@@ -528,7 +634,6 @@
       drawing = true;
       const { x, y } = getPos(evt);
       lastX = x; lastY = y;
-      // Dot on tap/click with no drag
       applyStrokeStyle();
       ctx.beginPath();
       ctx.arc(x, y, brush / 2, 0, Math.PI * 2);
@@ -559,28 +664,22 @@
     drawCanvas.addEventListener('touchend',    endDraw);
     drawCanvas.addEventListener('touchcancel', endDraw);
 
-    /* ═══════════════════════════════════════════════════
+    /* ═══════════════════════════════════════════
        BRUSH CONTROLS
-    ═══════════════════════════════════════════════════ */
+    ═══════════════════════════════════════════ */
     const updateBrushPreview = () => {
-      // Scale brush size from canvas space → approx CSS pixels for the dot preview
-      const displayBrush = Math.round(brush * (340 / CANVAS_RES));
-      const size = Math.max(displayBrush, 4);
+      const size = Math.max(Math.round(brush * (340 / CANVAS_RES)), 4);
       brushPreview.style.width  = size + 'px';
       brushPreview.style.height = size + 'px';
     };
-
-    brushInput.addEventListener('input', () => {
-      brush = Number(brushInput.value);
-      updateBrushPreview();
-    });
+    brushInput.addEventListener('input', () => { brush = Number(brushInput.value); updateBrushPreview(); });
     updateBrushPreview();
 
     document.getElementById('clearGlyph').addEventListener('click', () => clearCanvas(true));
 
-    /* ═══════════════════════════════════════════════════
+    /* ═══════════════════════════════════════════
        SELECT CHARACTER
-    ═══════════════════════════════════════════════════ */
+    ═══════════════════════════════════════════ */
     const selectChar = char => {
       currentChar = char;
       currentCharEl.textContent = char === ' ' ? '(sp)' : char;
@@ -590,13 +689,13 @@
       renderChart();
     };
 
-    /* ═══════════════════════════════════════════════════
+    /* ═══════════════════════════════════════════
        SAVE GLYPH
-    ═══════════════════════════════════════════════════ */
+    ═══════════════════════════════════════════ */
     document.getElementById('saveGlyph').addEventListener('click', () => {
-      const saved   = document.createElement('canvas');
-      saved.width   = CANVAS_RES;
-      saved.height  = CANVAS_RES;
+      const saved  = document.createElement('canvas');
+      saved.width  = CANVAS_RES;
+      saved.height = CANVAS_RES;
       saved.getContext('2d').drawImage(drawCanvas, 0, 0);
       glyphs.set(currentChar, saved);
       undoStack.length = 0;
@@ -605,9 +704,9 @@
       renderPreview();
     });
 
-    /* ═══════════════════════════════════════════════════
-       CHART GRID — thumbnails show actual drawn glyph
-    ═══════════════════════════════════════════════════ */
+    /* ═══════════════════════════════════════════
+       CHART GRID WITH THUMBNAILS
+    ═══════════════════════════════════════════ */
     const renderChart = () => {
       const saved = glyphs.size;
       const pct   = Math.round((saved / TOTAL) * 100);
@@ -623,38 +722,37 @@
         const card = document.createElement('div');
         card.className = 'glyph-card' + (isActive ? ' active' : '') + (hasSaved ? ' filled' : '');
         card.setAttribute('role', 'button');
-        card.setAttribute('aria-label', `Edit ${char === ' ' ? 'space' : char}`);
         card.setAttribute('tabindex', '0');
+        card.setAttribute('aria-label', `Edit ${char === ' ' ? 'space' : char}`);
         card.addEventListener('click',   () => selectChar(char));
         card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectChar(char); } });
 
-        const label = document.createElement('strong');
-        label.textContent = char === ' ' ? 'Spc' : char;
-        card.appendChild(label);
+        const lbl = document.createElement('strong');
+        lbl.textContent = char === ' ' ? 'Spc' : char;
+        card.appendChild(lbl);
 
-        // Thumbnail — shows actual drawing at 80×80 preview
         const thumb  = document.createElement('canvas');
         thumb.className = 'glyph-thumb';
         thumb.width  = 80;
         thumb.height = 80;
-        const tctx   = thumb.getContext('2d');
-        tctx.fillStyle = '#fff';
-        tctx.fillRect(0, 0, 80, 80);
-        if (hasSaved) tctx.drawImage(glyphs.get(char), 0, 0, 80, 80);
+        const tc     = thumb.getContext('2d');
+        tc.fillStyle = '#fff';
+        tc.fillRect(0, 0, 80, 80);
+        if (hasSaved) tc.drawImage(glyphs.get(char), 0, 0, 80, 80);
         card.appendChild(thumb);
 
-        const status = document.createElement('div');
-        status.className   = 'card-status';
-        status.textContent = hasSaved ? '✓ Saved' : 'Empty';
-        card.appendChild(status);
+        const st = document.createElement('div');
+        st.className   = 'card-status';
+        st.textContent = hasSaved ? '✓ Saved' : 'Empty';
+        card.appendChild(st);
 
         glyphGrid.appendChild(card);
       });
     };
 
-    /* ═══════════════════════════════════════════════════
+    /* ═══════════════════════════════════════════
        PREVIEW CANVAS
-    ═══════════════════════════════════════════════════ */
+    ═══════════════════════════════════════════ */
     const renderPreview = () => {
       const displayW = previewCanvas.parentElement.clientWidth || 900;
       previewCanvas.width  = displayW;
@@ -663,11 +761,11 @@
       previewCtx.fillStyle = '#fff';
       previewCtx.fillRect(0, 0, displayW, 180);
 
-      const text    = previewText.value || '';
-      const tH      = 130;
-      const top     = (180 - tH) / 2;
-      let x         = 16;
-      const maxX    = displayW - 16;
+      const text = previewText.value || '';
+      const tH   = 130;
+      const top  = (180 - tH) / 2;
+      let x      = 16;
+      const maxX = displayW - 16;
 
       for (const char of text) {
         if (x >= maxX) break;
@@ -695,66 +793,332 @@
     previewText.addEventListener('input', renderPreview);
     window.addEventListener('resize', renderPreview);
 
-    /* ═══════════════════════════════════════════════════
-       SESSION SAVE/LOAD — JSON + base64
-       Zero quality loss: each glyph stored at full CANVAS_RES
-       as a lossless PNG data URL inside the JSON file.
-    ═══════════════════════════════════════════════════ */
+    /* ═══════════════════════════════════════════
+       CHART EXPORT WITH REGISTRATION MARKS
 
-    // Serialise all saved glyphs → JSON string
+       Registration marks are L-shaped corner targets
+       drawn at all 4 corners of the sheet. On import,
+       we locate these marks to compute scale/offset and
+       correct for any resize Procreate may have applied.
+
+       Mark layout (top-left example):
+         ┌──        ← horizontal arm (regSize wide, regThick tall)
+         │          ← vertical arm (regThick wide, regSize tall)
+
+       All 4 corners are mirrored accordingly.
+    ═══════════════════════════════════════════ */
+    const chartDims = () => ({
+      w: CHART.cols * (CHART.cellSize + CHART.pad) + CHART.pad,
+      h: Math.ceil(TOTAL / CHART.cols) * (CHART.cellSize + CHART.pad + CHART.labelH) + CHART.pad
+    });
+
+    // Returns the 4 expected registration mark center positions on a sheet of given dims
+    const regMarkCenters = (W, H) => {
+      const m = CHART.regMargin + CHART.regSize / 2;
+      return [
+        { x: m,     y: m     },  // top-left
+        { x: W - m, y: m     },  // top-right
+        { x: m,     y: H - m },  // bottom-left
+        { x: W - m, y: H - m },  // bottom-right
+      ];
+    };
+
+    const drawRegMark = (sctx, cx, cy, corner) => {
+      // corner: 'tl' | 'tr' | 'bl' | 'br'
+      const s = CHART.regSize;
+      const t = CHART.regThick;
+      sctx.fillStyle = '#000';
+      const hDir = corner.includes('l') ? 1 : -1;  // horizontal arm direction
+      const vDir = corner.includes('t') ? 1 : -1;  // vertical arm direction
+
+      // Horizontal arm
+      const hx = corner.includes('l') ? cx : cx - s;
+      const hy = corner.includes('t') ? cy : cy - t;
+      sctx.fillRect(hx, hy, s, t);
+
+      // Vertical arm
+      const vx = corner.includes('l') ? cx : cx - t;
+      const vy = corner.includes('t') ? cy : cy - s;
+      sctx.fillRect(vx, vy, t, s);
+    };
+
+    const exportChart = (blankOnly = false) => {
+      const { w, h } = chartDims();
+      const sheet    = document.createElement('canvas');
+      sheet.width    = w;
+      sheet.height   = h;
+      const sctx     = sheet.getContext('2d');
+
+      // White background
+      sctx.fillStyle = '#fff';
+      sctx.fillRect(0, 0, w, h);
+
+      // ── Registration marks at all 4 corners ──
+      const m = CHART.regMargin;
+      const s = CHART.regSize;
+      drawRegMark(sctx, m,     m,     'tl');
+      drawRegMark(sctx, w - m, m,     'tr');
+      drawRegMark(sctx, m,     h - m, 'bl');
+      drawRegMark(sctx, w - m, h - m, 'br');
+
+      // ── Cells ──
+      CHARACTERS.forEach((char, idx) => {
+        const col = idx % CHART.cols;
+        const row = Math.floor(idx / CHART.cols);
+        const cx  = CHART.pad + col * (CHART.cellSize + CHART.pad);
+        const cy  = CHART.pad + row * (CHART.cellSize + CHART.pad + CHART.labelH);
+
+        // Label
+        sctx.fillStyle = '#444';
+        sctx.font      = '15px Fredoka, sans-serif';
+        sctx.fillText(char === ' ' ? 'Space' : char, cx + 5, cy + 17);
+
+        // Cell border
+        sctx.strokeStyle = '#bbb';
+        sctx.lineWidth   = 1;
+        sctx.strokeRect(cx + 0.5, cy + CHART.labelH + 0.5, CHART.cellSize, CHART.cellSize);
+
+        // Baseline guide (at ~75% of cell height — good for cap height)
+        sctx.strokeStyle = '#ddd';
+        sctx.lineWidth   = 1;
+        const baseY = cy + CHART.labelH + CHART.cellSize * 0.75;
+        sctx.beginPath();
+        sctx.moveTo(cx + 4, baseY);
+        sctx.lineTo(cx + CHART.cellSize - 4, baseY);
+        sctx.stroke();
+
+        // Glyph (filled chart only)
+        if (!blankOnly && glyphs.has(char)) {
+          sctx.drawImage(glyphs.get(char), cx, cy + CHART.labelH, CHART.cellSize, CHART.cellSize);
+        }
+      });
+
+      // Watermark
+      sctx.fillStyle = '#ccc';
+      sctx.font      = '12px Quicksand, sans-serif';
+      sctx.fillText('TypoGraph by Visual Visage — do not crop or resize before re-importing', CHART.pad, h - 10);
+
+      const a    = document.createElement('a');
+      a.download = blankOnly ? 'typograph-blank.png' : 'typograph-filled.png';
+      a.href     = sheet.toDataURL('image/png');
+      a.click();
+    };
+
+    document.getElementById('downloadBlank').addEventListener('click', () => exportChart(true));
+    document.getElementById('downloadChart') && document.getElementById('downloadChart').addEventListener('click', () => exportChart(false));
+
+    /* ═══════════════════════════════════════════
+       PROCREATE CHART IMPORT WITH REG MARK ALIGNMENT
+
+       Algorithm:
+       1. Scan the uploaded image for the 4 corner registration marks
+          by finding the darkest L-shaped region near each corner.
+       2. Compute scale (sx, sy) and offset (ox, oy) by comparing
+          found mark positions to expected positions on the canonical sheet.
+       3. Use that transform to map each cell's canonical coordinates
+          into image-space coordinates, then crop and extract.
+
+       This corrects for:
+         - Procreate canvas resize on export
+         - Slight border crops
+         - Any uniform scale applied by saving/sharing
+    ═══════════════════════════════════════════ */
+
+    // Find the center of mass of dark pixels in a region of imageData
+    const findDarkCenter = (data, imgW, rx, ry, rw, rh) => {
+      let sumX = 0, sumY = 0, count = 0;
+      for (let y = ry; y < ry + rh; y++) {
+        for (let x = rx; x < rx + rw; x++) {
+          const i = (y * imgW + x) * 4;
+          const brightness = (data[i] + data[i+1] + data[i+2]) / 3;
+          if (brightness < 80) { // dark pixel threshold
+            sumX += x; sumY += y; count++;
+          }
+        }
+      }
+      if (!count) return null;
+      return { x: sumX / count, y: sumY / count };
+    };
+
+    const importChartFromImage = (img) => {
+      // Draw image to a working canvas to get pixel data
+      const work   = document.createElement('canvas');
+      work.width   = img.width;
+      work.height  = img.height;
+      const wctx   = work.getContext('2d');
+      wctx.drawImage(img, 0, 0);
+      const imgData = wctx.getImageData(0, 0, img.width, img.height);
+      const data    = imgData.data;
+      const IW      = img.width;
+      const IH      = img.height;
+
+      // ── Step 1: Find reg mark centers in the uploaded image ──
+      // Search radius: 15% of image dimensions in each corner
+      const searchFrac = 0.15;
+      const sw = Math.round(IW * searchFrac);
+      const sh = Math.round(IH * searchFrac);
+
+      const foundMarks = [
+        findDarkCenter(data, IW, 0,       0,       sw, sh), // top-left
+        findDarkCenter(data, IW, IW - sw, 0,       sw, sh), // top-right
+        findDarkCenter(data, IW, 0,       IH - sh, sw, sh), // bottom-left
+        findDarkCenter(data, IW, IW - sw, IH - sh, sw, sh), // bottom-right
+      ];
+
+      // ── Step 2: Compute transform from canonical → image space ──
+      // Expected reg mark positions on the canonical sheet
+      const { w: CW, h: CH } = chartDims();
+      const expectedMarks = regMarkCenters(CW, CH);
+
+      // Compute scale by comparing distances between found marks
+      // Use TL→TR for X scale, TL→BL for Y scale (more robust than single pair)
+      let sx = IW / CW; // fallback: assume proportional scale
+      let sy = IH / CH;
+      let ox = 0;
+      let oy = 0;
+
+      const validMarks = foundMarks.filter(Boolean);
+      if (validMarks.length >= 2) {
+        // Use top-left and top-right for X scale if both found
+        if (foundMarks[0] && foundMarks[1]) {
+          sx = (foundMarks[1].x - foundMarks[0].x) / (expectedMarks[1].x - expectedMarks[0].x);
+          ox = foundMarks[0].x - expectedMarks[0].x * sx;
+        }
+        // Use top-left and bottom-left for Y scale if both found
+        if (foundMarks[0] && foundMarks[2]) {
+          sy = (foundMarks[2].y - foundMarks[0].y) / (expectedMarks[2].y - expectedMarks[0].y);
+          oy = foundMarks[0].y - expectedMarks[0].y * sy;
+        }
+      }
+
+      // ── Step 3: Extract each cell using the computed transform ──
+      let imported = 0;
+
+      CHARACTERS.forEach((char, idx) => {
+        const col = idx % CHART.cols;
+        const row = Math.floor(idx / CHART.cols);
+
+        // Canonical cell top-left (same formula as exportChart)
+        const canX = CHART.pad + col * (CHART.cellSize + CHART.pad);
+        const canY = CHART.pad + row * (CHART.cellSize + CHART.pad + CHART.labelH) + CHART.labelH;
+
+        // Map to image space using computed transform
+        const imgX = Math.round(canX * sx + ox);
+        const imgY = Math.round(canY * sy + oy);
+        const imgW = Math.round(CHART.cellSize * sx);
+        const imgH = Math.round(CHART.cellSize * sy);
+
+        // Bounds check
+        if (imgX < 0 || imgY < 0 || imgX + imgW > IW || imgY + imgH > IH) return;
+
+        // Extract cell into a CANVAS_RES canvas
+        const cell   = document.createElement('canvas');
+        cell.width   = CANVAS_RES;
+        cell.height  = CANVAS_RES;
+        const cc     = cell.getContext('2d');
+        cc.fillStyle = '#fff';
+        cc.fillRect(0, 0, CANVAS_RES, CANVAS_RES);
+        cc.imageSmoothingEnabled = true;
+        cc.imageSmoothingQuality = 'high';
+        cc.drawImage(work, imgX, imgY, imgW, imgH, 0, 0, CANVAS_RES, CANVAS_RES);
+
+        // Only store if the cell has meaningful ink
+        if (hasInk(cell)) {
+          glyphs.set(char, cell);
+          imported++;
+        }
+      });
+
+      return imported;
+    };
+
+    // Ink detection: returns true if canvas has more than threshold dark pixels
+    const hasInk = canvas => {
+      const d = canvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height).data;
+      let count = 0;
+      for (let i = 0; i < d.length; i += 4) {
+        // Procreate exports clean black on white — threshold at 200
+        if (d[i] < 200 && d[i+1] < 200 && d[i+2] < 200 && d[i+3] > 30) {
+          if (++count > 150) return true;
+        }
+      }
+      return false;
+    };
+
+    uploadChartBtn.addEventListener('click', () => uploadChartInput.click());
+    uploadChartInput.addEventListener('change', evt => {
+      const file = evt.target.files && evt.target.files[0];
+      if (!file) return;
+      importStatus.textContent = 'Reading chart…';
+      const reader = new FileReader();
+      reader.onload = e => {
+        const img   = new Image();
+        img.onload  = () => {
+          const count = importChartFromImage(img);
+          importStatus.textContent = count
+            ? `✓ Imported ${count} glyph${count === 1 ? '' : 's'} from your chart.`
+            : '⚠ No glyphs detected. Make sure you used the blank chart from this tool and drew with black ink on white.';
+          if (count) {
+            clearCanvas();
+            if (glyphs.has(currentChar)) ctx.drawImage(glyphs.get(currentChar), 0, 0);
+            autoSave();
+            renderChart();
+            renderPreview();
+          }
+          uploadChartInput.value = '';
+        };
+        img.onerror = () => { importStatus.textContent = 'Could not read that image.'; uploadChartInput.value = ''; };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+
+    /* ═══════════════════════════════════════════
+       JSON SESSION SAVE / LOAD
+       Zero quality loss — each glyph stored as
+       lossless PNG data URL at full CANVAS_RES.
+    ═══════════════════════════════════════════ */
     const serialiseSession = () => {
       const obj = { version: 2, res: CANVAS_RES, glyphs: {} };
       glyphs.forEach((canvas, char) => {
-        obj.glyphs[char] = canvas.toDataURL('image/png'); // lossless
+        obj.glyphs[char] = canvas.toDataURL('image/png');
       });
       return JSON.stringify(obj);
     };
 
-    // Restore glyphs from a parsed session object
-    const restoreSession = (obj) => {
-      if (!obj || obj.version !== 2 || !obj.glyphs) return 0;
-      let count = 0;
+    const restoreSession = obj => new Promise(resolve => {
+      if (!obj || obj.version !== 2 || !obj.glyphs) { resolve(0); return; }
       const entries = Object.entries(obj.glyphs);
-      let loaded = 0;
+      if (!entries.length) { resolve(0); return; }
 
-      return new Promise(resolve => {
-        if (!entries.length) { resolve(0); return; }
-
-        entries.forEach(([char, dataUrl]) => {
-          const img = new Image();
-          img.onload = () => {
-            const canvas   = document.createElement('canvas');
-            canvas.width   = CANVAS_RES;
-            canvas.height  = CANVAS_RES;
-            const c        = canvas.getContext('2d');
-            c.fillStyle    = '#fff';
-            c.fillRect(0, 0, CANVAS_RES, CANVAS_RES);
-            c.drawImage(img, 0, 0, CANVAS_RES, CANVAS_RES);
-            if (CHARACTERS.includes(char)) {
-              glyphs.set(char, canvas);
-              count++;
-            }
-            if (++loaded === entries.length) resolve(count);
-          };
-          img.onerror = () => {
-            if (++loaded === entries.length) resolve(count);
-          };
-          img.src = dataUrl;
-        });
+      let loaded = 0, count = 0;
+      entries.forEach(([char, dataUrl]) => {
+        const img = new Image();
+        img.onload = () => {
+          const c    = document.createElement('canvas');
+          c.width    = CANVAS_RES;
+          c.height   = CANVAS_RES;
+          const cc   = c.getContext('2d');
+          cc.fillStyle = '#fff';
+          cc.fillRect(0, 0, CANVAS_RES, CANVAS_RES);
+          cc.drawImage(img, 0, 0, CANVAS_RES, CANVAS_RES);
+          if (CHARACTERS.includes(char)) { glyphs.set(char, c); count++; }
+          if (++loaded === entries.length) resolve(count);
+        };
+        img.onerror = () => { if (++loaded === entries.length) resolve(count); };
+        img.src = dataUrl;
       });
-    };
+    });
 
-    // Auto-save to localStorage after every glyph save
     const autoSave = () => {
       try {
         localStorage.setItem(LS_KEY, serialiseSession());
-        sessionStatus.textContent = `Auto-saved (${glyphs.size} glyphs) — ${new Date().toLocaleTimeString()}`;
-      } catch (e) {
-        sessionStatus.textContent = 'Auto-save failed (storage full?). Use Save session to back up.';
+        sessionStatus.textContent = `Auto-saved (${glyphs.size} glyphs) · ${new Date().toLocaleTimeString()}`;
+      } catch {
+        sessionStatus.textContent = 'Auto-save failed (storage full?). Use Save session to backup manually.';
       }
     };
 
-    // Manual JSON download
     saveSessionBtn.addEventListener('click', () => {
       const blob = new Blob([serialiseSession()], { type: 'application/json' });
       const url  = URL.createObjectURL(blob);
@@ -765,18 +1129,15 @@
       URL.revokeObjectURL(url);
     });
 
-    // Manual JSON load
     loadSessionBtn.addEventListener('click', () => loadSessionInput.click());
     loadSessionInput.addEventListener('change', async evt => {
       const file = evt.target.files && evt.target.files[0];
       if (!file) return;
       sessionStatus.textContent = 'Loading session…';
-      const text = await file.text();
       try {
-        const obj = JSON.parse(text);
+        const obj   = JSON.parse(await file.text());
         glyphs.clear();
         const count = await restoreSession(obj);
-        // Reload current char if it was restored
         clearCanvas();
         if (glyphs.has(currentChar)) ctx.drawImage(glyphs.get(currentChar), 0, 0);
         undoStack.length = 0;
@@ -789,98 +1150,44 @@
       loadSessionInput.value = '';
     });
 
-    // Load from localStorage on startup
     const loadAutoSave = async () => {
       try {
         const raw = localStorage.getItem(LS_KEY);
         if (!raw) return;
-        const obj   = JSON.parse(raw);
-        const count = await restoreSession(obj);
+        const count = await restoreSession(JSON.parse(raw));
         if (count) {
           if (glyphs.has(currentChar)) ctx.drawImage(glyphs.get(currentChar), 0, 0);
           renderChart();
           renderPreview();
           sessionStatus.textContent = `Restored ${count} glyph${count === 1 ? '' : 's'} from last session.`;
         }
-      } catch {
-        // Silently ignore corrupt localStorage data
-      }
+      } catch { /* ignore corrupt data */ }
     };
 
-    /* ═══════════════════════════════════════════════════
-       PRINT CHART — PNG export (template only, not re-imported)
-    ═══════════════════════════════════════════════════ */
-    const chartDims = () => ({
-      w: CHART.cols * (CHART.cellSize + CHART.pad) + CHART.pad,
-      h: Math.ceil(TOTAL / CHART.cols) * (CHART.cellSize + CHART.pad + CHART.labelH) + CHART.pad
+    /* ═══════════════════════════════════════════
+       RESET
+    ═══════════════════════════════════════════ */
+    document.getElementById('resetAll').addEventListener('click', () => {
+      if (!confirm('Clear all saved glyphs and reset the session?')) return;
+      glyphs.clear();
+      undoStack.length = 0;
+      clearCanvas();
+      try { localStorage.removeItem(LS_KEY); } catch {}
+      sessionStatus.textContent = 'Session cleared.';
+      renderChart();
+      renderPreview();
     });
 
-    const exportChart = (blankOnly = false) => {
-      const { w, h } = chartDims();
-      const sheet    = document.createElement('canvas');
-      sheet.width    = w;
-      sheet.height   = h;
-      const sctx     = sheet.getContext('2d');
-
-      sctx.fillStyle   = '#fff';
-      sctx.fillRect(0, 0, w, h);
-
-      CHARACTERS.forEach((char, idx) => {
-        const col = idx % CHART.cols;
-        const row = Math.floor(idx / CHART.cols);
-        const cx  = CHART.pad + col * (CHART.cellSize + CHART.pad);
-        const cy  = CHART.pad + row * (CHART.cellSize + CHART.pad + CHART.labelH);
-
-        // Label
-        sctx.fillStyle   = '#333';
-        sctx.font        = '16px Fredoka, sans-serif';
-        sctx.fillText(char === ' ' ? 'Space' : char, cx + 6, cy + 17);
-
-        // Cell border
-        sctx.strokeStyle = '#ccc';
-        sctx.lineWidth   = 1;
-        sctx.strokeRect(cx + 0.5, cy + CHART.labelH + 0.5, CHART.cellSize, CHART.cellSize);
-
-        // Baseline guide
-        sctx.strokeStyle = '#e8e4da';
-        const baseY = cy + CHART.labelH + CHART.cellSize * 0.78;
-        sctx.beginPath();
-        sctx.moveTo(cx, baseY);
-        sctx.lineTo(cx + CHART.cellSize, baseY);
-        sctx.stroke();
-
-        // Glyph image (filled chart only)
-        if (!blankOnly && glyphs.has(char)) {
-          sctx.drawImage(glyphs.get(char), cx, cy + CHART.labelH, CHART.cellSize, CHART.cellSize);
-        }
-      });
-
-      // Watermark
-      sctx.fillStyle   = '#ccc';
-      sctx.font        = '13px Quicksand, sans-serif';
-      sctx.fillText('TypoGraph by Visual Visage — print template only', CHART.pad, h - 8);
-
-      const a    = document.createElement('a');
-      a.download = blankOnly ? 'typograph-blank.png' : 'typograph-filled.png';
-      a.href     = sheet.toDataURL('image/png');
-      a.click();
-    };
-
-    document.getElementById('downloadChart').addEventListener('click', () => exportChart(false));
-    document.getElementById('downloadBlank').addEventListener('click', () => exportChart(true));
-
-    /* ═══════════════════════════════════════════════════
+    /* ═══════════════════════════════════════════
        TTF EXPORT
-       Raster → path using horizontal run-length encoding.
-       96px raster (up from 64) + high-quality downscale = cleaner glyphs.
-       Run-length approach = far fewer path commands than per-pixel rects.
-    ═══════════════════════════════════════════════════ */
+       96px raster + horizontal run-length encoding
+       = clean glyphs, minimal path commands.
+    ═══════════════════════════════════════════ */
     const RASTER = 96;
 
     const rasterToPath = srcCanvas => {
       const tmp  = document.createElement('canvas');
-      tmp.width  = RASTER;
-      tmp.height = RASTER;
+      tmp.width  = RASTER; tmp.height = RASTER;
       const tc   = tmp.getContext('2d');
       tc.imageSmoothingEnabled = true;
       tc.imageSmoothingQuality = 'high';
@@ -895,13 +1202,11 @@
       const isInk = (x, y) => {
         if (x < 0 || x >= RASTER || y < 0 || y >= RASTER) return false;
         const i = (y * RASTER + x) * 4;
-        // Alpha-aware threshold: transparent counts as empty
-        if (data[i + 3] < 30) return false;
-        return data[i] < 215 || data[i + 1] < 215 || data[i + 2] < 215;
+        if (data[i+3] < 30) return false;
+        return data[i] < 215 || data[i+1] < 215 || data[i+2] < 215;
       };
 
       let maxInkX = 0;
-
       for (let y = 0; y < RASTER; y++) {
         let run = -1;
         for (let x = 0; x <= RASTER; x++) {
@@ -909,7 +1214,6 @@
           if (ink && run === -1) {
             run = x;
           } else if (!ink && run !== -1) {
-            // One rect per horizontal run — minimal path commands
             const fx = run * scale;
             const fy = FONT.ascender - y * scale;
             const fw = (x - run) * scale;
@@ -925,8 +1229,7 @@
         }
       }
 
-      const advanceWidth = Math.min(Math.max((maxInkX + 4) * scale + 80, 280), 1100);
-      return { path, advanceWidth };
+      return { path, advanceWidth: Math.min(Math.max((maxInkX + 4) * scale + 80, 280), 1100) };
     };
 
     const waitForOpenType = () => new Promise((resolve, reject) => {
@@ -934,8 +1237,8 @@
       let ms = 0;
       const iv = setInterval(() => {
         ms += 50;
-        if (window.opentype)    { clearInterval(iv); resolve(); }
-        else if (ms > 10000)    { clearInterval(iv); reject(new Error('opentype.js timed out')); }
+        if (window.opentype)  { clearInterval(iv); resolve(); }
+        else if (ms > 10000)  { clearInterval(iv); reject(new Error('opentype.js timed out')); }
       }, 50);
     });
 
@@ -945,8 +1248,7 @@
         downloadFontBtn.textContent = 'Generating…';
         await waitForOpenType();
 
-        const hexName = u => `uni${u.toString(16).toUpperCase().padStart(4, '0')}`;
-
+        const hexName = u => `uni${u.toString(16).toUpperCase().padStart(4,'0')}`;
         const glyphList = [
           new opentype.Glyph({ name: '.notdef', unicode: 0,  advanceWidth: 500, path: new opentype.Path() }),
           new opentype.Glyph({ name: 'space',   unicode: 32, advanceWidth: 350, path: new opentype.Path() })
@@ -975,9 +1277,7 @@
         const blob = new Blob([font.toArrayBuffer()], { type: 'font/ttf' });
         const url  = URL.createObjectURL(blob);
         const a    = document.createElement('a');
-        a.href     = url;
-        a.download = 'visual-visage-hand.ttf';
-        a.click();
+        a.href = url; a.download = 'visual-visage-hand.ttf'; a.click();
         URL.revokeObjectURL(url);
       } catch (err) {
         alert('Font export failed:\n' + err.message);
@@ -988,27 +1288,13 @@
     };
 
     downloadFontBtn.addEventListener('click', () => {
-      if (!glyphs.size && !confirm('No glyphs saved yet. Export anyway with empty characters?')) return;
+      if (!glyphs.size && !confirm('No glyphs saved yet. Export anyway?')) return;
       downloadFont();
     });
 
-    /* ═══════════════════════════════════════════════════
-       RESET
-    ═══════════════════════════════════════════════════ */
-    document.getElementById('resetAll').addEventListener('click', () => {
-      if (!confirm('Clear all saved glyphs and reset the session?')) return;
-      glyphs.clear();
-      undoStack.length = 0;
-      clearCanvas();
-      try { localStorage.removeItem(LS_KEY); } catch {}
-      sessionStatus.textContent = 'Session cleared.';
-      renderChart();
-      renderPreview();
-    });
-
-    /* ═══════════════════════════════════════════════════
-       FONT FILE UPLOAD — live type tester
-    ═══════════════════════════════════════════════════ */
+    /* ═══════════════════════════════════════════
+       FONT FILE UPLOAD — live tester
+    ═══════════════════════════════════════════ */
     const loadFontFile = file => {
       if (!file) return;
       fontLiveStatus.textContent = `Loading ${file.name}…`;
@@ -1022,15 +1308,10 @@
           fontLiveStatus.textContent    = `Now previewing: ${file.name}`;
           fontLiveArea.style.fontFamily = `"${family}", sans-serif`;
         } catch {
-          fontLiveStatus.textContent = 'Could not load that font file — make sure it's a valid TTF/OTF/WOFF.';
-        } finally {
-          fontUploadInput.value = '';
-        }
+          fontLiveStatus.textContent = 'Could not load that font file.';
+        } finally { fontUploadInput.value = ''; }
       };
-      reader.onerror = () => {
-        fontLiveStatus.textContent = 'File read error.';
-        fontUploadInput.value = '';
-      };
+      reader.onerror = () => { fontLiveStatus.textContent = 'File read error.'; fontUploadInput.value = ''; };
       reader.readAsArrayBuffer(file);
     };
 
@@ -1044,12 +1325,13 @@
       loadFontFile(e.dataTransfer.files && e.dataTransfer.files[0]);
     });
 
-    /* ═══════════════════════════════════════════════════
+    /* ═══════════════════════════════════════════
        INIT
-    ═══════════════════════════════════════════════════ */
+    ═══════════════════════════════════════════ */
     renderChart();
     renderPreview();
-    loadAutoSave(); // async — restores from localStorage if available
+    loadAutoSave();
+
   })();
   </script>
 
